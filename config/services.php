@@ -36,8 +36,8 @@ return [
     ],
 
     'aws' => [
+        'region' => env('AWS_DEFAULT_REGION', 'eu-central-1'),
         'acces_key' => env('AWS_ACCESS_KEY_ID'),
         'secret_access_key' => env('AWS_SECRET_ACCESS_KEY'),
     ]
-
 ];

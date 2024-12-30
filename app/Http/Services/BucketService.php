@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Models\BucketObjects;
 use App\Models\Buckets;
 use Aws\Credentials\CredentialProvider;
 use Aws\Result;
@@ -19,7 +20,7 @@ class BucketService
         $credentials = CredentialProvider::env();
         $this->s3Client = new S3Client([
             'version' => 'latest',
-            'region' => 'eu-central-1',
+            'region' => config("services.aws.region"),
             'credentials' => $credentials
         ]);
     }
@@ -41,12 +42,15 @@ class BucketService
         return $listBuckets ?? null;
     }
 
-    public function listObjects($bucketName): ?Result
+    public function listObjects($bucketName): ?array
     {
         try {
             $listObjects = $this->s3Client->listObjects([
                 'Bucket' => $bucketName
             ]);
+
+            $listObjects = new BucketObjects($listObjects);
+            $listObjects = $listObjects->getContents();
 
         } catch (S3Exception $e) {
             Log::info('S3 Exception:', [

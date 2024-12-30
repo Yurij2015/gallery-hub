@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\BucketObjectController;
+use App\Http\Controllers\BucketObjectsController;
 use App\Http\Controllers\BucketsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/buckets', [BucketsController::class, 'index'])->name('buckets.index');
 
 
-    Route::get('/bucket-objects/{bucketName}', [BucketObjectController::class, 'index'])->name('bucket-objects');
+    Route::get('/bucket-objects/{bucketName}', [BucketObjectsController::class, 'index'])->name('bucket-objects');
 });
 
 require __DIR__.'/auth.php';
