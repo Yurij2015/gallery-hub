@@ -5,7 +5,7 @@ namespace App\Models;
 use Aws\Result;
 class Buckets
 {
-    public array $buckets;
+    public ?array $buckets = null;
 
     public function __construct(Result $data)
     {
@@ -14,7 +14,7 @@ class Buckets
         }
     }
 
-    public function getBuckets(): array
+    public function getBuckets(): ?array
     {
         return $this->buckets;
     }
