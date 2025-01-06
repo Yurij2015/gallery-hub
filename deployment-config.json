@@ -1,0 +1,11 @@
+[
+    {
+        "name": "test-server",
+        "ip": "159.89.15.103",
+        "port": "22",
+        "username": "root",
+        "beforeHooks": "",
+        "afterHooks": "php /var/www/gallery-hub/current/artisan migrate",
+        "path": "/var/www/gallery-hub"
+    }
+]
