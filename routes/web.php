@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
     //TODO add username to the route
     //Route::get('/{userName}/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+    Route::get('/projects/{project}', [ProjectController::class, 'show'])->where('project',
+        '[0-9]+')->name('projects.show');
     Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
 });

@@ -24,7 +24,7 @@ class Project extends Model
 
     public int $objectsCount;
     public string $sizeOfProject;
-
+    public string $sizeOfProjectFolder;
     public string $projectImage;
 
     public function setObjectsCount($count): void
@@ -55,5 +55,15 @@ class Project extends Model
     public function getProjectImage()
     {
         return $this->projectImage;
+    }
+
+    public function setSizeOfProjectFolder($size): void
+    {
+        $this->sizeOfProjectFolder = $size;
+    }
+
+    public function getSizeOfProjectFolder()
+    {
+        return $this->sizeOfProjectFolder;
     }
 }

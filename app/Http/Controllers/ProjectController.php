@@ -37,7 +37,7 @@ class ProjectController extends Controller
                 break;
             }
 
-            if($projectObjects){
+            if ($projectObjects) {
                 $objectsCount = count($projectObjects);
                 $sizeOfProject = $projectService->sizeOfProject($projectObjects);
                 $sizeOfProject = $projectService->formatProjectSize($sizeOfProject);
@@ -46,13 +46,10 @@ class ProjectController extends Controller
                 $sizeOfProject = 0;
             }
 
-
             $project->setSizeOfProject($sizeOfProject);
             $project->setObjectsCount($objectsCount);
             $project->setProjecImage($imgUrl);
         }
-
-//        dd($projects);
 
         return view('projects.index', compact('projects'));
     }
@@ -110,9 +107,59 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Project $project, BucketService $bucketService, Request $request, ProjectService $projectService)
     {
-        //
+        $bucketName = $project->bucket_name;
+        $projectFolder = $project->project_folder;
+        $childKeyParam = $request->get('childKey');
+        $keySegmentsFromUrl = explode('/', $childKeyParam);
+        $childKeyParam = $childKeyParam ? '/'.$childKeyParam : '';
+        $countOfChildKeysInUrl = $childKeyParam ? count($keySegmentsFromUrl) - 1 : null;
+        $projectFolderObjects = $bucketService->listObjectsInFolder($bucketName, $projectFolder.$childKeyParam);
+
+        if ($projectFolderObjects) {
+            $objectsCount = count($projectFolderObjects);
+            $sizeOfProject = $projectService->sizeOfProject($projectFolderObjects);
+            $sizeOfProject = $projectService->formatProjectSize($sizeOfProject);
+        } else {
+            $objectsCount = 0;
+            $sizeOfProject = 0;
+        }
+
+        $project->setSizeOfProjectFolder($sizeOfProject);
+        $project->setObjectsCount($objectsCount);
+
+        $childKeys = [];
+        $filteredObjects = [];
+
+        // TODO move logic to service
+        foreach ($projectFolderObjects as $object) {
+            $keySegments = explode('/', $object->key);
+            $objectName = end($keySegments);
+            $childKey = '';;
+
+            if ((count($keySegments)) > 2 + $countOfChildKeysInUrl) {
+                for ($i = 1; $i < count($keySegments) - 1; $i++) {
+                    $childKey .= $keySegments[$i].'/';
+                }
+            } else {
+                $filteredObjects[] = $object;
+            }
+
+            $key = $object->key;
+            $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
+            $object->setObjectUrl($imgUrl);
+            $object->setObjectName($objectName);
+            if (!$childKey) {
+                continue;
+            }
+
+            if (!in_array($childKey, $childKeys)) {
+                $childKeys[] = $childKey;
+            }
+        }
+
+        return view('projects.show', compact('project', 'projectFolderObjects', 'filteredObjects', 'childKeys', 'countOfChildKeysInUrl'));
     }
 
     /**
