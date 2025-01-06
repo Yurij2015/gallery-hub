@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\BucketService;
 
-class BucketsController extends Controller
+class BucketController extends Controller
 {
     public function index(BucketService $bucketService)
     {

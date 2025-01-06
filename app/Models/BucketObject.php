@@ -14,6 +14,9 @@ class BucketObject
     public string $size;
     public string $storageClass;
     public array $owner;
+    public ?string $objectUrl;
+
+    public ?string $objectName;
 
     public function __construct(array $data)
     {
@@ -24,5 +27,25 @@ class BucketObject
         $this->size = $data['Size'];
         $this->storageClass = $data['StorageClass'];
         $this->owner = $data['Owner'];
+    }
+
+    public function getObjectUrl(): ?string
+    {
+        return $this->objectUrl;
+    }
+
+    public function setObjectUrl($objectUrl): void
+    {
+        $this->objectUrl = $objectUrl;
+    }
+
+    public function getObjectName(): ?string
+    {
+        return $this->objectName;
+    }
+
+    public function setObjectName($objectName): void
+    {
+        $this->objectName = $objectName;
     }
 }
