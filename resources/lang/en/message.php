@@ -36,4 +36,6 @@ return [
     'addFolder' => 'Add Folder',
     'addPhoto' => 'Add Photo',
     'goBack' => 'Go Back',
+    'editProject' => 'Edit Project',
+    'chooseNewFiles' => 'Choose New Files',
 ];
