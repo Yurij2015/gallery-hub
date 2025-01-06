@@ -153,7 +153,7 @@
                                             View
                                         </a>
 
-                                        <a href="{{ route('bucket-objects', $project->id) }}"
+                                        <a href="{{ route('projects.edit', $project->id) }}"
                                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-primary-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                                             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
                                                  xmlns="http://www.w3.org/2000/svg">
