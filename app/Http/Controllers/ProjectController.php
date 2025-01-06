@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Services\BucketService;
 use App\Http\Services\ProjectService;
 use App\Models\Project;
@@ -173,9 +174,18 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+
+        $validatedRequest = $request->validated();
+
+        $validatedRequest['date'] = (DateTime::createFromFormat('d/m/Y', $validatedRequest['date']))->format('Y-m-d');
+        $validatedRequest['expiration_date'] = (DateTime::createFromFormat('d/m/Y',
+            $validatedRequest['expiration_date']))->format('Y-m-d');
+
+        $project->update($validatedRequest);
+
+        return redirect()->route('projects.index')->with('success', 'Project updated successfully');
     }
 
     /**

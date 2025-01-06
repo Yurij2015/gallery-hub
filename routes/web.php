@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware(['auth', 'verified'])->name('welcome');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
     Route::get('/projects/edit/{project}', [ProjectController::class, 'edit'])->name('projects.edit');
-
+    Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
 });
 
 require __DIR__.'/auth.php';
