@@ -108,8 +108,12 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Project $project, BucketService $bucketService, Request $request, ProjectService $projectService)
-    {
+    public function show(
+        Project $project,
+        BucketService $bucketService,
+        Request $request,
+        ProjectService $projectService
+    ) {
         $bucketName = $project->bucket_name;
         $projectFolder = $project->project_folder;
         $childKeyParam = $request->get('childKey');
@@ -160,15 +164,26 @@ class ProjectController extends Controller
             }
         }
 
-        return view('projects.show', compact('project', 'projectFolderObjects', 'filteredObjects', 'childKeys', 'countOfChildKeysInUrl'));
+        return view('projects.show',
+            compact('project', 'projectFolderObjects', 'filteredObjects', 'childKeys', 'countOfChildKeysInUrl'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Project $project)
+    public function edit(Project $project, BucketService $bucketService)
     {
-        return view('projects.edit', compact('project'));
+        $bucketName = $project->bucket_name;
+        $projectDirectory = $project->project_folder;
+        $projectObjects = $bucketService->listObjectsInFolder($bucketName, $projectDirectory);
+
+        foreach ($projectObjects as $object) {
+            $key = $object->key;
+            $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
+            $object->setObjectUrl($imgUrl);
+        }
+
+        return view('projects.edit', compact('project', 'projectObjects'));
     }
 
     /**
