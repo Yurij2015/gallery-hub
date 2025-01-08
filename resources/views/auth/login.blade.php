@@ -45,7 +45,7 @@
         </button>
 
         <div class="text-sm font-medium text-gray-500 dark:text-gray-400">
-            {{ __('Not registered?') }} <a
+            {{ __('Not registered?') }} <a href="{{ route('register') }}"
                 class="text-primary-700 hover:underline dark:text-primary-500">{{ __('Create account')  }}</a>
         </div>
     </form>
