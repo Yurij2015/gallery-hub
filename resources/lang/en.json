@@ -86,5 +86,10 @@
     "Your email address is unverified.": "Your email address is unverified.",
     "Login to your account": "Login to your account",
     "Not registered?": "Not registered?",
-    "Create account": "Create account"
+    "Create account": "Create account",
+    "Your email": "Your email",
+    "Your password": "Your password",
+    "Confirm your password": "Confirm your password",
+    "Already have an account?": "Already have an account?",
+    "Login here": "Login here"
 }
