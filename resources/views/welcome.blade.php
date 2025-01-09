@@ -24,7 +24,12 @@
 @include('layouts.header')
 <main class="bg-gray-50 dark:bg-gray-900">
     <div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
-        @include('layouts.sidebar.admin')
+        @role('admin')
+             @include('layouts.sidebar.admin')
+        @endrole
+        @role('photographer')
+            @include('layouts.sidebar.photographer')
+        @endrole
         <div id="main-content" class="relative w-full h-full overflow-y-auto bg-gray-50 lg:ml-64 dark:bg-gray-900">
             <main>
                 @yield('content')
