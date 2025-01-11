@@ -24,6 +24,8 @@ class BucketService
             'region' => config("services.aws.region"),
             'credentials' => $credentials,
             'endpoint' => config("services.aws.endpoint"),
+            'debug' => false,
+            'use_path_style_endpoint' => true
         ]);
     }
 
