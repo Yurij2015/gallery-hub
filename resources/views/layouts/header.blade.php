@@ -51,8 +51,6 @@
                                   clip-rule="evenodd"></path>
                         </svg>
                     </button>
-
-
                     <!-- Settings Dropdown -->
                     <div class="hidden sm:flex sm:items-center sm:ms-6">
                         <x-dropdown align="right" width="48">
@@ -107,7 +105,7 @@
                                class="flex px-4 py-3 border-b hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600">
                                 <div class="flex-shrink-0">
                                     <img class="rounded-full w-11 h-11"
-                                         src="{{asset('public/images/users/bonnie-green.png')}}"
+                                         src="{{asset('images/no-avatar.jpg')}}"
                                          alt="Jese image">
                                     <div class="absolute flex items-center justify-center w-5 h-5 ml-6 -mt-5 border border-white rounded-full bg-primary-700 dark:border-gray-700">
                                         <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"
@@ -132,7 +130,7 @@
                                class="flex px-4 py-3 border-b hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600">
                                 <div class="flex-shrink-0">
                                     <img class="rounded-full w-11 h-11"
-                                         src="{{asset('public/images/users/jese-leos.png')}}"
+                                         src="{{asset('images/no-avatar.jpg')}}"
                                          alt="Jese image">
                                     <div class="absolute flex items-center justify-center w-5 h-5 ml-6 -mt-5 bg-gray-900 border border-white rounded-full dark:border-gray-700">
                                         <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"
@@ -156,7 +154,7 @@
                                class="flex px-4 py-3 border-b hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600">
                                 <div class="flex-shrink-0">
                                     <img class="rounded-full w-11 h-11"
-                                         src="{{ asset('/public/images/users/joseph-mcfall.png') }}"
+                                         src="{{ asset('images/no-avatar.jpg') }}"
                                          alt="Joseph image">
                                     <div class="absolute flex items-center justify-center w-5 h-5 ml-6 -mt-5 bg-red-600 border border-white rounded-full dark:border-gray-700">
                                         <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"
@@ -182,7 +180,7 @@
                                class="flex px-4 py-3 border-b hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600">
                                 <div class="flex-shrink-0">
                                     <img class="rounded-full w-11 h-11"
-                                         src="{{asset('public/images/users/leslie-livingston.png')}}"
+                                         src="{{asset('images/no-avatar.jpg')}}"
                                          alt="Leslie image">
                                     <div class="absolute flex items-center justify-center w-5 h-5 ml-6 -mt-5 bg-green-400 border border-white rounded-full dark:border-gray-700">
                                         <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"
@@ -207,7 +205,7 @@
                             <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-600">
                                 <div class="flex-shrink-0">
                                     <img class="rounded-full w-11 h-11"
-                                         src="{{ asset('/public/images/users/robert-brown.png') }}"
+                                         src="{{ asset('images/no-avatar.jpg') }}"
                                          alt="Robert image">
                                     <div class="absolute flex items-center justify-center w-5 h-5 ml-6 -mt-5 bg-purple-500 border border-white rounded-full dark:border-gray-700">
                                         <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"
@@ -373,7 +371,7 @@
                                     id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-2">
                                 <span class="sr-only">Open user menu</span>
                                 <img class="w-8 h-8 rounded-full"
-                                     src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                                     src="{{ auth()->user()->userDetail->avatar ?? asset("images/no-avatar.jpg") }}"
                                      alt="user photo">
                             </button>
                         </div>
@@ -382,10 +380,10 @@
                              id="dropdown-2">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                    Neil Sims
+                                    {{ auth()->user()->name }}
                                 </p>
                                 <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                                    neil.sims@flowbite.com
+                                    {{ auth()->user()->email }}
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
@@ -398,11 +396,6 @@
                                     <a href="#"
                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                        role="menuitem">Settings</a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                       role="menuitem">Earnings</a>
                                 </li>
                                 <li>
                                     <a href="#"
