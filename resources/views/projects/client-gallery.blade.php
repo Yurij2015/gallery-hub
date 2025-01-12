@@ -19,6 +19,20 @@
                     {{ $project->getSizeOfProject() }}
             </span>
 
+            <a href="{{ route('download-folder', $project->id) }}"
+               class="py-2 px-3 me-2 mb-9 text-xs text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-sm text-sx text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                <svg class="w-3 h-3 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M13 11.15V4a1 1 0 1 0-2 0v7.15L8.78 8.374a1 1 0 1 0-1.56 1.25l4 5a1 1 0 0 0 1.56 0l4-5a1 1 0 1 0-1.56-1.25L13 11.15Z"
+                          clip-rule="evenodd"/>
+                    <path fill-rule="evenodd"
+                          d="M9.657 15.874 7.358 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.358l-2.3 2.874a3 3 0 0 1-4.685 0ZM17 16a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z"
+                          clip-rule="evenodd"/>
+                </svg>
+                {{ __('client-gallery.download') }}
+            </a>
+
             <div class="gallery">
                 <div class="flex flex-col mb-10">
                     <div class="grid md:grid-cols-12 gap-8 lg:mb-11 mb-7">
@@ -69,10 +83,10 @@
                 </div>
             </div>
         </div>
-        <div class="lightbox" id="lightbox">
-            <span class="close" id="close">&times;</span>
-            <img src="" alt="" class="lightbox-image" id="lightbox-image">
-        </div>
+{{--        <div class="lightbox" id="lightbox">--}}
+{{--            <span class="close" id="close">&times;</span>--}}
+{{--            <img src="" alt="" class="lightbox-image" id="lightbox-image">--}}
+{{--        </div>--}}
 
         <!-- Modal -->
         <div id="like-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">

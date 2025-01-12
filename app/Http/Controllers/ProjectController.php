@@ -203,8 +203,12 @@ class ProjectController extends Controller
         //
     }
 
-    public function clientGallery(User $user, Project $project, BucketService $bucketService, ProjectService $projectService)
-    {
+    public function clientGallery(
+        User $user,
+        Project $project,
+        BucketService $bucketService,
+        ProjectService $projectService
+    ) {
         $projectFolder = $project->project_folder;
         $bucketName = $project->bucket_name;
 
@@ -249,5 +253,10 @@ class ProjectController extends Controller
 
         $project->setSizeOfProject($sizeOfProject);
         $project->setObjectsCount($objectsCount);
+    }
+
+    public function downloadFolder(BucketService $bucketService, Project $project)
+    {
+        return $bucketService->downloadFolder($project->bucket_name, $project->project_folder);
     }
 }
