@@ -26,7 +26,25 @@
                             <div class="relative md:col-span-4 h-[277px] w-full rounded-3xl">
                                 <a href="{{ $object->objectUrl }}"
                                    data-gallery="gallery-{{ $project->id }}"
-                                   data-description='<button class="like-btn" data-id="{{ $object->key }}">❤️ Like</button>'
+                                   data-description='
+                                                                   <div class="flex items-center space-x-2">
+                                                                       <!-- Like Button -->
+                                                                       <button class="like-btn" data-id="{{ $object->key }}">❤️ Like</button>
+
+                                                                       <!-- Comment Input -->
+                                                                       <input type="text" name="name" placeholder="Yout name..."
+                                                                              class="comment-input border border-gray-300 rounded-lg px-2 py-1 text-sm w-full"
+                                                                              data-id="{{ $object->key }}">
+                                                                                   <input type="text" name="comment" placeholder="Add a comment..."
+                                                                              class="comment-input border border-gray-300 rounded-lg px-2 py-1 text-sm w-full"
+                                                                              data-id="{{ $object->key }}">
+
+                                                                       <!-- Save Comment Button -->
+                                                                       <button class="save-comment-btn bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600 transition"
+                                                                               data-id="{{ $object->key }}">
+                                                                           Save
+                                                                       </button>
+                                                                   </div>'
                                    class="glightbox">
                                     <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
                                          class="gallery-image object-cover rounded-3xl hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
