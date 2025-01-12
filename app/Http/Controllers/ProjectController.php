@@ -6,7 +6,9 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Services\BucketService;
 use App\Http\Services\ProjectService;
+use App\Models\BucketObjects;
 use App\Models\Project;
+use App\Models\User;
 use Auth;
 use DateTime;
 use Illuminate\Http\Request;
@@ -19,7 +21,7 @@ class ProjectController extends Controller
      */
     public function index(BucketService $bucketService, ProjectService $projectService)
     {
-        $projects = Project::paginate(10);
+        $projects = Project::with('user')->paginate(10);
 
         foreach ($projects as $project) {
             $bucketName = $project->bucket_name;
@@ -38,17 +40,7 @@ class ProjectController extends Controller
                 break;
             }
 
-            if ($projectObjects) {
-                $objectsCount = count($projectObjects);
-                $sizeOfProject = $projectService->sizeOfProject($projectObjects);
-                $sizeOfProject = $projectService->formatProjectSize($sizeOfProject);
-            } else {
-                $objectsCount = 0;
-                $sizeOfProject = 0;
-            }
-
-            $project->setSizeOfProject($sizeOfProject);
-            $project->setObjectsCount($objectsCount);
+            $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
             $project->setProjecImage($imgUrl);
         }
 
@@ -209,5 +201,53 @@ class ProjectController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function clientGallery(User $user, Project $project, BucketService $bucketService, ProjectService $projectService)
+    {
+        $projectFolder = $project->project_folder;
+        $bucketName = $project->bucket_name;
+
+        $projectObjects = $bucketService->listObjectsInFolder($bucketName, $projectFolder);
+
+        foreach ($projectObjects as $object) {
+            $key = $object->key;
+            $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
+            $object->setObjectUrl($imgUrl);
+        }
+
+        $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
+
+        return view('projects.client-gallery', compact('user', 'project', 'projectObjects'));
+    }
+
+    /**
+     * @param  array|null  $projectObjects
+     * @param  ProjectService  $projectService
+     * @param  Project  $project
+     * @return void
+     */
+    public function setSizeAndCountOfObjects(
+        array|null $projectObjects,
+        ProjectService $projectService,
+        Project $project
+    ): void {
+        if ($projectObjects) {
+            $objectsCount = count($projectObjects);
+            $sizeOfProject = $projectService->sizeOfProject($projectObjects);
+            $sizeOfProject = $projectService->formatProjectSize($sizeOfProject);
+        } else {
+            $objectsCount = 0;
+            $sizeOfProject = 0;
+        }
+
+        foreach ($projectObjects as $object) {
+            $keySegments = explode('/', $object->key);
+            $objectName = end($keySegments);
+            $object->setObjectName($objectName);
+        }
+
+        $project->setSizeOfProject($sizeOfProject);
+        $project->setObjectsCount($objectsCount);
     }
 }
