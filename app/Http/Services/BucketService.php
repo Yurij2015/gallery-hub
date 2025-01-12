@@ -307,6 +307,7 @@ class BucketService
 
                 $zip->close();
 
+                // TODO add downloading to statistics
                 return response()->download($zipFileName)->deleteFileAfterSend(true);
             }
         } catch (S3Exception $e) {
