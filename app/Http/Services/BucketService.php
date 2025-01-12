@@ -10,6 +10,9 @@ use Aws\Result;
 use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3Client;
 use Illuminate\Support\Facades\Log;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use ZipArchive;
 
 class BucketService
 {
@@ -123,7 +126,7 @@ class BucketService
         try {
             $folder = $this->s3Client->putObject([
                 'Bucket' => $bucketName,
-                'Key' => $folderName . '/',
+                'Key' => $folderName.'/',
                 'Body' => ''
             ]);
         } catch (S3Exception $e) {
@@ -139,7 +142,7 @@ class BucketService
     {
         $buckets = $this->listBuckets();
 
-        if(!$buckets) {
+        if (!$buckets) {
             return false;
         }
 
@@ -173,8 +176,8 @@ class BucketService
                         's3:List*'
                     ],
                     'Resource' => [
-                        'arn:aws:s3:::' . $bucketName,
-                        'arn:aws:s3:::' . $bucketName . '/*'
+                        'arn:aws:s3:::'.$bucketName,
+                        'arn:aws:s3:::'.$bucketName.'/*'
                     ]
                 ]
             ]
@@ -207,8 +210,8 @@ class BucketService
                         's3:List*'
                     ],
                     'Resource' => [
-                        'arn:aws:s3:::' . $bucketName,
-                        'arn:aws:s3:::' . $bucketName . '/*'
+                        'arn:aws:s3:::'.$bucketName,
+                        'arn:aws:s3:::'.$bucketName.'/*'
                     ]
                 ]
             ]
@@ -252,5 +255,64 @@ class BucketService
     public function getObjectUrl($bucketName, $key): string
     {
         return $this->s3Client->getObjectUrl($bucketName, $key);
+    }
+
+    public function downloadFolder($bucketName, $folderName)
+    {
+        try {
+            $localDir = storage_path('/app/public/'.$bucketName.'/'.$folderName);
+
+            if (!file_exists($localDir)) {
+                mkdir($localDir, 0777, true);
+            }
+
+            $objects = $this->s3Client->listObjectsV2([
+                'Bucket' => $bucketName,
+                'Prefix' => $folderName
+            ]);
+
+            foreach ($objects['Contents'] as $object) {
+                $fileKey = $object['Key'];
+                $filePath = $localDir.'/'.str_replace($folderName, '', $fileKey);
+                // Ensure local subdirectory exists
+                $dir = dirname($filePath);
+                if (!file_exists($dir)) {
+                    mkdir($dir, 0777, true);
+                }
+                // Download each file
+                $result = $this->s3Client->getObject([
+                    'Bucket' => $bucketName,
+                    'Key' => $fileKey,
+                ]);
+
+                file_put_contents($filePath, $result['Body']);
+            }
+
+            $zip = new ZipArchive();
+            $zipFileName = storage_path('/app/public/'.$bucketName.'/'.$folderName.'.zip');
+
+            if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                $files = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($localDir),
+                    RecursiveIteratorIterator::LEAVES_ONLY
+                );
+
+                foreach ($files as $name => $file) {
+                    if (!$file->isDir()) {
+                        $filePath = $file->getRealPath();
+                        $relativePath = substr($filePath, strlen($localDir) + 1);
+                        $zip->addFile($filePath, $relativePath);
+                    }
+                }
+
+                $zip->close();
+
+                return response()->download($zipFileName)->deleteFileAfterSend(true);
+            }
+        } catch (S3Exception $e) {
+            Log::info('S3 Exception:', [
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }

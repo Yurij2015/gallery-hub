@@ -41,6 +41,6 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/user-projects/{user}/{project}', [ProjectController::class, 'clientGallery'])->name('user-projects.show');
-
+Route::get('/download-folder/{project}', [ProjectController::class, 'downloadFolder'])->name('download-folder');
 
 require __DIR__.'/auth.php';
