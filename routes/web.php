@@ -39,4 +39,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 });
 
+
+Route::get('/user-projects/{user}/{project}', [ProjectController::class, 'clientGallery'])->name('user-projects.show');
+
+
 require __DIR__.'/auth.php';

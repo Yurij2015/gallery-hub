@@ -6,7 +6,6 @@ use Illuminate\Support\Carbon;
 
 class BucketObject
 {
-
     public string $key;
     public string $lastModified;
     public string $eTag;
@@ -16,7 +15,7 @@ class BucketObject
     public array $owner;
     public ?string $objectUrl;
 
-    public ?string $objectName;
+    public ?string $objectName = null;
 
     public function __construct(array $data)
     {

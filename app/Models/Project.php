@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Project extends Model
 {
@@ -24,7 +25,7 @@ class Project extends Model
 
     public int $objectsCount;
     public string $sizeOfProject;
-    public string $sizeOfProjectFolder;
+    public ?string $sizeOfProjectFolder = null;
     public string $projectImage;
 
     public function setObjectsCount($count): void
@@ -65,5 +66,10 @@ class Project extends Model
     public function getSizeOfProjectFolder()
     {
         return $this->sizeOfProjectFolder;
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

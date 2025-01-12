@@ -86,8 +86,12 @@
                 {{ __('message.goBack') }}
             </button>
 
-            <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-blue-900 dark:text-blue-300">{{ $project->getObjectsCount() }} file(s)</span>
-            <span class="bg-green-100 text-green-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-green-900 dark:text-green-300">{{ $project->getSizeOfProjectFolder() }}</span>
+            <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-blue-900 dark:text-blue-300">
+                {{ $project->getObjectsCount() }} file(s)
+            </span>
+            <span class="bg-green-100 text-green-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-green-900 dark:text-green-300">
+                {{ $project->getSizeOfProjectFolder() }}
+            </span>
 
             <div class="gallery">
                 <div class="flex flex-col mb-10">
@@ -121,88 +125,9 @@
 @stop
 
 @section('footer')
-    <style>
-        .lightbox {
-            display: none;
-            position: fixed;
-            z-index: 999;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        .lightbox-image {
-            display: block;
-            margin: auto;
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        .close {
-            color: #fff;
-            font-size: 3em;
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            cursor: pointer;
-        }
-
-        .gallery {
-            width: 90vw;
-            max-width: 1200px;
-            margin: 0 auto;
-            grid-template-rows: 1fr;
-            grid-column-gap: 30px;
-            grid-row-gap: 30px;
-
-        }
-
-        .gallery img {
-            max-width: 100%;
-            cursor: pointer;
-        }
-
-        .gallery img:hover {
-            max-width: 100%;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/gallery.css') }}">
 @endsection
 
 @push('scripts')
-    <script>
-        // Get references to elements
-        const gallery = document.querySelector('.gallery');
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImage = document.getElementById('lightbox-image');
-        const closeButton = document.getElementById('close');
-
-        // Add event listener to each image
-        gallery.addEventListener('click', e => {
-            if (e.target.classList.contains('gallery-image')) {
-                lightboxImage.src = e.target.src;
-                lightbox.style.display = 'flex';
-            }
-        });
-
-        // Close lightbox when close button is clicked
-        closeButton.addEventListener('click', () => {
-            lightbox.style.display = 'none';
-        });
-
-        // Close lightbox when clicking outside the image
-        lightbox.addEventListener('click', e => {
-            if (e.target === lightbox) {
-                lightbox.style.display = 'none';
-            }
-        });
-    </script>
-    <script>
-        document.getElementById('goBack').addEventListener('click', function () {
-            window.history.back();
-        });
-    </script>
+    <script src="{{ asset('js/gallery.js') }}"></script>
 @endpush

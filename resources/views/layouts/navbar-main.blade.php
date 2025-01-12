@@ -3,8 +3,8 @@
         <div class="flex items-center justify-between">
             <div class="flex items-center justify-start">
                 <a href="/" class="flex mr-4">
-                    <img src="{{ asset('public/images/logo.svg') }}" class="h-8 mr-3" alt="NetPost Logo"/>
-                    <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">NetPostPanel</span>
+                    <img src="{{ asset('images/logo.svg') }}" class="h-8 mr-3" alt="GalleryHub Logo"/>
+                    <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">GalleryHub</span>
                 </a>
                 <div class="hidden sm:flex sm:ml-6">
                     <ul class="flex space-x-8">

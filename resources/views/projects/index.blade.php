@@ -134,12 +134,33 @@
                                         </div>
                                     </td>
 
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $project->date }}</td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $project->expiration_date }}</td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $project->views_statistic }}</td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $project->download_statistic }}</td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $project->user_reactions }}</td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $project->project_link }}</td>
+                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $project->date }}
+                                    </td>
+                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $project->expiration_date }}
+                                    </td>
+                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $project->views_statistic }}
+                                    </td>
+                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $project->download_statistic }}
+                                    </td>
+                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $project->user_reactions }}
+                                    </td>
+                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                            <div class="text-base font-semibold text-gray-900 dark:text-white">
+                                                <a href="{{ route('user-projects.show', ['project' =>  $project, 'user' => $project->user->id, 'project-name' => urldecode($project->name)]) }}">
+                                                    {{ "project-name=" . $project->name }}
+                                                </a>
+                                            </div>
+                                            <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                                {{ auth()->user()->hasRole('admin') ? $project->user->name  : ''}}
+                                            </div>
+                                        </div>
+                                    </td>
 
                                     <td class="p-4 space-x-2 whitespace-nowrap">
                                         <a href="{{ route('projects.show', $project->id) }}"
@@ -166,8 +187,18 @@
                                             Edit
                                         </a>
 
-                                        <button type="button" id="deleteProductButton" data-drawer-target="drawer-delete-product-default" data-drawer-show="drawer-delete-product-default" aria-controls="drawer-delete-product-default" data-drawer-placement="right" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
-                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                                        <button type="button" id="deleteProductButton"
+                                                data-drawer-target="drawer-delete-product-default"
+                                                data-drawer-show="drawer-delete-product-default"
+                                                aria-controls="drawer-delete-product-default"
+                                                data-drawer-placement="right"
+                                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
+                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                      d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                      clip-rule="evenodd"></path>
+                                            </svg>
                                             Delete
                                         </button>
                                     </td>
