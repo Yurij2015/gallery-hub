@@ -20,7 +20,8 @@ class Project extends Model
         'user_reactions',
         'project_statistic',
         'project_link',
-        'status'
+        'status',
+        'user_id',
     ];
 
     public int $objectsCount;

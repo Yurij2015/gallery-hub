@@ -60,6 +60,8 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request, BucketService $bucketService)
     {
+        $user = Auth::user();
+
         $files = $request->file('files');
         $userEmail = Auth::user()->email;
         $userName = explode('@', $userEmail)[0];
@@ -92,6 +94,8 @@ class ProjectController extends Controller
         $validatedRequest['date'] = (DateTime::createFromFormat('d/m/Y', $validatedRequest['date']))->format('Y-m-d');
         $validatedRequest['expiration_date'] = (DateTime::createFromFormat('d/m/Y',
             $validatedRequest['expiration_date']))->format('Y-m-d');
+        $validatedRequest['user_id'] = $user->id;
+
         Project::create($validatedRequest);
 
         return redirect()->route('projects.index')->with('success', 'Project created successfully');
