@@ -37,7 +37,7 @@
                 <div class="flex flex-col mb-10">
                     <div class="grid md:grid-cols-12 gap-8 lg:mb-11 mb-7">
                         @foreach($projectObjects as $object)
-                            <div class="relative md:col-span-4 h-[277px] w-full rounded-3xl">
+                            <div class="relative md:col-span-4 h-[277px] w-full rounded-3xl mb-7">
                                 <a href="{{ $object->objectUrl }}"
                                    data-gallery="gallery-{{ $project->id }}"
                                    data-description='
