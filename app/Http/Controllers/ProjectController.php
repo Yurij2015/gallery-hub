@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveUserCommentRequest;
+use App\Http\Requests\SaveUserLikeRequest;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Services\BucketService;
@@ -9,6 +11,7 @@ use App\Http\Services\ProjectService;
 use App\Models\BucketObjects;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\UserReaction;
 use Auth;
 use DateTime;
 use Illuminate\Http\Request;
@@ -21,7 +24,7 @@ class ProjectController extends Controller
      */
     public function index(BucketService $bucketService, ProjectService $projectService)
     {
-        $projects = Project::with('user')->paginate(10);
+        $projects = Project::with('user')->with('userReaction')->paginate(10);
 
         foreach ($projects as $project) {
             $bucketName = $project->bucket_name;
@@ -91,7 +94,8 @@ class ProjectController extends Controller
         $validatedRequest['slug'] = $projectSlug;
         $validatedRequest['bucket_name'] = $bucketName;
         $validatedRequest['project_folder'] = $projectFolder;
-        $validatedRequest['date'] = (DateTime::createFromFormat('d/m/Y', $validatedRequest['date']))->format('Y-m-d');
+        $validatedRequest['date'] = (DateTime::createFromFormat('d/m/Y',
+            $validatedRequest['date']))->format('Y-m-d');
         $validatedRequest['expiration_date'] = (DateTime::createFromFormat('d/m/Y',
             $validatedRequest['expiration_date']))->format('Y-m-d');
         $validatedRequest['user_id'] = $user->id;
@@ -187,10 +191,10 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-
         $validatedRequest = $request->validated();
 
-        $validatedRequest['date'] = (DateTime::createFromFormat('d/m/Y', $validatedRequest['date']))->format('Y-m-d');
+        $validatedRequest['date'] = (DateTime::createFromFormat('d/m/Y',
+            $validatedRequest['date']))->format('Y-m-d');
         $validatedRequest['expiration_date'] = (DateTime::createFromFormat('d/m/Y',
             $validatedRequest['expiration_date']))->format('Y-m-d');
 
@@ -229,10 +233,62 @@ class ProjectController extends Controller
         return view('projects.client-gallery', compact('user', 'project', 'projectObjects'));
     }
 
+    public function saveUserLike(SaveUserLikeRequest $request, Project $project)
+    {
+        return response()->json([
+            'success' => 'Like saved successfully', 'reactionData' => $this->saveUserReaction($request, $project),
+        ]);
+    }
+
+    public function saveUserComment(SaveUserCommentRequest $request, Project $project)
+    {
+        return response()->json([
+            'success' => 'Comment saved successfully', 'reactionData' => $this->saveUserReaction($request, $project)
+        ]);
+    }
+
+    private function saveUserReaction(SaveUserCommentRequest|SaveUserLikeRequest $request, Project $project)
+    {
+        $userId = $request->get('userId');
+        $projectId = $project->id;
+        $object = $request->get('object');
+        $objectKey = $object['key'];
+        $objectUrl = $object['objectUrl'];
+        $clientName = $request->get('clientName', 'Anonymous');
+        $hasLike = $request->get('hasLike', false);
+        $hasComment = $request->get('hasComment', false);
+        $commentMessage = $request->get('commentMessage', null);
+        $commentDate = $hasComment ? now() : null;
+        $likeDate = $hasLike ? now() : null;
+
+        if ($request instanceof SaveUserCommentRequest) {
+            session(['client_name' => $clientName]);
+        }
+
+        return UserReaction::updateOrCreate([
+            'user_id' => $userId,
+            'project_id' => $projectId,
+            'object_key' => $objectKey,
+            'client_name' => $clientName,
+        ], [
+            'user_id' => $userId,
+            'project_id' => $projectId,
+            'object_key' => $objectKey,
+            'object_url' => $objectUrl,
+            'client_name' => $clientName,
+            'has_like' => $hasLike,
+            'has_comment' => $hasComment,
+            'comment_message' => $commentMessage,
+            'comment_date' => $commentDate,
+            'like_date' => $likeDate,
+        ]);
+    }
+
     /**
      * @param  array|null  $projectObjects
      * @param  ProjectService  $projectService
      * @param  Project  $project
+     *
      * @return void
      */
     public function setSizeAndCountOfObjects(

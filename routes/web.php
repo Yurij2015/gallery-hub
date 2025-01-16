@@ -43,4 +43,10 @@ Route::middleware('auth')->group(function () {
 Route::get('/user-projects/{user}/{project}', [ProjectController::class, 'clientGallery'])->name('user-projects.show');
 Route::get('/download-folder/{project}', [ProjectController::class, 'downloadFolder'])->name('download-folder');
 
+//likes and comments ajax
+Route::group(['prefix' => 'client', 'as' => 'client.'], function () {
+    Route::post('/projects/{project}/like', [ProjectController::class, 'saveUserLike'])->name('projects.like');
+    Route::post('/projects/{project}/comment', [ProjectController::class, 'saveUserComment'])->name('projects.comment');
+});
+
 require __DIR__.'/auth.php';
