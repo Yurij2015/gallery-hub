@@ -231,6 +231,10 @@ class ProjectController extends Controller
 
         $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
 
+        if($project->expiration_date < now()) {
+            return view('projects.expired-client-gallery', compact('user', 'project'))->with('error', 'Project has expired');
+        }
+
         return view('projects.client-gallery', compact('user', 'project', 'projectObjects'));
     }
 
