@@ -141,14 +141,39 @@
                                         {{ $project->expiration_date }}
                                     </td>
                                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{ $project->views_statistic }}
-                                    </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{ $project->download_statistic }}
-                                    </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <span
-                                            class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded me-2 dark:bg-red-700 dark:text-red-100 border border-red-500 ">
+                                            class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex justify-center items-center px-2.5 py-0.5 rounded me-2 dark:bg-green-700 dark:text-green-100 border border-green-500 w-14 h-6">
+                                                <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true"
+                                                     xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                     viewBox="0 0 20 20">
+                                                <path stroke="currentColor" stroke-width="2"
+                                                      d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
+                                                <path stroke="currentColor" stroke-width="2"
+                                                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                                </svg>
+                                                {{ $project->views_statistic }}
+                                             </span>
+                                    </td>
+                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                         <span
+                                             class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex justify-center items-center px-2.5 py-0.5 rounded me-2 dark:bg-yellow-700 dark:text-yellow-100 border border-yellow-500 w-14 h-6">
+                                                <svg class="w-3 h-3 me-1.5" aria-hidden="true"
+                                                     xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                     viewBox="0 0 20 20">
+                                               <path fill-rule="evenodd"
+                                                     d="M13 11.15V4a1 1 0 1 0-2 0v7.15L8.78 8.374a1 1 0 1 0-1.56 1.25l4 5a1 1 0 0 0 1.56 0l4-5a1 1 0 1 0-1.56-1.25L13 11.15Z"
+                                                     clip-rule="evenodd"/>
+                                                <path fill-rule="evenodd"
+                                                      d="M9.657 15.874 7.358 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.358l-2.3 2.874a3 3 0 0 1-4.685 0ZM17 16a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z"
+                                                      clip-rule="evenodd"/>
+                                                </svg>
+                                                {{ $project->download_statistic }}
+                                             </span>
+                                    </td>
+                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <div>
+                                            <span
+                                                class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex justify-center items-center px-2.5 py-0.5 rounded me-2 dark:bg-red-700 dark:text-red-100 border border-red-500 w-14 h-6">
                                                 <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true"
                                                      xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                                      viewBox="0 0 20 20">
@@ -156,10 +181,12 @@
                                                         d="M15.03 9.684h3.965c.322 0 .64.08.925.232.286.153.532.374.717.645a2.109 2.109 0 0 1 .242 1.883l-2.36 7.201c-.288.814-.48 1.355-1.884 1.355-2.072 0-4.276-.677-6.157-1.256-.472-.145-.924-.284-1.348-.404h-.115V9.478a25.485 25.485 0 0 0 4.238-5.514 1.8 1.8 0 0 1 .901-.83 1.74 1.74 0 0 1 1.21-.048c.396.13.736.397.96.757.225.36.32.788.269 1.211l-1.562 4.63ZM4.177 10H7v8a2 2 0 1 1-4 0v-6.823C3 10.527 3.527 10 4.176 10Z"
                                                         clip-rule="evenodd"/>
                                                 </svg>
-                                                 {{$project->userReaction->where('has_like', 1)->count()}}
-                                        </span>
+                                                {{$project->userReaction->where('has_like', 1)->count()}}
+                                            </span>
+                                        </div>
+                                        <div>
                                         <span
-                                            class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded me-2 dark:bg-blue-700 dark:text-blue-100 border border-blue-500 ">
+                                            class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded me-2 dark:bg-blue-700 dark:text-blue-100 border border-blue-500 w-14 justify-center h-6 mt-2">
                                                 <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true"
                                                      xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                                      viewBox="0 0 20 20">
@@ -169,6 +196,7 @@
                                                 </svg>
                                                     {{ $project->userReaction->where('has_comment', 1)->count()}}
                                                 </span>
+                                        </div>
                                     </td>
                                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
