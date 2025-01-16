@@ -1,15 +1,12 @@
 @extends('client-main')
-
 @section('content')
     <section class="py-10">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ">
-
             <button type="button"
                     class="py-2 px-3 me-2 mb-9 text-xs font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                     id="goBack">
                 {{ __('message.goBack') }}
             </button>
-
             <span
                 class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-blue-900 dark:text-blue-300">
                     {{ $project->getObjectsCount() }} file(s)
@@ -18,7 +15,6 @@
                 class="bg-green-100 text-green-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-green-900 dark:text-green-300">
                     {{ $project->getSizeOfProject() }}
             </span>
-
             <a href="{{ route('download-folder', $project->id) }}"
                class="py-2 px-3 me-2 mb-9 text-xs text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-sm text-sx text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                 <svg class="w-3 h-3 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -70,7 +66,9 @@
                                     data-modal-target="like-modal"
                                     data-modal-toggle="like-modal"
                                     class="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 like-btn-preview"
-                                    data-id="{{ $object->key  }}">
+                                    data-id="{{ $object->key  }}"
+                                    data-object="{{ json_encode($object) }}"
+                                >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                          stroke="currentColor" class="w-6 h-6 text-gray-500">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -83,44 +81,50 @@
                 </div>
             </div>
         </div>
-{{--        <div class="lightbox" id="lightbox">--}}
-{{--            <span class="close" id="close">&times;</span>--}}
-{{--            <img src="" alt="" class="lightbox-image" id="lightbox-image">--}}
-{{--        </div>--}}
-
         <!-- Modal -->
-        <div id="like-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div id="like-modal" tabindex="-1" aria-hidden="true"
+             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-md max-h-full">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            Add yout comment
+                            Add your comment
                         </h3>
-
-                        <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="like-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        <button type="button"
+                                class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                data-modal-hide="like-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                 viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                      stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                             </svg>
                             <span class="sr-only">Close modal</span>
                         </button>
                     </div>
-
                     <!-- Modal body -->
                     <div class="p-4 md:p-5">
-                        <p class="text-sm font-semibold text-gray-900 dark:text-white">You liked image ID: <span id="liked-image-id"></span>.</p>
-
+                        {{--                        <p class="text-sm font-semibold text-gray-900 dark:text-white hidden"><span id="liked-image-id"></span></p>--}}
                         <form class="space-y-4" action="#">
                             <div>
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your name</label>
-                                <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="name@company.com" required />
+                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
+                                    name</label>
+                                <input type="text" name="name" id="name"
+                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                       placeholder="Type your name" required value="{{ session('client_name') }}"/>
                             </div>
                             <div class="col-span-2">
-                                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Yout comment</label>
-                                <textarea id="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write product description here"></textarea>
+                                <label for="comment"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
+                                    comment</label>
+                                <textarea id="comment" rows="4"
+                                          class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                          placeholder="Write your comment here"></textarea>
                             </div>
-                            <button id="close-modal" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">Save</button>
+                            <button id="save-comment"
+                                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">Save
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -130,7 +134,6 @@
 @endsection
 
 @section('footer')
-    {{--        <link rel="stylesheet" href="{{ asset('css/client-gallery.css') }}">--}}
     <style>
         #like-modal {
             transition: opacity 0.3s ease-in-out;
@@ -139,39 +142,59 @@
 @endsection
 
 @push('scripts')
-    {{--        <script src="{{ asset('js/client-gallery.js') }}"></script>--}}
     <script>
+        let currentImageId = null;
+        let currentObject = null;
+
+        const project = @json($project);
+        const user = @json($user);
+        const likeProjectUrl = "{{ route('client.projects.like', ['project' => '__PROJECT_ID__']) }}";
+        const commentProjectUrl = "{{ route('client.projects.comment', ['project' => '__PROJECT_ID__']) }}";
+        const clientName = "{{ session('client_name') }}" || null;
+
+        if(clientName){
+            const buttons = document.querySelectorAll('.like-btn-preview');
+            buttons.forEach(button => {
+                button.removeAttribute('data-modal-toggle');
+            });
+        }
+
         document.addEventListener('click', function (e) {
             if (e.target.classList.contains('like-btn')) {
-                const imageId = e.target.getAttribute('data-id');
-
-                // Update the modal content with the image ID
-                document.getElementById('liked-image-id').textContent = imageId;
-
-                // Show the modal
-                // document.getElementById('like-modal').classList.remove('hidden');
+                document.getElementById('liked-image-id').textContent = e.target.getAttribute('data-id');
             }
         });
 
-        // Close the modal when the close button is clicked
-        document.getElementById('close-modal').addEventListener('click', function () {
-            document.getElementById('like-modal').classList.add('hidden');
-        });
+        document.getElementById('save-comment').addEventListener('click', function (e) {
+            e.preventDefault();
 
+            const nameInput = document.getElementById('name');
+            const commentInput = document.getElementById('comment');
+
+            if (!nameInput.checkValidity()) {
+                nameInput.focus();
+                return;
+            }
+
+            if (!commentInput.checkValidity()) {
+                commentInput.focus();
+                return;
+            }
+
+            const name = nameInput.value;
+            const comment = commentInput.value;
+
+            sendCommentRequest(currentImageId, currentObject, comment, name);
+            // document.getElementById('like-modal').classList.add('hidden');
+        });
 
         document.addEventListener('click', function (e) {
             if (e.target.classList.contains('like-btn')) {
                 console.log('Like button clicked!');
 
                 const button = e.target;
-                const imageId = button.getAttribute('data-id');
 
-                // Toggle liked state (you can replace this with an AJAX call)
                 button.innerHTML = button.innerHTML === '❤️ Like' ? '💔 Unlike' : '❤️ Like';
-
-                console.log(`Toggled like for image ID: ${imageId}`);
-
-                // TODO: Add AJAX request to save the like state on the server
             }
         });
 
@@ -180,20 +203,80 @@
 
                 const button = e.target.closest('.like-btn-preview');
                 const imageId = button.getAttribute('data-id');
+                const object = JSON.parse(button.getAttribute('data-object'));
 
-                document.getElementById('liked-image-id').textContent = imageId;
+                currentImageId = button.getAttribute('data-id');
+                currentObject = JSON.parse(button.getAttribute('data-object'));
 
                 // Toggle liked state (change heart color)
                 const heartIcon = button.querySelector('svg');
                 heartIcon.classList.toggle('text-red-500');
                 heartIcon.classList.toggle('text-gray-500');
 
-                console.log(`Toggled like for image ID: ${imageId}`);
+                // console.log(`Toggled like for image ID: ${imageId}`);
+                console.log({userId: user.id, projectId: project.id});
 
-                document.getElementById('like-modal').classList.remove('hidden');
+                sendLikeRequest(imageId, object);
 
-                // TODO: Send AJAX request to save the like state
+                // document.getElementById('like-modal').classList.remove('hidden');
             }
         });
+
+        function sendLikeRequest(imageId, object) {
+            const url = likeProjectUrl.replace('__PROJECT_ID__', project.id);
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    userId: user.id,
+                    projectId: project.id,
+                    imageId: imageId,
+                    object: object,
+                    hasLike: true,
+                    clientName: clientName
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Object liked:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function sendCommentRequest(imageId, object, comment, name) {
+            const url = commentProjectUrl.replace('__PROJECT_ID__', project.id);
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    userId: user.id,
+                    projectId: project.id,
+                    imageId: imageId,
+                    object: object,
+                    hasComment: true,
+                    comment: comment,
+                    clientName: name
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Object commented:', data);
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
     </script>
 @endpush
