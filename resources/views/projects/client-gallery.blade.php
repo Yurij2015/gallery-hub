@@ -105,7 +105,6 @@
                     </div>
                     <!-- Modal body -->
                     <div class="p-4 md:p-5">
-                        {{--                        <p class="text-sm font-semibold text-gray-900 dark:text-white hidden"><span id="liked-image-id"></span></p>--}}
                         <form class="space-y-4" action="#">
                             <div>
                                 <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your

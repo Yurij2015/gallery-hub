@@ -8,7 +8,6 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Services\BucketService;
 use App\Http\Services\ProjectService;
-use App\Models\BucketObjects;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\UserReaction;
@@ -228,6 +227,8 @@ class ProjectController extends Controller
             $object->setObjectUrl($imgUrl);
         }
 
+        $project->increment('views_statistic');
+
         $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
 
         return view('projects.client-gallery', compact('user', 'project', 'projectObjects'));
@@ -324,6 +325,8 @@ class ProjectController extends Controller
 
     public function downloadFolder(BucketService $bucketService, Project $project)
     {
+        $project->increment('download_statistic');
+
         return $bucketService->downloadFolder($project->bucket_name, $project->project_folder);
     }
 }
