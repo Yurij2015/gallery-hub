@@ -265,23 +265,30 @@ class ProjectController extends Controller
             session(['client_name' => $clientName]);
         }
 
-        return UserReaction::updateOrCreate([
-            'user_id' => $userId,
-            'project_id' => $projectId,
-            'object_key' => $objectKey,
-            'client_name' => $clientName,
-        ], [
+        $reactionData = [
             'user_id' => $userId,
             'project_id' => $projectId,
             'object_key' => $objectKey,
             'object_url' => $objectUrl,
             'client_name' => $clientName,
-            'has_like' => $hasLike,
-            'has_comment' => $hasComment,
             'comment_message' => $commentMessage,
-            'comment_date' => $commentDate,
-            'like_date' => $likeDate,
-        ]);
+        ];
+
+        if ($request instanceof SaveUserLikeRequest) {
+            $reactionData['has_like'] = $hasLike;
+            $reactionData['like_date'] = $likeDate;
+        } else {
+            $reactionData['has_comment'] = $hasComment;
+            $reactionData['comment_message'] = $commentMessage;
+            $reactionData['comment_date'] = $commentDate;
+        }
+
+        return UserReaction::updateOrCreate([
+            'user_id' => $userId,
+            'project_id' => $projectId,
+            'object_key' => $objectKey,
+            'client_name' => $clientName,
+        ], $reactionData);
     }
 
     /**
