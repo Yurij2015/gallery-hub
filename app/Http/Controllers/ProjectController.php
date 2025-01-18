@@ -298,7 +298,7 @@ class ProjectController extends Controller
             $reactionData['comment_message'] = $commentMessage;
             $reactionData['comment_date'] = $commentDate;
         } elseif ($request instanceof SaveUserDownloadRequest) {
-            $reactionData['download_statistic'] = $userReaction->download_statistic + 1;
+            $reactionData['download_statistic'] = $userReaction->download_statistic ? $userReaction->download_statistic + 1 : 1;
         }
 
         return UserReaction::updateOrCreate([
