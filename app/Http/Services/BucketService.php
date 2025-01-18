@@ -10,6 +10,7 @@ use Aws\Result;
 use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3Client;
 use Illuminate\Support\Facades\Log;
+use Psr\Http\Message\RequestInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ZipArchive;
@@ -315,5 +316,18 @@ class BucketService
                 'message' => $e->getMessage()
             ]);
         }
+    }
+
+    public function genetateShareUrl($bucketName, $key): string
+    {
+        $cmd = $this->s3Client->getCommand('GetObject', [
+            'Bucket' => $bucketName,
+            'Key'    => $key,
+        ]);
+
+        $expires = 3600;
+        $request = $this->s3Client->createPresignedRequest($cmd, "+{$expires} seconds");
+
+        return (string) $request->getUri();
     }
 }

@@ -17,6 +17,8 @@ class BucketObject
 
     public ?string $objectName = null;
 
+    public ?string $shareUrl = null;
+
     public function __construct(array $data)
     {
         $this->key = $data['Key'];
@@ -46,5 +48,15 @@ class BucketObject
     public function setObjectName($objectName): void
     {
         $this->objectName = $objectName;
+    }
+
+    public function getShareUrl(): ?string
+    {
+        return $this->shareUrl;
+    }
+
+    public function setShareUrl($shareUrl): void
+    {
+        $this->shareUrl = $shareUrl;
     }
 }

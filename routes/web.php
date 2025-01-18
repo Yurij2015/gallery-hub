@@ -47,6 +47,7 @@ Route::get('/download-folder/{project}', [ProjectController::class, 'downloadFol
 Route::group(['prefix' => 'client', 'as' => 'client.'], function () {
     Route::post('/projects/{project}/like', [ProjectController::class, 'saveUserLike'])->name('projects.like');
     Route::post('/projects/{project}/comment', [ProjectController::class, 'saveUserComment'])->name('projects.comment');
+    Route::post('/download-object-increment/{project}', [ProjectController::class, 'downloadObjectUrlIncrement'])->name('download-object-url-increment');
 });
 
 require __DIR__.'/auth.php';
