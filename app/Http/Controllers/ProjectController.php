@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SaveUserCommentRequest;
+use App\Http\Requests\SaveUserDownloadRequest;
 use App\Http\Requests\SaveUserLikeRequest;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
@@ -225,14 +226,16 @@ class ProjectController extends Controller
             $key = $object->key;
             $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
             $object->setObjectUrl($imgUrl);
+            $object->setShareUrl($bucketService->genetateShareUrl($bucketName, $key));
         }
 
         $project->increment('views_statistic');
 
         $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
 
-        if($project->expiration_date < now()) {
-            return view('projects.expired-client-gallery', compact('user', 'project'))->with('error', 'Project has expired');
+        if ($project->expiration_date < now()) {
+            return view('projects.expired-client-gallery', compact('user', 'project'))->with('error',
+                'Project has expired');
         }
 
         return view('projects.client-gallery', compact('user', 'project', 'projectObjects'));
@@ -252,8 +255,10 @@ class ProjectController extends Controller
         ]);
     }
 
-    private function saveUserReaction(SaveUserCommentRequest|SaveUserLikeRequest $request, Project $project)
-    {
+    private function saveUserReaction(
+        SaveUserCommentRequest|SaveUserLikeRequest|SaveUserDownloadRequest $request,
+        Project $project
+    ) {
         $userId = $request->get('userId');
         $projectId = $project->id;
         $object = $request->get('object');
@@ -262,7 +267,7 @@ class ProjectController extends Controller
         $clientName = $request->get('clientName', 'Anonymous');
         $hasLike = $request->get('hasLike', false);
         $hasComment = $request->get('hasComment', false);
-        $commentMessage = $request->get('commentMessage', null);
+        $commentMessage = $request->get('comment', null);
         $commentDate = $hasComment ? now() : null;
         $likeDate = $hasLike ? now() : null;
 
@@ -279,13 +284,21 @@ class ProjectController extends Controller
             'comment_message' => $commentMessage,
         ];
 
+        $userReaction = UserReaction::where('user_id', $userId)
+            ->where('project_id', $projectId)
+            ->where('object_key', $objectKey)
+            ->where('client_name', $clientName)
+            ->first();
+
         if ($request instanceof SaveUserLikeRequest) {
             $reactionData['has_like'] = $hasLike;
             $reactionData['like_date'] = $likeDate;
-        } else {
+        } elseif ($request instanceof SaveUserCommentRequest) {
             $reactionData['has_comment'] = $hasComment;
             $reactionData['comment_message'] = $commentMessage;
             $reactionData['comment_date'] = $commentDate;
+        } elseif ($request instanceof SaveUserDownloadRequest) {
+            $reactionData['download_statistic'] = $userReaction->download_statistic + 1;
         }
 
         return UserReaction::updateOrCreate([
@@ -332,5 +345,13 @@ class ProjectController extends Controller
         $project->increment('download_statistic');
 
         return $bucketService->downloadFolder($project->bucket_name, $project->project_folder);
+    }
+
+    public function downloadObjectUrlIncrement(SaveUserDownloadRequest $request, Project $project)
+    {
+        return response()->json([
+            'success' => 'Download stat saved successfully',
+            'reactionData' => $this->saveUserReaction($request, $project)
+        ]);
     }
 }

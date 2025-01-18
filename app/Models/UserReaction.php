@@ -18,6 +18,7 @@ class UserReaction extends Model
         'comment_message',
         'comment_date',
         'like_date',
+        'download_statistic',
     ];
 
     public function user(): BelongsTo
