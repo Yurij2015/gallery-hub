@@ -540,6 +540,11 @@
                     console.error('Error:', error);
                 });
         }
+
+        document.getElementById('instagramButton').addEventListener('click', function (e) {
+            window.open('{{ $user->userDetail->instagram_url }}', '_blank');
+        });
+
     </script>
     <script type="module" src="{{ asset("js/client-gallery.js") }}"></script>
 @endpush
