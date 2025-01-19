@@ -541,6 +541,6 @@
                 });
         }
     </script>
-    <script type="module" src="{{ asset("js/client-gallery.js") }}"
+    <script type="module" src="{{ asset("js/client-gallery.js") }}"></script>
 @endpush
 
