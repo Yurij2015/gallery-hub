@@ -14,10 +14,13 @@ Alpine.start();
 import GLightbox from 'glightbox';
 import 'glightbox/dist/css/glightbox.min.css';
 
-const lightbox = GLightbox({
+
+ const glightbox = GLightbox({
     selector: '.glightbox',
     touchNavigation: true,
     loop: true,
     closeButton: true,
     zoomable: true,
 });
+
+window.glightbox = glightbox;
