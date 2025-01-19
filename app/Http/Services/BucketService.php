@@ -10,10 +10,12 @@ use Aws\Result;
 use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3Client;
 use Illuminate\Support\Facades\Log;
-use Psr\Http\Message\RequestInterface;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Imagick\Driver;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ZipArchive;
+
 
 class BucketService
 {
@@ -322,12 +324,22 @@ class BucketService
     {
         $cmd = $this->s3Client->getCommand('GetObject', [
             'Bucket' => $bucketName,
-            'Key'    => $key,
+            'Key' => $key,
         ]);
 
         $expires = 3600;
         $request = $this->s3Client->createPresignedRequest($cmd, "+{$expires} seconds");
 
         return (string) $request->getUri();
+    }
+
+    public function prepareResizedImage($bucketName, $key): string
+    {
+        $objectUrl = $this->s3Client->getObjectUrl($bucketName, $key);
+        $file = file_get_contents($objectUrl);
+        $manager = new ImageManager(new Driver());
+        $resizedImage = $manager->read($file)->scale(300);
+
+        return $resizedImage->toJpeg()->toDataUri();
     }
 }
