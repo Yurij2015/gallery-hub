@@ -14,7 +14,6 @@ Alpine.start();
 import GLightbox from 'glightbox';
 import 'glightbox/dist/css/glightbox.min.css';
 
-
  const glightbox = GLightbox({
     selector: '.glightbox',
     touchNavigation: true,
