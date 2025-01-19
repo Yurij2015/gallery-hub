@@ -17,6 +17,7 @@ class UserDetail extends Model
         'dob',
         'avatar',
         'status',
+        'instagram_url',
     ];
 
     public function user(): BelongsTo

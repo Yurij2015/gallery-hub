@@ -33,6 +33,7 @@ class UpdateUserRequest extends FormRequest
             'file' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|string',
             'role' => 'nullable|string',
+            'instagram_url' => 'nullable|string',
         ];
     }
 

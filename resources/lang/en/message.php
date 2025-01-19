@@ -63,5 +63,6 @@ return [
     'selectStatus' => 'Select Status',
     'phoneNumber' => 'Phone Number',
     'selectRole' => 'Select Role',
+    'instagramUrl' => 'Instagram Url'
 ];
 
