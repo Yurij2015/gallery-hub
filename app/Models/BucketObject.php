@@ -19,6 +19,8 @@ class BucketObject
 
     public ?string $shareUrl = null;
 
+    public ?string $base64Image = null;
+
     public function __construct(array $data)
     {
         $this->key = $data['Key'];
@@ -58,5 +60,15 @@ class BucketObject
     public function setShareUrl($shareUrl): void
     {
         $this->shareUrl = $shareUrl;
+    }
+
+    public function getBase64Image(): ?string
+    {
+        return $this->base64Image;
+    }
+
+    public function setBase64Image($base64Image): void
+    {
+        $this->base64Image = $base64Image;
     }
 }

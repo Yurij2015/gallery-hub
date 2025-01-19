@@ -227,6 +227,7 @@ class ProjectController extends Controller
             $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
             $object->setObjectUrl($imgUrl);
             $object->setShareUrl($bucketService->genetateShareUrl($bucketName, $key));
+//            $object->setBase64Image($bucketService->prepareResizedImage($bucketName, $key));
         }
 
         $project->increment('views_statistic');
