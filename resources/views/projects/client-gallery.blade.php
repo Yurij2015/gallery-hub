@@ -2,7 +2,7 @@
 @section('content')
     <section class="py-10">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ">
-            <div class="md:flex items-center space-x-3 mb-8">
+            <div class="md:flex items-center mb-8">
                 <div class="flex-1">
                     <button type="button"
                             class="py-2 px-3 me-2 text-xs font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
@@ -33,7 +33,7 @@
                     </a>
                 </div>
                 <button
-                    class="py-2 px-4 text-sm font-medium text-white rounded-lg group bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 hover:from-yellow-500 hover:via-red-600 hover:to-pink-600 focus:ring-4 focus:outline-none focus:ring-yellow-200 dark:focus:ring-yellow-800 flex items-center gap-3"
+                    class="mt-2 sm:mt-0 py-2 px-4 text-sm font-medium text-white rounded-lg group bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 hover:from-yellow-500 hover:via-red-600 hover:to-pink-600 focus:ring-4 focus:outline-none focus:ring-yellow-200 dark:focus:ring-yellow-800 flex items-center gap-3"
                     id="instagramButton">
                     <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                          width="24" height="24" fill="none" viewBox="0 0 24 24">
