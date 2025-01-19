@@ -82,5 +82,16 @@ document.addEventListener('click', function (e) {
 // Find the modal element
 const modalElement = document.getElementById('comment-modal-slider');
 // Initialize the modal
-new Modal(modalElement);
+const commentModal = new Modal(modalElement);
+// Attach the modal toggle behavior to your button
+// const commentButton = document.querySelector('.comment-btn-preview');
+// commentButton.addEventListener('click', () => {
+//     commentModal.show();
+// });
+//
+// // Close button
+// const closeModalButton = document.querySelector('.close-comment-modal');
+// closeModalButton.addEventListener('click', () => {
+//     commentModal.hide();
+// });
 
