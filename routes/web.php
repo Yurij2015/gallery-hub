@@ -19,9 +19,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile-settings', [ProfileController::class, 'settings'])->name('profile.settings');
+    Route::put('/update-user-settings', [UserController::class, 'updateUserSettings'])->name('update-user-settings');
 
     Route::get('/buckets', [BucketController::class, 'index'])->name('buckets.index');
-
 
     Route::get('/bucket-objects/{bucketName}', [BucketObjectsController::class, 'index'])->name('bucket-objects');
     //projects
@@ -34,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
     Route::get('/projects/edit/{project}', [ProjectController::class, 'edit'])->name('projects.edit');
     Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
+    Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
