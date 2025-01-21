@@ -1,4 +1,7 @@
 @extends('client-main')
+@php
+    use Carbon\Carbon;
+@endphp
 @section('content')
     <section class="py-10">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ">
@@ -31,11 +34,17 @@
                         </svg>
                         {{ __('client-gallery.download') }}
                     </a>
+                    <span class="text-sm text-gray-900 sm:text-sm dark:text-white text-center mt-2">
+                       {{ __('message.expirationDate') }}:
+                       {{ Carbon::createFromFormat( 'Y-m-d', $project->expiration_date)->diffForHumans() }}
+                       ({{ Carbon::createFromFormat( 'Y-m-d', $project->expiration_date)->format('d M Y H:i:s')  }})
+                    </span>
                 </div>
                 <button
                     class="mt-2 sm:mt-0 py-2 px-4 text-sm font-medium text-white rounded-lg group bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 hover:from-yellow-500 hover:via-red-600 hover:to-pink-600 focus:ring-4 focus:outline-none focus:ring-yellow-200 dark:focus:ring-yellow-800 flex items-center gap-3"
                     id="instagramButton">
-                    <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
+                         xmlns="http://www.w3.org/2000/svg"
                          width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path fill="currentColor" fill-rule="evenodd"
                               d="M3 8a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8Zm5-3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H8Zm7.597 2.214a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2h-.01a1 1 0 0 1-1-1ZM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-5 3a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z"
@@ -52,26 +61,26 @@
                             <div class="relative md:col-span-4 h-[277px] w-full rounded-3xl mb-7">
                                 <a href="{{ $object->objectUrl }}"
                                    data-gallery="gallery-{{ $project->id }}"
-{{--                                   data-description='--}}
-{{--                                                                   <div class="flex items-center space-x-2">--}}
-{{--                                                                       <!-- Like Button -->--}}
-{{--                                                                       <button class="like-btn" data-id="{{ $object->key }}">❤️ Like</button>--}}
+                                   {{--                                   data-description='--}}
+                                   {{--                                                                   <div class="flex items-center space-x-2">--}}
+                                   {{--                                                                       <!-- Like Button -->--}}
+                                   {{--                                                                       <button class="like-btn" data-id="{{ $object->key }}">❤️ Like</button>--}}
 
-{{--                                                                       <!-- Comment Input -->--}}
-{{--                                                                       <input type="text" name="name" placeholder="Yout name..."--}}
-{{--                                                                              class="comment-input border border-gray-300 rounded-lg px-2 py-1 text-sm w-full"--}}
-{{--                                                                              data-id="{{ $object->key }}">--}}
-{{--                                                                                   <input type="text" name="comment" placeholder="Add a comment..."--}}
-{{--                                                                              class="comment-input border border-gray-300 rounded-lg px-2 py-1 text-sm w-full"--}}
-{{--                                                                              data-id="{{ $object->key }}">--}}
+                                   {{--                                                                       <!-- Comment Input -->--}}
+                                   {{--                                                                       <input type="text" name="name" placeholder="Yout name..."--}}
+                                   {{--                                                                              class="comment-input border border-gray-300 rounded-lg px-2 py-1 text-sm w-full"--}}
+                                   {{--                                                                              data-id="{{ $object->key }}">--}}
+                                   {{--                                                                                   <input type="text" name="comment" placeholder="Add a comment..."--}}
+                                   {{--                                                                              class="comment-input border border-gray-300 rounded-lg px-2 py-1 text-sm w-full"--}}
+                                   {{--                                                                              data-id="{{ $object->key }}">--}}
 
-{{--                                                                       <!-- Save Comment Button -->--}}
-{{--                                                                       <button class="save-comment-btn bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600 transition"--}}
-{{--                                                                               data-id="{{ $object->key }}">--}}
-{{--                                                                           Save--}}
-{{--                                                                       </button>--}}
-{{--                                                                   </div>--}}
-{{--                                                                   '--}}
+                                   {{--                                                                       <!-- Save Comment Button -->--}}
+                                   {{--                                                                       <button class="save-comment-btn bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600 transition"--}}
+                                   {{--                                                                               data-id="{{ $object->key }}">--}}
+                                   {{--                                                                           Save--}}
+                                   {{--                                                                       </button>--}}
+                                   {{--                                                                   </div>--}}
+                                   {{--                                                                   '--}}
                                    class="glightbox">
                                     <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
                                          class="gallery-image object-cover rounded-3xl hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
@@ -542,7 +551,7 @@
         }
 
         document.getElementById('instagramButton').addEventListener('click', function (e) {
-            window.open('{{ $user->userDetail->instagram_url }}', '_blank');
+            window.open('{{ $user?->userDetail?->instagram_url }}', '_blank');
         });
 
     </script>

@@ -42,6 +42,9 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // TODO change this approach in admin panel and related to package
+        $user->syncRoles('photographer');
+
         event(new Registered($user));
 
         Auth::login($user);

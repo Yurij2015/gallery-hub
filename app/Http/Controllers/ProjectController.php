@@ -19,12 +19,25 @@ use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
+    public string $mainStorage;
+
+    public function __construct()
+    {
+        $this->mainStorage = config('services.minio.main_storage');
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(BucketService $bucketService, ProjectService $projectService)
     {
-        $projects = Project::with('user')->with('userReaction')->paginate(10);
+        $user = Auth::user();
+
+        if ($user->hasRole('admin')) {
+            $projects = Project::with('user')->with('userReaction')->paginate(10);
+        } else {
+            $projects = Project::with('user')->with('userReaction')->where('user_id', $user->id)->paginate(10);
+        }
 
         foreach ($projects as $project) {
             $bucketName = $project->bucket_name;
@@ -68,9 +81,13 @@ class ProjectController extends Controller
         $files = $request->file('files');
         $userEmail = Auth::user()->email;
         $userName = explode('@', $userEmail)[0];
-        $bucketService->createBucketIfNotExist($userName);
-        $bucketName = $userName;
-        $projectFolder = explode('/', reset($files)->getClientOriginalPath())[0];
+        $emailDomain = explode('@', $userEmail)[1];
+        //TODO add unique userName
+        $userDirectory = $userName.'.'.$emailDomain;
+        // change approach - do not create bucket for each user, just need to create a folder!!!
+        $bucketName = $this->mainStorage;
+        $bucketService->createBucketIfNotExist($bucketName);
+        $projectFolder = $userDirectory.'/'.explode('/', reset($files)->getClientOriginalPath())[0];
         $validatedRequest = $request->validated();
         $projectSlug = Str::slug($validatedRequest['name']);
 
@@ -88,7 +105,7 @@ class ProjectController extends Controller
             $objectName = $file->getClientOriginalPath();
             $objectPath = $file->getPathname();
             $content = file_get_contents($objectPath);
-            $bucketService->putObject($bucketName, $objectName, $content, $metaData);
+            $bucketService->putObject($bucketName, $userDirectory.'/'.$objectName, $content, $metaData);
         }
 
         $validatedRequest['slug'] = $projectSlug;
@@ -114,13 +131,19 @@ class ProjectController extends Controller
         Request $request,
         ProjectService $projectService
     ) {
-        $bucketName = $project->bucket_name;
-        $projectFolder = $project->project_folder;
+        $bucketName = config('services.minio.main_storage');
+
+        $userEmail = Auth::user()->email;
+        $userName = explode('@', $userEmail)[0];
+        $emailDomain = explode('@', $userEmail)[1];
+        $userDirectory = $userName.'.'.$emailDomain;
+
         $childKeyParam = $request->get('childKey');
         $keySegmentsFromUrl = explode('/', $childKeyParam);
         $childKeyParam = $childKeyParam ? '/'.$childKeyParam : '';
         $countOfChildKeysInUrl = $childKeyParam ? count($keySegmentsFromUrl) - 1 : null;
-        $projectFolderObjects = $bucketService->listObjectsInFolder($bucketName, $projectFolder.$childKeyParam);
+
+        $projectFolderObjects = $bucketService->listObjectsInFolder($bucketName, $userDirectory.$childKeyParam);
 
         if ($projectFolderObjects) {
             $objectsCount = count($projectFolderObjects);
@@ -143,7 +166,7 @@ class ProjectController extends Controller
             $objectName = end($keySegments);
             $childKey = '';;
 
-            if ((count($keySegments)) > 2 + $countOfChildKeysInUrl) {
+            if ((count($keySegments)) > 3 + $countOfChildKeysInUrl) {
                 for ($i = 1; $i < count($keySegments) - 1; $i++) {
                     $childKey .= $keySegments[$i].'/';
                 }
@@ -206,9 +229,11 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Project $project)
     {
-        //
+        $project->delete();
+
+        return redirect()->route('projects.index')->with('success', 'Project deleted successfully');
     }
 
     public function clientGallery(

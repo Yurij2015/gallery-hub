@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\UpdateUserSettingsRequest;
 use App\Models\User;
 use Exception;
 use DateTime;
@@ -40,7 +41,7 @@ class UserController extends Controller
         $name = $validatedRequest['name'];
         $user->update(['name' => $name]);
 
-        if(array_key_exists('role', $validatedRequest)){
+        if (array_key_exists('role', $validatedRequest)) {
             $user->syncRoles($validatedRequest['role']);
         }
 
@@ -68,5 +69,41 @@ class UserController extends Controller
         );
 
         return redirect()->route('users.index');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function updateUserSettings(UpdateUserSettingsRequest $request)
+    {
+        $user = auth()->user();
+        $validatedRequest = $request->validated();
+
+        $name = $validatedRequest['name'];
+        $user->update(['name' => $name]);
+
+        try {
+            $image = $request->file('file');
+            $imageName = $image?->getClientOriginalName();
+            $filePath = $user->email.'/images/'.$imageName;
+
+            if ($imageName) {
+                Storage::disk('s3')->put($filePath, file_get_contents($image));
+                $avatar = Storage::disk('s3')->url($filePath);
+                $validatedRequest['avatar'] = $avatar ?? null;
+            }
+        } catch (Exception $e) {
+            Log::info($e->getMessage());
+            throw $e;
+        }
+
+        $validatedRequest['dob'] = (DateTime::createFromFormat('d/m/Y', $validatedRequest['dob']))->format('Y-m-d');
+
+        $user->userDetail()->updateOrCreate(
+            ['user_id' => $user->id],
+            $validatedRequest
+        );
+
+        return redirect()->route('profile.settings');
     }
 }

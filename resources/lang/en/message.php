@@ -63,6 +63,9 @@ return [
     'selectStatus' => 'Select Status',
     'phoneNumber' => 'Phone Number',
     'selectRole' => 'Select Role',
-    'instagramUrl' => 'Instagram Url'
+    'instagramUrl' => 'Instagram Url',
+    'userSettings' => 'User Settings',
+    'updateSettings' => 'Update Settings',
+    'expiringDate' => 'Expiring Date',
 ];
 
