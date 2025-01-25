@@ -6,6 +6,7 @@ import '../css/style.css';
 import './sidebar';
 
 import Alpine from 'alpinejs';
+import Inputmask from "inputmask";
 
 window.Alpine = Alpine;
 

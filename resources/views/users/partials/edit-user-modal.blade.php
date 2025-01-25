@@ -3,7 +3,7 @@
 @endphp
 <div
     class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-full"
-    id="edit-project-modal-{{ $user->id }}">
+    id="edit-user-modal-{{ $user->id }}">
     <div class="relative w-full h-full max-w-2xl px-4 md:h-auto">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
@@ -14,7 +14,7 @@
                 </h3>
                 <button type="button"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-white"
-                        data-modal-toggle="edit-project-modal-{{ $user->id }}">
+                        data-modal-toggle="edit-user-modal-{{ $user->id }}">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd"
                               d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -24,7 +24,10 @@
             </div>
             <!-- Modal body -->
             <div class="p-6 space-y-6">
-                <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('users.update', $user->id) }}"
+                      method="POST"
+                      enctype="multipart/form-data"
+                >
                     @csrf
                     @method('PUT')
                     <div class="grid grid-cols-6 gap-6">
@@ -108,7 +111,7 @@
                                    id="address"
                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                    required
-                                   value="{{ $user->userDetail?->address }}"
+                                   value="{{ $user->userDetail?->address  ?? old('address') }}"
                             >
                             <x-input-error :messages="$errors->get('address')" class="mt-2"/>
                         </div>
@@ -123,7 +126,7 @@
                                    id="city"
                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                    required
-                                   value="{{ $user->userDetail?->city }}"
+                                   value="{{ $user->userDetail?->city ?? old('city') }}"
                             >
                             <x-input-error :messages="$errors->get('city')" class="mt-2"/>
                         </div>
@@ -137,7 +140,7 @@
                                    id="state"
                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                    required
-                                   value="{{ $user->userDetail?->state }}"
+                                   value="{{ $user->userDetail?->state ?? old('state') }}"
                             >
                             <x-input-error :messages="$errors->get('state')" class="mt-2"/>
                         </div>
@@ -151,7 +154,7 @@
                                    id="zip"
                                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                    required
-                                   value="{{ $user->userDetail?->zip }}"
+                                   value="{{ $user->userDetail?->zip  ?? old('zip') }}"
                             >
                             <x-input-error :messages="$errors->get('zip')" class="mt-2"/>
                         </div>
@@ -173,10 +176,10 @@
                                        id="phone"
                                        aria-describedby="helper-text-explanation"
                                        name="phone"
-                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                       pattern="\+[0-9]{3}-[0-9]{3}-[0-9]{4,5,6}"
+                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 input-mask-phone"
+                                       pattern="\+\d{1,3}-\d{3}-\d{4,6}"
                                        placeholder="+123-456-7890"
-                                       value="{{ $user->userDetail?->phone }}"
+                                       value="{{ $user->userDetail?->phone ?? old('phone') }}"
                                        required
                                 />
                             </div>
@@ -205,7 +208,7 @@
                                        name="dob"
                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                        placeholder="Select date of birth"
-                                       value="{{ Carbon::parse($user->userDetail?->dob )->format('d/m/Y') }}"
+                                       value="{{ Carbon::parse($user->userDetail?->dob )->format('d/m/Y') ?? old('dob') }}"
                                 >
                             </div>
                             <x-input-error :messages="$errors->get('dob')" class="mt-2"/>
@@ -218,7 +221,8 @@
                             <div class="relative">
                                 <div
                                     class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
-                                    <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
+                                         xmlns="http://www.w3.org/2000/svg"
                                          width="24" height="24" fill="none" viewBox="0 0 24 24">
                                         <path fill="currentColor" fill-rule="evenodd"
                                               d="M3 8a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8Zm5-3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H8Zm7.597 2.214a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2h-.01a1 1 0 0 1-1-1ZM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-5 3a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z"
@@ -231,7 +235,7 @@
                                        name="instagram_url"
                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                        placeholder="Type your instagram link"
-                                       value="{{ $user->userDetail?->instagram_url }}"
+                                       value="{{ $user->userDetail?->instagram_url  ?? old('instagram_url') }}"
                                 />
                             </div>
                         </div>
@@ -250,7 +254,8 @@
                     <div class="items-center border-t border-gray-200 rounded-b dark:border-gray-700 mt-8">
                         <button
                             class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 mt-8"
-                            type="submit">
+                            type="submit"
+                        >
                             {{ __('message.updateUser') }}
                         </button>
                     </div>
@@ -259,3 +264,11 @@
         </div>
     </div>
 </div>
+@push('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const inputElements = document.querySelectorAll(".input-mask-phone");
+            Inputmask({ mask: "+999-999-9999" }).mask(inputElements);
+        });
+    </script>
+@endpush
