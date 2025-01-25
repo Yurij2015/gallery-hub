@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/projects/edit/{project}', [ProjectController::class, 'edit'])->name('projects.edit');
     Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
     Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+    Route::get('/projects/statistic/{project}', [ProjectController::class, 'projectStatistic'])->name('project.statistic');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
