@@ -251,6 +251,17 @@ class ProjectController extends Controller
         $projectFolder = $project->project_folder;
         $bucketName = $project->bucket_name;
 
+        $sessionClientName = session('client_name');
+        $projectId = $project->id;
+        $userId = $user->id;
+
+//        dd($sessionClientName, $projectId, $userId);
+
+        $userReactions = UserReaction::where('user_id', $userId)
+            ->where('project_id', $projectId)
+            ->where('client_name', $sessionClientName)
+            ->get();
+
         $projectObjects = $bucketService->listObjectsInFolder($bucketName, $projectFolder);
 
         foreach ($projectObjects as $object) {
@@ -259,6 +270,14 @@ class ProjectController extends Controller
             $object->setObjectUrl($imgUrl);
             $object->setShareUrl($bucketService->genetateShareUrl($bucketName, $key));
 //            $object->setBase64Image($bucketService->prepareResizedImage($bucketName, $key));
+
+            foreach ($userReactions as $userReaction) {
+                if ($object->key === $userReaction->object_key) {
+                    $object->setUserLike($userReaction->has_like);
+                    $object->setUserComment($userReaction->has_comment);
+                    $object->setCommentMessage($userReaction->comment_message);
+                }
+            }
         }
 
         $project->increment('views_statistic');
