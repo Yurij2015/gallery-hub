@@ -21,6 +21,10 @@ class BucketObject
 
     public ?string $base64Image = null;
 
+    public ?bool $hasLike = null;
+    public ?bool $hasComment = null;
+    public ?string $commentMessage = null;
+
     public function __construct(array $data)
     {
         $this->key = $data['Key'];
@@ -70,5 +74,35 @@ class BucketObject
     public function setBase64Image($base64Image): void
     {
         $this->base64Image = $base64Image;
+    }
+
+    public function setUserLike($hasLike): void
+    {
+        $this->hasLike = $hasLike;
+    }
+
+    public function setUserComment($hasComment): void
+    {
+        $this->hasComment = $hasComment;
+    }
+
+    public function setCommentMessage($commentMessage): void
+    {
+        $this->commentMessage = $commentMessage;
+    }
+
+    public function getHasLike(): ?bool
+    {
+        return $this->hasLike;
+    }
+
+    public function getHasComment(): ?bool
+    {
+        return $this->hasComment;
+    }
+
+    public function getCommentMessage(): ?string
+    {
+        return $this->commentMessage;
     }
 }

@@ -69,7 +69,6 @@
                                         {{ $object->getObjectName() }}
                                     </p>
                                 </a>
-
                                 <div class="absolute top-2 right-2 flex flex-col items-end space-y-1 group">
                                     <!-- First button (Like) -->
                                     <button
@@ -80,7 +79,7 @@
                                         data-object="{{ json_encode($object) }}"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                             stroke="currentColor" class="w-6 h-6 text-gray-500">
+                                             stroke="currentColor" class="w-6 h-6  {{ $object->hasLike ? 'text-red-600' : 'text-gray-500'}}  bg-gray-200 rounded-full">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                   d="M4.318 6.318a4.5 4.5 0 011.406-1.094 4.5 4.5 0 015.68 0l.596.596.596-.596a4.5 4.5 0 015.68 0 4.5 4.5 0 011.406 1.094 4.5 4.5 0 010 5.68l-7.072 7.072a1 1 0 01-1.414 0L4.318 12a4.5 4.5 0 010-5.682z"/>
                                         </svg>
@@ -292,8 +291,6 @@
                 </div>
             </div>
         </div>
-
-
     </section>
 @endsection
 
@@ -410,7 +407,7 @@
                 currentObject = JSON.parse(button.getAttribute('data-object'));
 
                 const heartIcon = button.querySelector('svg');
-                heartIcon.classList.toggle('text-red-500');
+                heartIcon.classList.toggle('bg-red-500');
                 heartIcon.classList.toggle('text-gray-500');
 
                 console.log({userId: user.id, projectId: project.id});
@@ -426,8 +423,12 @@
         document.addEventListener('click', function (e) {
             if (e.target.closest('.comment-btn-preview')) {
                 const button = e.target.closest('.comment-btn-preview');
+
                 currentImageId = button.getAttribute('data-id');
                 currentObject = JSON.parse(button.getAttribute('data-object'));
+
+                const commentModalComment = document.getElementById('comment-modal-comment');
+                commentModalComment.value = currentObject.commentMessage;
 
                 const commentIcon = button.querySelector('svg');
                 commentIcon.classList.toggle('text-red-500');
