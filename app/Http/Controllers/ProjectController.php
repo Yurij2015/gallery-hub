@@ -307,7 +307,6 @@ class ProjectController extends Controller
             'object_key' => $objectKey,
             'object_url' => $objectUrl,
             'client_name' => $clientName,
-            'comment_message' => $commentMessage,
         ];
 
         $userReaction = UserReaction::where('user_id', $userId)
