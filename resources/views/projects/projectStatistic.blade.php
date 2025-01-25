@@ -75,23 +75,23 @@
                             </th>
 
                             <th scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                 {{ __('message.hasLike') }}
                             </th>
                             <th scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                 {{ __('message.hasComment') }}
                             </th>
                             <th scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                 {{ __('message.comment') }}
                             </th>
                             <th scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                 {{ __('message.downloadStatistic') }}
                             </th>
                             <th scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                 {{ __('message.showImage') }}
                             </th>
                         </tr>
@@ -111,12 +111,10 @@
                                                 class="text-base font-semibold text-gray-900 dark:text-white stringDisplay"
                                                 data-full-string="{{ $reaction->object_key }}">
                                             </div>
-                                            {{--  TODO add project statistic --}}
                                             <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                                                 {{ $reaction->client_name }}
                                             </div>
                                         </div>
-
                                         <div id="tooltip-object-{{ $reaction->id }}" role="tooltip"
                                              class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
                                             {{ $reaction->object_key }}
@@ -124,28 +122,35 @@
                                         </div>
                                     </td>
                                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div class="flex items-center">
-                                            <input id="checkbox-has-like-{{ $reaction->id }}"
-                                                   aria-describedby="checkbox-has-like"
-                                                   type="checkbox"
-                                                   readonly
-                                                   disabled
-                                                   {{ $reaction->has_like ? 'checked' : '' }}
-                                                   class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600 cursor-not-allowed">
-                                            <label for="checkbox-{{ $reaction->id }}" class="sr-only">checkbox</label>
+                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                            <div
+                                                class="text-base font-semibold text-gray-900 dark:text-white text-center">
+                                                <input id="checkbox-has-like-{{ $reaction->id }}"
+                                                       aria-describedby="checkbox-has-like"
+                                                       type="checkbox"
+                                                       readonly
+                                                       disabled
+                                                       {{ $reaction->has_like ? 'checked' : '' }}
+                                                       class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600 cursor-not-allowed">
+                                                <label for="checkbox-{{ $reaction->id }}"
+                                                       class="sr-only">checkbox</label>
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-
-                                        <div class="flex items-center">
-                                            <input id="checkbox-has-comment-{{ $reaction->id }}"
-                                                   aria-describedby="checkbox-has-comment"
-                                                   type="checkbox"
-                                                   readonly
-                                                   disabled
-                                                   {{ $reaction->has_comment ? 'checked' : '' }}
-                                                   class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600 cursor-not-allowed">
-                                            <label for="checkbox-{{ $reaction->id }}" class="sr-only">checkbox</label>
+                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                            <div
+                                                class="text-base font-semibold text-gray-900 dark:text-white text-center">
+                                                <input id="checkbox-has-comment-{{ $reaction->id }}"
+                                                       aria-describedby="checkbox-has-comment"
+                                                       type="checkbox"
+                                                       readonly
+                                                       disabled
+                                                       {{ $reaction->has_comment ? 'checked' : '' }}
+                                                       class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600 cursor-not-allowed">
+                                                <label for="checkbox-{{ $reaction->id }}"
+                                                       class="sr-only">checkbox</label>
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -157,13 +162,28 @@
                                     </td>
                                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                            <div class="text-base font-semibold text-gray-900 dark:text-white">
-                                                {{ $reaction->download_statistic > 0 ? $reaction->download_statistic : null }}
+                                            <div
+                                                class="text-base font-semibold text-gray-900 dark:text-white text-center">
+                                                <span
+                                                    class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex justify-center items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-100 border border-gray-500 w-14 h-6">
+                                                <svg class="w-3 h-3 me-1.5" aria-hidden="true"
+                                                     xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                     viewBox="0 0 20 20">
+                                               <path fill-rule="evenodd"
+                                                     d="M13 11.15V4a1 1 0 1 0-2 0v7.15L8.78 8.374a1 1 0 1 0-1.56 1.25l4 5a1 1 0 0 0 1.56 0l4-5a1 1 0 1 0-1.56-1.25L13 11.15Z"
+                                                     clip-rule="evenodd"/>
+                                                <path fill-rule="evenodd"
+                                                      d="M9.657 15.874 7.358 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.358l-2.3 2.874a3 3 0 0 1-4.685 0ZM17 16a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z"
+                                                      clip-rule="evenodd"/>
+                                                </svg>
+                                                {{ $reaction->download_statistic }}
+                                             </span>
+
                                             </div>
                                         </div>
                                     </td>
                                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400 text-center">
                                             <div class="text-base font-semibold text-gray-900 dark:text-white">
                                                 <a href="{{ route('projects.show', $project->id) }}"
                                                    data-tooltip-target="tooltip-view-{{$reaction->id}}"
@@ -180,7 +200,8 @@
                                                     </svg>
                                                 </a>
                                             </div>
-                                            <div id="tooltip-view-{{ $reaction->id }}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
+                                            <div id="tooltip-view-{{ $reaction->id }}" role="tooltip"
+                                                 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
                                                 {{ __('message.viewImage') }}
                                                 <div class="tooltip-arrow" data-popper-arrow></div>
                                             </div>
