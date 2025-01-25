@@ -34,9 +34,9 @@ class ProjectController extends Controller
         $user = Auth::user();
 
         if ($user->hasRole('admin')) {
-            $projects = Project::with('user')->with('userReaction')->paginate(10);
+            $projects = Project::with('user')->with('userReactions')->paginate(10);
         } else {
-            $projects = Project::with('user')->with('userReaction')->where('user_id', $user->id)->paginate(10);
+            $projects = Project::with('user')->with('userReactions')->where('user_id', $user->id)->paginate(10);
         }
 
         foreach ($projects as $project) {
@@ -234,6 +234,12 @@ class ProjectController extends Controller
         $project->delete();
 
         return redirect()->route('projects.index')->with('success', 'Project deleted successfully');
+    }
+
+    public function projectStatistic(Project $project)
+    {
+        $project->load('userReactions');
+        return view('projects.projectStatistic', compact('project'));
     }
 
     public function clientGallery(

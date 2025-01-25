@@ -99,7 +99,7 @@
                             </th>
                             <th scope="col"
                                 class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Actions
+                                {{ __('message.actions') }}
                             </th>
                         </tr>
                         </thead>
@@ -181,7 +181,7 @@
                                                         d="M15.03 9.684h3.965c.322 0 .64.08.925.232.286.153.532.374.717.645a2.109 2.109 0 0 1 .242 1.883l-2.36 7.201c-.288.814-.48 1.355-1.884 1.355-2.072 0-4.276-.677-6.157-1.256-.472-.145-.924-.284-1.348-.404h-.115V9.478a25.485 25.485 0 0 0 4.238-5.514 1.8 1.8 0 0 1 .901-.83 1.74 1.74 0 0 1 1.21-.048c.396.13.736.397.96.757.225.36.32.788.269 1.211l-1.562 4.63ZM4.177 10H7v8a2 2 0 1 1-4 0v-6.823C3 10.527 3.527 10 4.176 10Z"
                                                         clip-rule="evenodd"/>
                                                 </svg>
-                                                {{$project->userReaction->where('has_like', 1)->count()}}
+                                                {{$project->userReactions->where('has_like', 1)->count()}}
                                             </span>
                                         </div>
                                         <div>
@@ -194,38 +194,60 @@
                                                         d="M3 5.983C3 4.888 3.895 4 5 4h14c1.105 0 2 .888 2 1.983v8.923a1.992 1.992 0 0 1-2 1.983h-6.6l-2.867 2.7c-.955.899-2.533.228-2.533-1.08v-1.62H5c-1.105 0-2-.888-2-1.983V5.983Zm5.706 3.809a1 1 0 1 0-1.412 1.417 1 1 0 1 0 1.412-1.417Zm2.585.002a1 1 0 1 1 .003 1.414 1 1 0 0 1-.003-1.414Zm5.415-.002a1 1 0 1 0-1.412 1.417 1 1 0 1 0 1.412-1.417Z"
                                                         clip-rule="evenodd"/>
                                                 </svg>
-                                                    {{ $project->userReaction->where('has_comment', 1)->count()}}
+                                                    {{ $project->userReactions->where('has_comment', 1)->count()}}
                                                 </span>
                                         </div>
                                     </td>
                                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                                             <div class="text-base font-semibold text-gray-900 dark:text-white">
-                                                <a href="{{ route('user-projects.show', ['project' =>  $project, 'user' => $project->user->id, 'project-name' => urldecode($project->name)]) }}" target="_blank">
+                                                <a href="{{ route('user-projects.show', ['project' =>  $project, 'user' => $project->user->id, 'project-name' => urldecode($project->name)]) }}"
+                                                   target="_blank">
                                                     {{ __('message.projectLink')  }}
                                                 </a>
+                                                <a href="{{ route('user-projects.show', ['project' =>  $project, 'user' => $project->user->id, 'project-name' => urldecode($project->name)]) }}"
+                                                   target="_blank"
+                                                   data-tooltip-target="tooltip-copy"
+                                                   data-url="{{ route('user-projects.show', ['project' =>  $project, 'user' => $project->user->id, 'project-name' => urldecode($project->name)]) }}"
+                                                   class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-primary-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800 ml-2 copyLink">
+                                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                              d="M8 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1h2a2 2 0 0 1 2 2v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2Zm6 1h-4v2H9a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2h-1V4Zm-6 8a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1Zm1 3a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H9Z"
+                                                              clip-rule="evenodd"/>
+                                                    </svg>
+                                                </a>
+                                                <div id="tooltip-copy" role="tooltip"
+                                                     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
+                                                    {{ __('message.copyToClipboard') }}
+                                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                                </div>
                                             </div>
                                             <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                                                 {{ auth()->user()->hasRole('admin') ? $project->user->name  : ''}}
                                             </div>
                                         </div>
                                     </td>
-
                                     <td class="p-4 space-x-2 whitespace-nowrap">
                                         <a href="{{ route('projects.show', $project->id) }}"
+                                           data-tooltip-target="tooltip-view"
                                            class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                                  xmlns="http://www.w3.org/2000/svg">
                                                 <path fill-rule="evenodd"
                                                       d="M4.998 7.78C6.729 6.345 9.198 5 12 5c2.802 0 5.27 1.345 7.002 2.78a12.713 12.713 0 0 1 2.096 2.183c.253.344.465.682.618.997.14.286.284.658.284 1.04s-.145.754-.284 1.04a6.6 6.6 0 0 1-.618.997 12.712 12.712 0 0 1-2.096 2.183C17.271 17.655 14.802 19 12 19c-2.802 0-5.27-1.345-7.002-2.78a12.712 12.712 0 0 1-2.096-2.183 6.6 6.6 0 0 1-.618-.997C2.144 12.754 2 12.382 2 12s.145-.754.284-1.04c.153-.315.365-.653.618-.997A12.714 12.714 0 0 1 4.998 7.78ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
                                                       clip-rule="evenodd"/>
                                             </svg>
-                                            View
                                         </a>
-
+                                        <div id="tooltip-view" role="tooltip"
+                                             class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
+                                            {{ __('message.view') }}
+                                            <div class="tooltip-arrow" data-popper-arrow></div>
+                                        </div>
                                         <a href="{{ route('projects.edit', $project->id) }}"
+                                           data-tooltip-target="tooltip-edit"
                                            class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-primary-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                                  xmlns="http://www.w3.org/2000/svg">
                                                 <path
                                                     d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
@@ -233,20 +255,47 @@
                                                       d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
                                                       clip-rule="evenodd"></path>
                                             </svg>
-                                            Edit
                                         </a>
+                                        <div id="tooltip-edit" role="tooltip"
+                                             class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
+                                            {{ __('message.edit') }}
+                                            <div class="tooltip-arrow" data-popper-arrow></div>
+                                        </div>
                                         <button type="button"
                                                 data-modal-target="delete-project-modal-{{ $project->id }}"
                                                 data-modal-toggle="delete-project-modal-{{ $project->id }}"
-                                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
-                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                                                data-tooltip-target="tooltip-delete"
+                                                class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                                  xmlns="http://www.w3.org/2000/svg">
                                                 <path fill-rule="evenodd"
                                                       d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                                                       clip-rule="evenodd"></path>
                                             </svg>
-                                            {{ __('message.delete') }}
                                         </button>
+                                        <div id="tooltip-delete" role="tooltip"
+                                             class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
+                                            {{ __('message.delete') }}
+                                            <div class="tooltip-arrow" data-popper-arrow></div>
+                                        </div>
+                                        <a href="{{ route('project.statistic', $project->id) }}"
+                                           data-tooltip-target="tooltip-statistic"
+                                           class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-primary-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                      stroke-linejoin="round" stroke-width="2"
+                                                      d="M10 6.025A7.5 7.5 0 1 0 17.975 14H10V6.025Z"/>
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                      stroke-linejoin="round" stroke-width="2"
+                                                      d="M13.5 3c-.169 0-.334.014-.5.025V11h7.975c.011-.166.025-.331.025-.5A7.5 7.5 0 0 0 13.5 3Z"/>
+                                            </svg>
+                                        </a>
+                                        <div id="tooltip-statistic" role="tooltip"
+                                             class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
+                                            {{ __('message.projectStatistic') }}
+                                            <div class="tooltip-arrow" data-popper-arrow></div>
+                                        </div>
                                         @include('projects.partials.delete-project-modal')
                                     </td>
                                 </tr>
@@ -255,7 +304,7 @@
                             <tr>
                                 <td colspan="6"
                                     class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    No data found
+                                    {{ __('message.noDataFound') }}
                                 </td>
                             </tr>
                         @endif
@@ -284,10 +333,6 @@
                           clip-rule="evenodd"></path>
                 </svg>
             </a>
-            {{--            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{ __('app.showing') }} <span--}}
-            {{--                    class="font-semibold text-gray-900 dark:text-white">{{ $sites->currentPage() . " page" }}</span> of <span--}}
-            {{--                    class="font-semibold text-gray-900 dark:text-white">{{ $sites->lastPage() . " page(s)" }}</span>--}}
-            {{--            </span>--}}
         </div>
         <div class="flex items-center space-x-3">
             <a href="#"
@@ -313,3 +358,22 @@
         </div>
     </div>
 @stop
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const copyLinks = document.querySelectorAll('.copyLink');
+
+            copyLinks.forEach(link => {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const url = link.getAttribute('data-url');
+                    navigator.clipboard.writeText(url).then(() => {
+                        alert('URL copied to clipboard!');
+                    }).catch(err => {
+                        console.error('Failed to copy: ', err);
+                    });
+                });
+            });
+        });
+    </script>
+@endpush

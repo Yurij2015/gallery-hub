@@ -75,7 +75,7 @@ class Project extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function userReaction(): HasMany
+    public function userReactions(): HasMany
     {
         return $this->hasMany(UserReaction::class);
     }
