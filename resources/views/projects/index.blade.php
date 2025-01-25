@@ -74,31 +74,31 @@
                                 {{ __('message.name') }}
                             </th>
                             <th scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                 {{ __('message.creationDate') }}
                             </th>
                             <th scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                 {{ __('message.expirationDate') }}
                             </th>
                             <th scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                 {{ __('message.viewsStatistic') }}
                             </th>
                             <th scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                 {{ __('message.downloadStatistic') }}
                             </th>
                             <th scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                 {{ __('message.userReactions') }}
                             </th>
                             <th scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                 {{ __('message.projectLink') }}
                             </th>
                             <th scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                 {{ __('message.actions') }}
                             </th>
                         </tr>
@@ -134,15 +134,15 @@
                                         </div>
                                     </td>
 
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                         {{ $project->date }}
                                     </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                         {{ $project->expiration_date }}
                                     </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                         <span
-                                            class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex justify-center items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-100 border border-gray-500 w-14 h-6">
+                                            class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex justify-center items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-100 border border-gray-500 w-14 h-6 text-center">
                                                 <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true"
                                                      xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                                      viewBox="0 0 20 20">
@@ -154,7 +154,7 @@
                                                 {{ $project->views_statistic }}
                                              </span>
                                     </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                          <span
                                              class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex justify-center items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-100 border border-gray-500 w-14 h-6">
                                                 <svg class="w-3 h-3 me-1.5" aria-hidden="true"
@@ -170,8 +170,7 @@
                                                 {{ $project->download_statistic }}
                                              </span>
                                     </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div>
+                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                             <span
                                                 class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex justify-center items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-100 border border-gray-500 w-14 h-6">
                                                 <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true"
@@ -183,8 +182,6 @@
                                                 </svg>
                                                 {{$project->userReactions->where('has_like', 1)->count()}}
                                             </span>
-                                        </div>
-                                        <div>
                                         <span
                                             class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-100 border border-gray-500 w-14 justify-center h-6 mt-2">
                                                 <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true"
@@ -196,9 +193,8 @@
                                                 </svg>
                                                     {{ $project->userReactions->where('has_comment', 1)->count()}}
                                                 </span>
-                                        </div>
                                     </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                                             <div class="text-base font-semibold text-gray-900 dark:text-white">
                                                 <a href="{{ route('user-projects.show', ['project' =>  $project, 'user' => $project->user->id, 'project-name' => urldecode($project->name)]) }}"
