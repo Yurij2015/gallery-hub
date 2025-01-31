@@ -218,7 +218,6 @@ class ProjectController extends Controller
         if (!$project->project_folder) {
             return view('projects.edit', compact('project'));
         }
-
         $bucketName = $project->bucket_name;
         $projectDirectory = $project->project_folder;
         $projectObjects = $bucketService->listObjectsInFolder($bucketName, $projectDirectory);
