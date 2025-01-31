@@ -25,10 +25,10 @@ class Project extends Model
         'user_id',
     ];
 
-    public int $objectsCount;
-    public string $sizeOfProject;
+    public ?int $objectsCount = null;
+    public ?string $sizeOfProject = null;
     public ?string $sizeOfProjectFolder = null;
-    public string $projectImage;
+    public ?string $projectImage = null;
 
     public function setObjectsCount($count): void
     {
