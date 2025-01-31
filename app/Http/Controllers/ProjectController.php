@@ -133,7 +133,9 @@ class ProjectController extends Controller
     ) {
         $bucketName = config('services.minio.main_storage');
 
-        $userEmail = Auth::user()->email;
+        $user_id = $project->user_id;
+        $user = User::find($user_id);
+        $userEmail = $user->email;
         $userName = explode('@', $userEmail)[0];
         $emailDomain = explode('@', $userEmail)[1];
         $userDirectory = $userName.'.'.$emailDomain;
