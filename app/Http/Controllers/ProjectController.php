@@ -45,19 +45,24 @@ class ProjectController extends Controller
 //            $bucketService->putPublicAccessBlock($bucketName);
 //            $bucketService->putPublicBucketPolicy($bucketName);
 //            $bucketService->createBucketIfNotExist($bucketName);
-
             $projectFolder = $project->project_folder;
 
             $projectObjects = $bucketService->listObjectsInFolder($bucketName, $projectFolder);
 
-            foreach ($projectObjects as $object) {
-                $key = $object->key;
-                $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
-                break;
+            if (!$projectFolder) {
+                $project->setProjecImage(url('images/empty-project.png'));
+                continue;
             }
 
-            $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
-            $project->setProjecImage($imgUrl);
+            if ($projectObjects) {
+                foreach ($projectObjects as $object) {
+                    $key = $object->key;
+                    $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
+                    break;
+                }
+                $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
+                $project->setProjecImage($imgUrl);
+            }
         }
 
         return view('projects.index', compact('projects'));
@@ -84,10 +89,12 @@ class ProjectController extends Controller
         $emailDomain = explode('@', $userEmail)[1];
         //TODO add unique userName
         $userDirectory = $userName.'.'.$emailDomain;
-        // change approach - do not create bucket for each user, just need to create a folder!!!
+
         $bucketName = $this->mainStorage;
         $bucketService->createBucketIfNotExist($bucketName);
-        $projectFolder = $userDirectory.'/'.explode('/', reset($files)->getClientOriginalPath())[0];
+        if ($files) {
+            $projectFolder = $userDirectory.'/'.explode('/', reset($files)->getClientOriginalPath())[0];
+        }
         $validatedRequest = $request->validated();
         $projectSlug = Str::slug($validatedRequest['name']);
 
@@ -97,20 +104,24 @@ class ProjectController extends Controller
             'userEmail' => $userEmail,
         ];
 
-        foreach ($files as $file) {
-            if ($file->getClientOriginalName() === '.DS_Store') {
-                continue;
-            }
+        if ($files) {
+            foreach ($files as $file) {
+                // exclude .DS_Store file
+                // TODO - check and remove this condition
+                if ($file->getClientOriginalName() === '.DS_Store') {
+                    continue;
+                }
 
-            $objectName = $file->getClientOriginalPath();
-            $objectPath = $file->getPathname();
-            $content = file_get_contents($objectPath);
-            $bucketService->putObject($bucketName, $userDirectory.'/'.$objectName, $content, $metaData);
+                $objectName = $file->getClientOriginalPath();
+                $objectPath = $file->getPathname();
+                $content = file_get_contents($objectPath);
+                $bucketService->putObject($bucketName, $userDirectory.'/'.$objectName, $content, $metaData);
+            }
         }
 
         $validatedRequest['slug'] = $projectSlug;
         $validatedRequest['bucket_name'] = $bucketName;
-        $validatedRequest['project_folder'] = $projectFolder;
+        $validatedRequest['project_folder'] = $projectFolder ?? null;
         $validatedRequest['date'] = (DateTime::createFromFormat('d/m/Y',
             $validatedRequest['date']))->format('Y-m-d');
         $validatedRequest['expiration_date'] = (DateTime::createFromFormat('d/m/Y',
@@ -131,8 +142,14 @@ class ProjectController extends Controller
         Request $request,
         ProjectService $projectService
     ) {
-        $bucketName = config('services.minio.main_storage');
+        $projectFolder = $project->project_folder;
 
+        if (!$projectFolder) {
+            $emptyProjectFolder = true;
+            return view('projects.show', compact('project', 'emptyProjectFolder'));
+        }
+
+        $bucketName = config('services.minio.main_storage');
         $user_id = $project->user_id;
         $user = User::find($user_id);
         $userEmail = $user->email;
@@ -198,6 +215,10 @@ class ProjectController extends Controller
      */
     public function edit(Project $project, BucketService $bucketService)
     {
+        if (!$project->project_folder) {
+            return view('projects.edit', compact('project'));
+        }
+
         $bucketName = $project->bucket_name;
         $projectDirectory = $project->project_folder;
         $projectObjects = $bucketService->listObjectsInFolder($bucketName, $projectDirectory);
