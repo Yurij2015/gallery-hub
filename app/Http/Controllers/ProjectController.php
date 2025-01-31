@@ -49,7 +49,7 @@ class ProjectController extends Controller
 
             $projectObjects = $bucketService->listObjectsInFolder($bucketName, $projectFolder);
 
-            if(!$projectFolder){
+            if (!$projectFolder) {
                 $project->setProjecImage(url('images/empty-project.png'));
                 continue;
             }
@@ -142,8 +142,14 @@ class ProjectController extends Controller
         Request $request,
         ProjectService $projectService
     ) {
-        $bucketName = config('services.minio.main_storage');
+        $projectFolder = $project->project_folder;
 
+        if (!$projectFolder) {
+            $emptyProjectFolder = true;
+            return view('projects.show', compact('project', 'emptyProjectFolder'));
+        }
+
+        $bucketName = config('services.minio.main_storage');
         $user_id = $project->user_id;
         $user = User::find($user_id);
         $userEmail = $user->email;
@@ -209,6 +215,10 @@ class ProjectController extends Controller
      */
     public function edit(Project $project, BucketService $bucketService)
     {
+        if (!$project->project_folder) {
+            return view('projects.edit', compact('project'));
+        }
+
         $bucketName = $project->bucket_name;
         $projectDirectory = $project->project_folder;
         $projectObjects = $bucketService->listObjectsInFolder($bucketName, $projectDirectory);

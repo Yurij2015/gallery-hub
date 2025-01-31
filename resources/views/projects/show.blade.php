@@ -29,7 +29,7 @@
                                 {{ __('message.projects')}}
                             </a>
                         </li>
-                        @if($countOfChildKeysInUrl)
+                        @if(isset($countOfChildKeysInUrl))
                             <li class="inline-flex items-center">
                                 <a href="{{ route('projects.show', $project->id) }}"
                                    class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
@@ -86,33 +86,39 @@
                 {{ __('message.goBack') }}
             </button>
 
-            <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-blue-900 dark:text-blue-300">
+            <span
+                class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-blue-900 dark:text-blue-300">
                 {{ $project->getObjectsCount() }} file(s)
             </span>
-            <span class="bg-green-100 text-green-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-green-900 dark:text-green-300">
+            <span
+                class="bg-green-100 text-green-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-green-900 dark:text-green-300">
                 {{ $project->getSizeOfProjectFolder() }}
             </span>
 
             <div class="gallery">
                 <div class="flex flex-col mb-10">
                     <div class="grid md:grid-cols-12 gap-8 lg:mb-11 mb-7">
-                        @foreach($filteredObjects as $object)
-                            <div class="md:col-span-4 md:h-[404px] h-[277px] w-full rounded-3xl">
-                                <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
-                                     class="gallery-image object-cover rounded-3xl hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
-                                <p class="text-sm text-gray-900 sm:text-sm dark:text-white text-center mt-2">{{ $object->getObjectName() }}</p>
-                            </div>
-                        @endforeach
+                        @if(isset($filteredObjects))
+                            @foreach($filteredObjects as $object)
+                                <div class="md:col-span-4 md:h-[404px] h-[277px] w-full rounded-3xl">
+                                    <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
+                                         class="gallery-image object-cover rounded-3xl hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
+                                    <p class="text-sm text-gray-900 sm:text-sm dark:text-white text-center mt-2">{{ $object->getObjectName() }}</p>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
                     <div class="grid md:grid-cols-12 gap-8 lg:mb-11 mb-7 mt-4">
-                        @foreach($childKeys as $childKey)
-                            <a href="{{ $project->id .  '?childKey=' . $childKey}}"
-                               class="md:col-span-2 w-[128px]  h-[128px]">
-                                <img src="{{ asset('images/folder.png') }}" alt=""
-                                     class="object-cover rounded-3xl hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
-                                <p class="text-sm text-gray-900 sm:text-sm dark:text-white text-center">{{ $childKey }}</p>
-                            </a>
-                        @endforeach
+                        @if(isset($childKeys))
+                            @foreach($childKeys as $childKey)
+                                <a href="{{ $project->id .  '?childKey=' . $childKey}}"
+                                   class="md:col-span-2 w-[128px]  h-[128px]">
+                                    <img src="{{ asset('images/folder.png') }}" alt=""
+                                         class="object-cover rounded-3xl hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
+                                    <p class="text-sm text-gray-900 sm:text-sm dark:text-white text-center">{{ $childKey }}</p>
+                                </a>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
             </div>
