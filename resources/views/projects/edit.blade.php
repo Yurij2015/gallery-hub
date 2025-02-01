@@ -148,7 +148,7 @@
                     <section class="bg-white dark:bg-gray-900">
                         <div class="px-4 mx-auto max-w-6xl mb-20">
                             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                @if(isset($projects))
+                                @if(isset($projectObjects))
                                     @foreach($projectObjects as $projectObject)
                                         <div>
                                             <img class="h-auto max-w-full rounded-lg"
