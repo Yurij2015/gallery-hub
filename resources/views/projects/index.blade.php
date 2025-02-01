@@ -54,8 +54,8 @@
     <div class="flex flex-col">
         <div class="overflow-x-auto">
             <div class="inline-bock min-w-full align-middle">
-                <div class="overflow-hidden shadow">
-                    <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
+                <div class="relative overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600 relative overflow-hidden">
                         <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr>
                             <th scope="col" class="p-4">
