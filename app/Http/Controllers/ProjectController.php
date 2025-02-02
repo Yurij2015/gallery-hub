@@ -419,7 +419,9 @@ class ProjectController extends Controller
     {
         $project->increment('download_statistic');
 
-        return $bucketService->downloadFolder($project->bucket_name, $project->project_folder);
+        $userDirectory = $this->getUserFolderName($project);
+
+        return $bucketService->downloadFolder($project->bucket_name, $project->project_folder, $userDirectory);
     }
 
     public function downloadObjectUrlIncrement(SaveUserDownloadRequest $request, Project $project)

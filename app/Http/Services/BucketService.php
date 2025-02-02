@@ -260,10 +260,10 @@ class BucketService
         return $this->s3Client->getObjectUrl($bucketName, $key);
     }
 
-    public function downloadFolder($bucketName, $folderName)
+    public function downloadFolder($bucketName, $folderName, $userDirectory)
     {
         try {
-            $localDir = storage_path('/app/public/'.$bucketName.'/'.$folderName);
+            $localDir = storage_path('/app/public/'.$bucketName.'/'. $userDirectory . '/' .$folderName);
 
             if (!file_exists($localDir)) {
                 mkdir($localDir, 0777, true);
@@ -271,7 +271,7 @@ class BucketService
 
             $objects = $this->s3Client->listObjectsV2([
                 'Bucket' => $bucketName,
-                'Prefix' => $folderName
+                'Prefix' => $userDirectory.'/'.$folderName.'/'
             ]);
 
             foreach ($objects['Contents'] as $object) {
