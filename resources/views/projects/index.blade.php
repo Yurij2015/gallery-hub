@@ -55,7 +55,8 @@
         <div class="overflow-x-auto">
             <div class="inline-bock min-w-full align-middle">
                 <div class="relative overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600 relative overflow-hidden">
+                    <table
+                        class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600 relative overflow-hidden">
                         <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr>
                             <th scope="col" class="p-4">
@@ -197,15 +198,22 @@
                                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                                             <div class="text-base font-semibold text-gray-900 dark:text-white">
-                                                <a href="{{ route('user-projects.show', ['project' =>  $project, 'user' => $project->user->id, 'project-name' => urldecode($project->name)]) }}"
-                                                   target="_blank">
-                                                    {{ __('message.projectLink')  }}
-                                                </a>
+                                                @if($project->getObjectsCount())
+                                                    <a href="{{route('user-projects.show', ['project' =>  $project, 'user' => $project->user->id, 'project-name' => urldecode($project->name)]) }}"
+                                                       target="_blank">
+                                                        {{ __('message.projectLink')  }}
+                                                    </a>
+                                                @else
+                                                    <span class="cursor-not-allowed">
+                                                        {{ __('message.projectLink')  }}
+                                                    </span>
+                                                @endif
                                                 <a href="{{ route('user-projects.show', ['project' =>  $project, 'user' => $project->user->id, 'project-name' => urldecode($project->name)]) }}"
                                                    target="_blank"
-                                                   data-tooltip-target="tooltip-copy"
+                                                   data-tooltip-target="tooltip-copy-{{ $project->id }}"
+                                                   data-objects-count="{{ $project->getObjectsCount() }}"
                                                    data-url="{{ route('user-projects.show', ['project' =>  $project, 'user' => $project->user->id, 'project-name' => urldecode($project->name)]) }}"
-                                                   class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-primary-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800 ml-2 copyLink">
+                                                   class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-primary-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800 ml-2 copyLink {{ !$project->getObjectsCount() ? 'cursor-not-allowed disabled' : ''  }}">
                                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path fill-rule="evenodd"
@@ -213,7 +221,7 @@
                                                               clip-rule="evenodd"/>
                                                     </svg>
                                                 </a>
-                                                <div id="tooltip-copy" role="tooltip"
+                                                <div id="tooltip-copy-{{ $project->id }}" role="tooltip"
                                                      class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
                                                     {{ __('message.copyToClipboard') }}
                                                     <div class="tooltip-arrow" data-popper-arrow></div>
@@ -363,6 +371,10 @@
                 link.addEventListener('click', function (event) {
                     event.preventDefault();
                     const url = link.getAttribute('data-url');
+                    const objectsCount = link.getAttribute('data-objects-count');
+                    if (!objectsCount) {
+                        return;
+                    }
                     navigator.clipboard.writeText(url).then(() => {
                         alert('URL copied to clipboard!');
                     }).catch(err => {
