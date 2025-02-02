@@ -238,9 +238,29 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProjectRequest $request, Project $project)
+    public function update(UpdateProjectRequest $request, Project $project, BucketService $bucketService)
     {
         $validatedRequest = $request->validated();
+        $userDirectory = $this->getUserFolderName($project);
+        $bucketName = $this->mainStorage;
+        $userEmail = Auth::user()->email;
+        $files = $request->file('files');
+
+        $metaData = [
+            'projectName' => $validatedRequest['name'],
+            'projectSlug' => $project->slug,
+            'userEmail' => $userEmail,
+        ];
+
+        if ($files) {
+            foreach ($files as $file) {
+                $objectName = $file->getClientOriginalPath();
+                $objectPath = $file->getPathname();
+                $content = file_get_contents($objectPath);
+                $bucketService->putObject($bucketName, $userDirectory.'/'.$project->project_folder.'/'.$objectName, $content,
+                    $metaData);
+            }
+        }
 
         $validatedRequest['date'] = (DateTime::createFromFormat('d/m/Y',
             $validatedRequest['date']))->format('Y-m-d');
