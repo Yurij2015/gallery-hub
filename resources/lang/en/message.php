@@ -32,6 +32,7 @@ return [
     'projectName' => 'Project Name',
     'uploadDirectory' => 'Upload Directory',
     'uploadFile' => 'Upload File',
+    'uploadFiles' => 'Upload Files',
     'project' => 'Project',
     'addFolder' => 'Add Folder',
     'addPhoto' => 'Add Photo',

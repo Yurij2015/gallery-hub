@@ -41,28 +41,24 @@ class ProjectController extends Controller
 
         foreach ($projects as $project) {
             $bucketName = $project->bucket_name;
-
-//            $bucketService->putPublicAccessBlock($bucketName);
-//            $bucketService->putPublicBucketPolicy($bucketName);
-//            $bucketService->createBucketIfNotExist($bucketName);
             $projectFolder = $project->project_folder;
 
-            $projectObjects = $bucketService->listObjectsInFolder($bucketName, $projectFolder);
+            $userFolderName = $this->getUserFolderName($project);
 
-            if (!$projectFolder) {
+            $projectObjects = $bucketService->listObjectsInFolder($bucketName, $userFolderName.'/'.$projectFolder);
+
+            if (!$projectObjects) {
                 $project->setProjecImage(url('images/empty-project.png'));
                 continue;
             }
 
-            if ($projectObjects) {
-                foreach ($projectObjects as $object) {
-                    $key = $object->key;
-                    $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
-                    break;
-                }
-                $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
-                $project->setProjecImage($imgUrl);
+            foreach ($projectObjects as $object) {
+                $key = $object->key;
+                $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
+                break;
             }
+            $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
+            $project->setProjecImage($imgUrl);
         }
 
         return view('projects.index', compact('projects'));
@@ -91,12 +87,9 @@ class ProjectController extends Controller
         $userDirectory = $userName.'.'.$emailDomain;
 
         $bucketName = $this->mainStorage;
-        $bucketService->createBucketIfNotExist($bucketName);
-        if ($files) {
-            $projectFolder = $userDirectory.'/'.explode('/', reset($files)->getClientOriginalPath())[0];
-        }
         $validatedRequest = $request->validated();
         $projectSlug = Str::slug($validatedRequest['name']);
+        $projectFolderName = $projectSlug;
 
         $metaData = [
             'projectName' => $validatedRequest['name'],
@@ -115,13 +108,14 @@ class ProjectController extends Controller
                 $objectName = $file->getClientOriginalPath();
                 $objectPath = $file->getPathname();
                 $content = file_get_contents($objectPath);
-                $bucketService->putObject($bucketName, $userDirectory.'/'.$objectName, $content, $metaData);
+                $bucketService->putObject($bucketName, $userDirectory.'/'.$projectFolderName.'/'.$objectName, $content,
+                    $metaData);
             }
         }
 
         $validatedRequest['slug'] = $projectSlug;
         $validatedRequest['bucket_name'] = $bucketName;
-        $validatedRequest['project_folder'] = $projectFolder ?? null;
+        $validatedRequest['project_folder'] = $projectFolderName;
         $validatedRequest['date'] = (DateTime::createFromFormat('d/m/Y',
             $validatedRequest['date']))->format('Y-m-d');
         $validatedRequest['expiration_date'] = (DateTime::createFromFormat('d/m/Y',
@@ -150,19 +144,24 @@ class ProjectController extends Controller
         }
 
         $bucketName = config('services.minio.main_storage');
-        $user_id = $project->user_id;
-        $user = User::find($user_id);
-        $userEmail = $user->email;
-        $userName = explode('@', $userEmail)[0];
-        $emailDomain = explode('@', $userEmail)[1];
-        $userDirectory = $userName.'.'.$emailDomain;
+        $userDirectory = $this->getUserFolderName($project);
 
         $childKeyParam = $request->get('childKey');
         $keySegmentsFromUrl = explode('/', $childKeyParam);
-        $childKeyParam = $childKeyParam ? '/'.$childKeyParam : '';
+        $childKeyParam = $childKeyParam ?  '/'.$childKeyParam : '';
         $countOfChildKeysInUrl = $childKeyParam ? count($keySegmentsFromUrl) - 1 : null;
 
-        $projectFolderObjects = $bucketService->listObjectsInFolder($bucketName, $userDirectory.$childKeyParam);
+        if(!$childKeyParam) {
+            $projectFolderObjects = $bucketService->listObjectsInFolder($bucketName, $userDirectory . '/' . $projectFolder);
+        }
+        else {
+            $projectFolderObjects = $bucketService->listObjectsInFolder($bucketName, $userDirectory . $childKeyParam);
+        }
+
+        if(!$projectFolderObjects) {
+            $emptyProjectFolder = true;
+            return view('projects.show', compact('project', 'emptyProjectFolder'));
+        }
 
         if ($projectFolderObjects) {
             $objectsCount = count($projectFolderObjects);
@@ -185,7 +184,7 @@ class ProjectController extends Controller
             $objectName = end($keySegments);
             $childKey = '';;
 
-            if ((count($keySegments)) > 3 + $countOfChildKeysInUrl) {
+            if ((count($keySegments)) > 3+ $countOfChildKeysInUrl) {
                 for ($i = 1; $i < count($keySegments) - 1; $i++) {
                     $childKey .= $keySegments[$i].'/';
                 }
@@ -220,7 +219,12 @@ class ProjectController extends Controller
         }
         $bucketName = $project->bucket_name;
         $projectDirectory = $project->project_folder;
-        $projectObjects = $bucketService->listObjectsInFolder($bucketName, $projectDirectory);
+        $userDirectory = $this->getUserFolderName($project);
+        $projectObjects = $bucketService->listObjectsInFolder($bucketName, $userDirectory . '/' . $projectDirectory);
+
+        if(!$projectObjects) {
+            return view('projects.edit', compact('project'));
+        }
 
         foreach ($projectObjects as $object) {
             $key = $object->key;
@@ -272,19 +276,18 @@ class ProjectController extends Controller
     ) {
         $projectFolder = $project->project_folder;
         $bucketName = $project->bucket_name;
+        $userDirectory = $this->getUserFolderName($project);
 
         $sessionClientName = session('client_name');
         $projectId = $project->id;
         $userId = $user->id;
-
-//        dd($sessionClientName, $projectId, $userId);
 
         $userReactions = UserReaction::where('user_id', $userId)
             ->where('project_id', $projectId)
             ->where('client_name', $sessionClientName)
             ->get();
 
-        $projectObjects = $bucketService->listObjectsInFolder($bucketName, $projectFolder);
+        $projectObjects = $bucketService->listObjectsInFolder($bucketName, $userDirectory . '/' . $projectFolder);
 
         foreach ($projectObjects as $object) {
             $key = $object->key;
@@ -425,5 +428,15 @@ class ProjectController extends Controller
             'success' => 'Download stat saved successfully',
             'reactionData' => $this->saveUserReaction($request, $project)
         ]);
+    }
+
+    private function getUserFolderName(Project $project): string
+    {
+        $user_id = $project->user_id;
+        $user = User::find($user_id);
+        $userEmail = $user->email;
+        $userName = explode('@', $userEmail)[0];
+        $emailDomain = explode('@', $userEmail)[1];
+        return $userName.'.'.$emailDomain;
     }
 }
