@@ -288,6 +288,18 @@ class ProjectController extends Controller
         return view('projects.projectStatistic', compact('project'));
     }
 
+    public function deleteObject(Project $project, Request $request, BucketService $bucketService)
+    {
+        $bucketName = $project->bucket_name;
+        $imageKey = $request->get('imageKey');
+        $bucketService->deleteObject($bucketName, $imageKey);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Object deleted successfully',
+        ]);
+    }
+
     public function clientGallery(
         User $user,
         Project $project,

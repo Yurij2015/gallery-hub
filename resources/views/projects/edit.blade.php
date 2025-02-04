@@ -143,10 +143,20 @@
                             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                                 @if(isset($projectObjects))
                                     @foreach($projectObjects as $projectObject)
-                                        <div>
-                                            <img class="h-auto max-w-full rounded-lg"
-                                                 src="{{ $projectObject->getObjectUrl() }}"
-                                                 alt="">
+                                        <div class="relative">
+                                            <img class="h-auto max-w-full rounded-lg image"
+                                                 src="{{ $projectObject->getObjectUrl() }}" alt="">
+                                            <button
+                                                class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 delete-button"
+                                                data-image-key="{{ $projectObject->key }}"
+                                            >
+                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd"
+                                                          d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                          clip-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
                                         </div>
                                     @endforeach
                                 @endif
@@ -158,4 +168,50 @@
         </div>
     </div>
 @stop
+@section('footer')
+    <style>
+        .delete-button {
+            transition: opacity 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .delete-button:hover {
+            opacity: 1;
+        }
+    </style>
+@endsection
+@push('scripts')
+    <script>
+        let projectId = JSON.parse(`{{ $project->id }}`);
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.delete-button');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const imageKey = button.getAttribute('data-image-key');
+                    if (confirm('Are you sure you want to delete this image?')) {
+                        fetch(`/project/remove-object/${projectId}?imageKey=${imageKey}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            }
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    alert('Image deleted successfully');
+                                    location.reload();
+                                } else {
+                                    alert('Failed to delete image');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Failed to delete image');
+                            });
+                    }
+                });
+            });
+        });
+    </script>
+@endpush
 
