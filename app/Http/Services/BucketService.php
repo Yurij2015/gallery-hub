@@ -342,4 +342,20 @@ class BucketService
 
         return $resizedImage->toJpeg()->toDataUri();
     }
+
+    public function deleteObject($bucketName, $key): ?Result
+    {
+        try {
+            $result = $this->s3Client->deleteObject([
+                'Bucket' => $bucketName,
+                'Key' => $key
+            ]);
+        } catch (S3Exception $e) {
+            Log::info('S3 Exception:', [
+                'message' => $e->getMessage()
+            ]);
+        }
+
+        return $result ?? null;
+    }
 }
