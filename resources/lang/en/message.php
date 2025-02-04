@@ -85,5 +85,13 @@ return [
     'comments' => 'Comments',
     'uploadIndividualPhotos' => 'Upload Individual Photos',
     'loadingProjectFolder' => 'Loading The Project Folder',
+    'supportTickets' => 'Support Tickets',
+    'createTicket' => 'Create Ticket',
+    'createNewTicket' => 'Create Support Ticket',
+    'subject' => 'Subject',
+    'message' => 'Message',
+    'submitTicket' => 'Submit Ticket',
+    'user' => 'User',
+    'supportTicket' => 'Support Ticket',
 ];
 
