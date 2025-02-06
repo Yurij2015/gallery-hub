@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BucketObjectsController;
 use App\Http\Controllers\BucketController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SupportTicketController;
@@ -47,6 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/support/create', [SupportTicketController::class, 'create'])->name('support.create');
     Route::post('/support', [SupportTicketController::class, 'store'])->name('support.store');
     Route::get('/support/{ticket}', [SupportTicketController::class, 'show'])->name('support.show');
+
+    Route::resource('packages', PackageController::class);
 });
 
 
