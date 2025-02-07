@@ -4,6 +4,7 @@ return [
     'id' => 'ID',
     'userName' => 'UserName',
     'creationDate' => 'Creation Date',
+    'eventDate' => 'Event Date',
     'fileName' => 'File Name',
     'lastModified' => 'Last Modified',
     'eTag' => 'ETag',

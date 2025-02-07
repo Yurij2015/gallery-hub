@@ -35,12 +35,12 @@
             @yield('content')
             @yield('footer')
             <!-- Footer Scripts -->
+            <!-- Start of HubSpot Embed Code -->
+            <script type="text/javascript" id="hs-script-loader" async defer src="//js-na1.hs-scripts.com/49248827.js"></script>
+            <!-- End of HubSpot Embed Code -->
             @stack('scripts')
         </div>
     </div>
 </main>
-<!-- Start of HubSpot Embed Code -->
-<script type="text/javascript" id="hs-script-loader" async defer src="//js-na1.hs-scripts.com/49248827.js"></script>
-<!-- End of HubSpot Embed Code -->
 </body>
 </html>

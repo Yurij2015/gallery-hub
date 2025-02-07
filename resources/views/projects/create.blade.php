@@ -68,7 +68,7 @@
                                     </div>
                                     <div class="w-full">
                                         <label for="brand"
-                                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __('message.creationDate') }}</label>
+                                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __('message.eventDate') }}</label>
                                         <div class="relative max-w-sm">
                                             <div
                                                 class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
