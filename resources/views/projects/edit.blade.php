@@ -74,7 +74,7 @@
                                             </div>
                                             <div class="col-span-6 sm:col-span-2">
                                                 <label for="date-datepicker"
-                                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __('message.creationDate') }}</label>
+                                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __('message.eventDate') }}</label>
                                                 <div class="relative max-w-full">
                                                     <div
                                                         class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
