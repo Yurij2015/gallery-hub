@@ -1,4 +1,7 @@
 @extends('main')
+@php
+    use Carbon\Carbon
+@endphp
 @section('content')
     <div
         class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700">
@@ -62,7 +65,7 @@
                                     <div class="sm:col-span-2">
                                         <label for="name"
                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __('message.projectName') }}</label>
-                                        <input type="text" name="name" id="name"
+                                        <input type="text" name="name" id="name" autocomplete="off"
                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                placeholder="Type project name" required="">
                                     </div>
@@ -83,8 +86,10 @@
                                                    type="text"
                                                    name="date"
                                                    autocomplete="off"
+                                                   required
+                                                   value="{{ Carbon::now()->format('m/d/Y') }}"
                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                   placeholder="Select creation date">
+                                                   placeholder="Select event date">
                                         </div>
                                     </div>
                                     <div class="w-full">
@@ -98,16 +103,24 @@
                                                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
                                                      xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                                      viewBox="0 0 20 20">
-                                                    <path
-                                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 8h10M9 12h10M9 16h10M4.99 8H5m-.02 4h.01m0 4H5"/>
                                                 </svg>
                                             </div>
-                                            <input datepicker id="expiration-date-datepicker"
-                                                   type="text"
-                                                   name="expiration_date"
-                                                   autocomplete="off"
-                                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                   placeholder="Select expiration date">
+                                            <select id="expiration-date-datepicke"
+                                                    name="expiration_date"
+                                                    required
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            >
+                                                <option value="" disabled selected>
+                                                    {{ __('message.selectPeriod') }}
+                                                </option>
+                                                @foreach($timeOptions as $key => $timeOption)
+                                                    <option value="{{ $key }}" >
+                                                        {{ $timeOption }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <x-input-error :messages="$errors->get('status')" class="mt-2"/>
                                         </div>
                                     </div>
                                     @php

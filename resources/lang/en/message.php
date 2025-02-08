@@ -94,5 +94,6 @@ return [
     'submitTicket' => 'Submit Ticket',
     'user' => 'User',
     'supportTicket' => 'Support Ticket',
+    'selectPeriod' => 'Select Period',
 ];
 
