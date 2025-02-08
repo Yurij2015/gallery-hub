@@ -239,8 +239,13 @@ class ProjectController extends Controller
 
         foreach ($projectObjects as $object) {
             $key = $object->key;
+
+            $keySegments = explode('/', $key);
+            $objectName = end($keySegments);
+
             $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
             $object->setObjectUrl($imgUrl);
+            $object->setObjectName($objectName);
         }
 
         return view('projects.edit', compact('project', 'projectObjects'));

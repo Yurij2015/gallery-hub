@@ -145,21 +145,55 @@
                                     @if(isset($projectObjects))
                                         @foreach($projectObjects as $object)
                                             <div
-                                                class="md:col-span-4 md:h-[404px] h-[277px] w-full rounded-3xl relative">
+                                                class="md:col-span-4 md:h-[404px] h-[277px] w-full rounded-3xl relative group">
+                                                <!-- Image -->
                                                 <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
                                                      class="gallery-image object-cover rounded-none hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
-                                                <button
-                                                    class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 delete-button"
-                                                    data-image-key="{{ $object->key }}"
-                                                >
-                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd"
-                                                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                              clip-rule="evenodd"></path>
-                                                    </svg>
-                                                </button>
-                                                <p class="text-sm text-gray-900 sm:text-sm dark:text-white text-center mt-2">{{ $object->getObjectName() }}</p>
+                                                <!-- Hover Menu (Fixed for Proper Visibility) -->
+                                                <div
+                                                    class="absolute top-0  left-1/2 transform -translate-x-1/2 -translate-y-1/1 flex items-center bg-white py-2 px-2 rounded-none shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-auto min-h-[50px]">
+                                                    <!-- Favorite Button -->
+                                                    <button
+                                                        class="bg-yellow-500 text-white rounded-full p-2 favorite-button"
+                                                        data-image-key="{{ $object->key }}">
+                                                        <svg class="w-4 h-4 text-gray-800 dark:text-white"
+                                                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                             width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                            <path stroke="currentColor" stroke-width="2"
+                                                                  d="M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597l1.753-4.022Z"/>
+                                                        </svg>
+                                                    </button>
+                                                    <!-- Separator -->
+                                                    <div class="h-6 w-[1px] bg-gray-300 mx-2"></div>
+                                                    <!-- Expand Button -->
+                                                    <button
+                                                        class="bg-blue-500 text-white rounded-full p-2 expand-button"
+                                                        data-image-url="{{ $object->objectUrl }}">
+                                                        <svg class="w-4 h-4 text-gray-800 dark:text-white"
+                                                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                             width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                            <path d="M4 10V4h6M4 14v6h6M20 10V4h-6M20 14v6h-6"
+                                                                  stroke="currentColor" stroke-width="2"
+                                                                  stroke-linecap="round" stroke-linejoin="round"/>
+                                                        </svg>
+                                                    </button>
+                                                    <!-- Separator -->
+                                                    <div class="h-6 w-[1px] bg-gray-300 mx-2"></div>
+                                                    <!-- Delete Button -->
+                                                    <button class="bg-red-500 text-white rounded-full p-2 delete-button"
+                                                            data-image-key="{{ $object->key }}">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd"
+                                                                  d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                                  clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                                <!-- Image Caption -->
+                                                <p class="text-sm text-gray-900 sm:text-sm dark:text-white text-center mt-2">
+                                                    {{ $object->objectName }}
+                                                </p>
                                             </div>
                                         @endforeach
                                     @endif
@@ -192,13 +226,16 @@
 @push('scripts')
     <script>
         let projectId = JSON.parse(`{{ $project->id }}`);
+
         document.addEventListener('DOMContentLoaded', function () {
             const deleteButtons = document.querySelectorAll('.delete-button');
+            const expandButtons = document.querySelectorAll('.expand-button');
+
             deleteButtons.forEach(button => {
                 button.addEventListener('click', function (event) {
                     event.preventDefault();
                     const imageKey = button.getAttribute('data-image-key');
-                    if (confirm('Are you sure you want to delete this image?')) {
+                    if (confirm('Are you sure you want to delete this image?' + imageKey)) {
                         fetch(`/project/remove-object/${projectId}?imageKey=${imageKey}`, {
                             method: 'DELETE',
                             headers: {
@@ -217,6 +254,18 @@
                                 console.error('Error:', error);
                                 alert('Failed to delete image');
                             });
+                    }
+                });
+            });
+
+            expandButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const imageToExpand = button.closest('.gallery').querySelector('.gallery-image');
+                    const imageSrc = button.getAttribute('data-image-url');
+
+                    if (imageToExpand) {
+                        lightboxImage.src = imageSrc;
+                        lightbox.style.display = 'flex';
                     }
                 });
             });
