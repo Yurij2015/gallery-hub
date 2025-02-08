@@ -314,20 +314,37 @@
         class="sticky bottom-0 right-0 items-center w-full p-4 bg-white border-t border-gray-200 sm:flex sm:justify-between dark:bg-gray-800 dark:border-gray-700 pr-24">
         <div class="flex items-center mb-4 sm:mb-0">
             <a href="{{ $projects->previousPageUrl() ?: '#' }}"
-               class="inline-flex justify-center p-1 rounded cursor-pointer
-                 {{ $projects->onFirstPage() ? 'text-gray-600 cursor-not-allowed' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white' }}">
+               class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
                 <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
                           d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
                           clip-rule="evenodd"></path>
                 </svg>
             </a>
+            <a href="{{ $projects->nextPageUrl() ?: '#' }}"
+               class="inline-flex justify-center p-1 mr-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                          clip-rule="evenodd"></path>
+                </svg>
+            </a>
+            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{ __('message.showing') }} <span
+                    class="font-semibold text-gray-900 dark:text-white">{{ $projects->currentPage() . " page" }}</span> of <span
+                    class="font-semibold text-gray-900 dark:text-white">{{ $projects->lastPage() . " page(s)" }}</span>
+            </span>
         </div>
 
         <div class="flex items-center space-x-3">
             <a href="{{ $projects->previousPageUrl() ?: '#' }}"
                class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium rounded-lg
                  {{ $projects->onFirstPage() ? 'bg-gray-600 text-white cursor-not-allowed' : 'bg-primary-700 text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800' }}">
+                <svg class="w-5 h-5 mr-1 -ml-1" fill="currentColor" viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                          clip-rule="evenodd"></path>
+                </svg>
                 {{ __('message.previous') }}
             </a>
 
@@ -349,10 +366,15 @@
                class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium rounded-lg
                 {{ !$projects->hasMorePages() ? 'bg-gray-600 text-white cursor-not-allowed' : 'bg-primary-700 text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800' }}">
                 {{ __('message.next') }}
+                <svg class="w-5 h-5 ml-1 -mr-1" fill="currentColor" viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                          clip-rule="evenodd"></path>
+                </svg>
             </a>
         </div>
     </div>
-
 @stop
 @push('scripts')
     <script>
