@@ -150,11 +150,9 @@
                                                 <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
                                                      class="gallery-image object-cover rounded-none hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
                                                 <!-- Hover Menu -->
-{{--                                                <div--}}
-{{--                                                    class="absolute top-0  left-1/2 transform -translate-x-1/2 -translate-y-1/1 flex items-center bg-white py-2 px-2 rounded-none shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-auto min-h-[50px]">--}}
-                                                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/1 flex items-center bg-white py-2 px-2 rounded-none shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-auto min-h-[50px] on-hover-menu">
-
-                                                <!-- Favorite Button -->
+                                                <div
+                                                    class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/1 flex items-center bg-white py-2 px-2 rounded-none shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-auto min-h-[50px]">
+                                                    <!-- Favorite Button -->
                                                     <button
                                                         class="bg-yellow-500 text-white rounded-full p-2 set-cover-button"
                                                         data-image-key="{{ $object->key }}">
@@ -298,13 +296,7 @@
             });
         });
 
-        const element = document.querySelector('.on-hover-menu');
-        element.addEventListener('touchstart', () => {
-            element.classList.add('group-hover:opacity-100');
-        });
-        element.addEventListener('touchend', () => {
-            element.classList.remove('group-hover:opacity-100');
-        });
+
     </script>
     <script src="{{ asset('js/gallery.js') }}"></script>
 @endpush

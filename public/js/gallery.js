@@ -30,3 +30,17 @@ if (goBackButton) {
         window.history.back();
     });
 }
+
+function isMobile() {
+    return window.innerWidth <= 768;
+}
+
+const galleryImages = document.querySelectorAll('.gallery-image');
+galleryImages.forEach(image => {
+    image.addEventListener('click', function(event) {
+        if (isMobile()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    });
+});
