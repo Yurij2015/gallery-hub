@@ -149,12 +149,14 @@
                                                 <!-- Image -->
                                                 <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
                                                      class="gallery-image object-cover rounded-none hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
-                                                <!-- Hover Menu (Fixed for Proper Visibility) -->
-                                                <div
-                                                    class="absolute top-0  left-1/2 transform -translate-x-1/2 -translate-y-1/1 flex items-center bg-white py-2 px-2 rounded-none shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-auto min-h-[50px]">
-                                                    <!-- Favorite Button -->
+                                                <!-- Hover Menu -->
+{{--                                                <div--}}
+{{--                                                    class="absolute top-0  left-1/2 transform -translate-x-1/2 -translate-y-1/1 flex items-center bg-white py-2 px-2 rounded-none shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-auto min-h-[50px]">--}}
+                                                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/1 flex items-center bg-white py-2 px-2 rounded-none shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-auto min-h-[50px] on-hover-menu">
+
+                                                <!-- Favorite Button -->
                                                     <button
-                                                        class="bg-yellow-500 text-white rounded-full p-2 favorite-button"
+                                                        class="bg-yellow-500 text-white rounded-full p-2 set-cover-button"
                                                         data-image-key="{{ $object->key }}">
                                                         <svg class="w-4 h-4 text-gray-800 dark:text-white"
                                                              aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -230,6 +232,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const deleteButtons = document.querySelectorAll('.delete-button');
             const expandButtons = document.querySelectorAll('.expand-button');
+            const setCoverButtons = document.querySelectorAll('.set-cover-button');
 
             deleteButtons.forEach(button => {
                 button.addEventListener('click', function (event) {
@@ -269,6 +272,38 @@
                     }
                 });
             });
+
+            setCoverButtons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const imageKey = button.getAttribute('data-image-key');
+                    fetch(`/project/set-cover-image/${projectId}?imageKey=${imageKey}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                alert('Cover image set successfully');
+                            } else {
+                                alert('Failed to set cover image');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Failed to set cover image');
+                        });
+                });
+            });
+        });
+
+        const element = document.querySelector('.on-hover-menu');
+        element.addEventListener('touchstart', () => {
+            element.classList.add('group-hover:opacity-100');
+        });
+        element.addEventListener('touchend', () => {
+            element.classList.remove('group-hover:opacity-100');
         });
     </script>
     <script src="{{ asset('js/gallery.js') }}"></script>

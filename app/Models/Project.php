@@ -18,6 +18,7 @@ class Project extends Model
         'project_folder',
         'date',
         'expiration_date',
+        'cover_image',
         'views_statistic',
         'download_statistic',
         'user_reactions',
