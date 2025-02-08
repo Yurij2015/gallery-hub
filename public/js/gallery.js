@@ -3,6 +3,7 @@ const gallery = document.querySelector('.gallery');
 const lightbox = document.getElementById('lightbox');
 const lightboxImage = document.getElementById('lightbox-image');
 const closeButton = document.getElementById('close');
+const goBackButton = document.getElementById('goBack');
 
 // Add event listener to each image
 gallery.addEventListener('click', e => {
@@ -24,6 +25,8 @@ lightbox.addEventListener('click', e => {
     }
 });
 
-document.getElementById('goBack').addEventListener('click', function () {
-    window.history.back();
-});
+if (goBackButton) {
+    goBackButton.addEventListener('click', function () {
+        window.history.back();
+    });
+}
