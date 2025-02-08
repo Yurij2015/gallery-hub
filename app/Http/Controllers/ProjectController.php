@@ -316,6 +316,20 @@ class ProjectController extends Controller
         ]);
     }
 
+    public function setCoverImage(Project $project, Request $request)
+    {
+        $imageKey = $request->get('imageKey');
+        $project->cover_image = $imageKey;
+        $project->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cover image set successfully',
+        ]);
+    }
+
+
+
     public function clientGallery(
         User $user,
         Project $project,

@@ -41,6 +41,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/projects/statistic/{project}', [ProjectController::class, 'projectStatistic'])->name('project.statistic');
     Route::delete('/project/remove-object/{project}', [ProjectController::class, 'deleteObject'])->name('project.delete-object');
 
+    // project ajax requests
+    Route::post('/project/set-cover-image/{project}', [ProjectController::class, 'setCoverImage'])->name('project.set-cover-image');
+
+
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
