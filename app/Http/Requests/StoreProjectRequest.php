@@ -27,7 +27,7 @@ class StoreProjectRequest extends FormRequest
             'files' => ['nullable', 'array'],
             'files.*' => ['nullable', 'file'],
             'date' => ['nullable', 'date'],
-            'expiration_date' => ['nullable', 'date'],
+            'expiration_date' => ['nullable', 'string', 'max:255'],
             'project_link' => ['nullable', 'string', 'max:255'],
         ];
     }

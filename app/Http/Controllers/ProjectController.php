@@ -13,6 +13,7 @@ use App\Models\Project;
 use App\Models\User;
 use App\Models\UserReaction;
 use Auth;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -25,6 +26,13 @@ class ProjectController extends Controller
     {
         $this->mainStorage = config('services.minio.main_storage');
     }
+
+    public const TIME_OPTIONS = [
+        1 => '1 month',
+        2 => '2 months',
+        6 => '6 months',
+        12 => '1 year',
+    ];
 
     /**
      * Display a listing of the resource.
@@ -69,7 +77,9 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('projects.create');
+        $timeOptions = self::TIME_OPTIONS;
+
+        return view('projects.create', compact('timeOptions'));
     }
 
     /**
@@ -89,7 +99,7 @@ class ProjectController extends Controller
         $bucketName = $this->mainStorage;
         $validatedRequest = $request->validated();
         $projectSlug = Str::slug($validatedRequest['name']);
-        $projectFolderName = $projectSlug;
+        $projectFolderName = $projectSlug . '-' . time();
 
         $metaData = [
             'projectName' => $validatedRequest['name'],
@@ -113,13 +123,14 @@ class ProjectController extends Controller
             }
         }
 
+        $eventDate = Carbon::createFromFormat('m/d/Y', $validatedRequest['date']);;
+        $expirationDate = $eventDate->copy()->addMonths((int)$validatedRequest['expiration_date']);
+
         $validatedRequest['slug'] = $projectSlug;
         $validatedRequest['bucket_name'] = $bucketName;
         $validatedRequest['project_folder'] = $projectFolderName;
-        $validatedRequest['date'] = (DateTime::createFromFormat('d/m/Y',
-            $validatedRequest['date']))->format('Y-m-d');
-        $validatedRequest['expiration_date'] = (DateTime::createFromFormat('d/m/Y',
-            $validatedRequest['expiration_date']))->format('Y-m-d');
+        $validatedRequest['date'] = $eventDate->format('Y-m-d');
+        $validatedRequest['expiration_date'] = $expirationDate->format('Y-m-d');
         $validatedRequest['user_id'] = $user->id;
 
         Project::create($validatedRequest);
