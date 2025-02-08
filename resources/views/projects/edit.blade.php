@@ -139,28 +139,36 @@
                         </div>
                     </section>
                     <section class="bg-white dark:bg-gray-900">
-                        <div class="px-4 mx-auto max-w-6xl mb-20">
-                            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                @if(isset($projectObjects))
-                                    @foreach($projectObjects as $projectObject)
-                                        <div class="relative">
-                                            <img class="h-auto max-w-full rounded-lg image"
-                                                 src="{{ $projectObject->getObjectUrl() }}" alt="">
-                                            <button
-                                                class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 delete-button"
-                                                data-image-key="{{ $projectObject->key }}"
-                                            >
-                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
-                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd"
-                                                          d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                          clip-rule="evenodd"></path>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    @endforeach
-                                @endif
+                        <div class="gallery">
+                            <div class="flex flex-col mb-10">
+                                <div class="grid md:grid-cols-12 gap-8 lg:mb-11 mb-7">
+                                    @if(isset($projectObjects))
+                                        @foreach($projectObjects as $object)
+                                            <div
+                                                class="md:col-span-4 md:h-[404px] h-[277px] w-full rounded-3xl relative">
+                                                <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
+                                                     class="gallery-image object-cover rounded-none hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
+                                                <button
+                                                    class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 delete-button"
+                                                    data-image-key="{{ $object->key }}"
+                                                >
+                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                              clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </button>
+                                                <p class="text-sm text-gray-900 sm:text-sm dark:text-white text-center mt-2">{{ $object->getObjectName() }}</p>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
                             </div>
+                        </div>
+                        <div class="lightbox" id="lightbox">
+                            <span class="close" id="close">&times;</span>
+                            <img src="" alt="" class="lightbox-image" id="lightbox-image">
                         </div>
                     </section>
                 </div>
@@ -179,6 +187,7 @@
             opacity: 1;
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('css/gallery.css') }}">
 @endsection
 @push('scripts')
     <script>
@@ -213,5 +222,5 @@
             });
         });
     </script>
+    <script src="{{ asset('js/gallery.js') }}"></script>
 @endpush
-
