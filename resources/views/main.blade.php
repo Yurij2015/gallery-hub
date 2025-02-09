@@ -20,7 +20,7 @@
         }
     </script>
 </head>
-<body class="dark:bg-gray-800">
+<body class="{{ Route::is('projects.edit', 'projects.basic-setting', 'projects.design-and-cover', 'projects.reviews', 'projects.favorites') ? 'dark:bg-gray-900' : 'dark:bg-gray-800' }}">
 {{--@include('layouts.navbar-main')--}}
 @include('layouts.header')
 <main class="bg-gray-50 dark:bg-gray-900">

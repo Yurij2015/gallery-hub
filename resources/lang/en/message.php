@@ -95,5 +95,12 @@ return [
     'user' => 'User',
     'supportTicket' => 'Support Ticket',
     'selectPeriod' => 'Select Period',
+    'photos' => 'Photos',
+    'basic' => 'Basic',
+    'designAndCover' => 'Design and Cover',
+    'reviews' => 'Reviews',
+    'favorites' => 'Favorites',
+    'upload' => 'Upload',
+    'imageNotFound' => 'Image Not Found Or Deleted',
 ];
 

@@ -254,6 +254,37 @@ class ProjectController extends Controller
         return view('projects.edit', compact('project', 'projectObjects'));
     }
 
+    public function basicSettings(Project $project)
+    {
+        $timeOptions = self::TIME_OPTIONS;
+
+        return view('projects.basic-settings', compact('project', 'timeOptions'));
+    }
+
+    public function designAndCover(Project $project)
+    {
+        return view('projects.design-and-cover', compact('project'));
+    }
+
+    public function reviews(Project $project)
+    {
+        $project->load(['userReactions' => function ($query) {
+            $query->where('has_comment', true);
+        }]);
+
+        return view('projects.reviews', compact('project'));
+    }
+
+    public function favorites(Project $project)
+    {
+        $project->load(['userReactions' => function ($query) {
+            $query->where('has_like', true);
+            $query->orWhere('has_comment', true);
+        }]);
+
+        return view('projects.favorites', compact('project'));
+    }
+
     /**
      * Update the specified resource in storage.
      */
