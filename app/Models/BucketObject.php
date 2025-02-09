@@ -24,6 +24,7 @@ class BucketObject
     public ?bool $hasLike = null;
     public ?bool $hasComment = null;
     public ?string $commentMessage = null;
+    public ?int $downloadsCount = null;
 
     public function __construct(array $data)
     {
@@ -104,5 +105,15 @@ class BucketObject
     public function getCommentMessage(): ?string
     {
         return $this->commentMessage;
+    }
+
+    public function getDownloadsCount(): ?int
+    {
+        return $this->downloadsCount;
+    }
+
+    public function setDownloadsCount($downloadsCount): void
+    {
+        $this->downloadsCount = $downloadsCount;
     }
 }

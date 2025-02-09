@@ -190,6 +190,19 @@
                                                         </svg>
                                                     </button>
                                                 </div>
+                                                @if($object->downloadsCount)
+                                                    <div class="downloads-count-block">
+                                                        <div class="flex items-center justify-center">
+                                                            <svg class="w-4 h-4 text-gray-400"
+                                                                 xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                                 viewBox="0 0 24 24">
+                                                                <path d="M12 16l4-5h-3V4h-2v7H8l4 5zm-6 2v2h12v-2H6z"/>
+                                                            </svg>
+                                                            <span
+                                                                class="text-xs text-gray-400">{{ $object->downloadsCount }}</span>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                                 <!-- Image Caption -->
                                                 <p class="text-sm text-gray-900 sm:text-sm dark:text-white text-center mt-2">
                                                     {{ $object->objectName }}
@@ -220,6 +233,40 @@
         .delete-button:hover {
             opacity: 1;
         }
+
+        .expand-button {
+            transition: opacity 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .expand-button:hover {
+            opacity: 1;
+        }
+
+        .set-cover-button {
+            transition: opacity 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .set-cover-button:hover {
+            opacity: 1;
+        }
+
+        .downloads-count-block {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            transform: translate(100%, -100%);
+            width: 25px;
+            height: 25px;
+        }
+
+        @media (max-width: 640px) {
+            .downloads-count-block {
+                transform: none;
+            }
+        }
+
     </style>
     <link rel="stylesheet" href="{{ asset('css/gallery.css') }}">
 @endsection
