@@ -240,12 +240,15 @@ class ProjectController extends Controller
         foreach ($projectObjects as $object) {
             $key = $object->key;
 
+            $downoadsCount = UserReaction::where('object_key', $key)->pluck('download_statistic')->sum();
+
             $keySegments = explode('/', $key);
             $objectName = end($keySegments);
 
             $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
             $object->setObjectUrl($imgUrl);
             $object->setObjectName($objectName);
+            $object->setDownloadsCount($downoadsCount);
         }
 
         return view('projects.edit', compact('project', 'projectObjects'));
@@ -328,8 +331,6 @@ class ProjectController extends Controller
         ]);
     }
 
-
-
     public function clientGallery(
         User $user,
         Project $project,
@@ -402,7 +403,7 @@ class ProjectController extends Controller
         $object = $request->get('object');
         $objectKey = $object['key'];
         $objectUrl = $object['objectUrl'];
-        $clientName = $request->get('clientName', 'Anonymous');
+        $clientName = isset($request->clientName) ? $request->clientName : 'Anonymous';
         $hasLike = $request->get('hasLike', false);
         $hasComment = $request->get('hasComment', false);
         $commentMessage = $request->get('comment', null);
