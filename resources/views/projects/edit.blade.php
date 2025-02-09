@@ -145,16 +145,16 @@
                                     @if(isset($projectObjects))
                                         @foreach($projectObjects as $object)
                                             <div
-                                                class="md:col-span-4 md:h-[404px] h-[277px] w-full rounded-3xl relative group">
+                                                class="md:col-span-2 md:h-[202px] h-[138px] w-full rounded-3xl relative group">
                                                 <!-- Image -->
                                                 <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
                                                      class="gallery-image object-cover rounded-none hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
                                                 <!-- Hover Menu -->
                                                 <div
-                                                    class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/1 flex items-center bg-white py-2 px-2 rounded-none shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-auto min-h-[50px]">
+                                                    class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/1 flex items-center bg-white py-1 px-2 rounded-none shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-auto min-h-[25px]">
                                                     <!-- Favorite Button -->
                                                     <button
-                                                        class="bg-yellow-500 text-white rounded-full p-2 set-cover-button"
+                                                        class="bg-yellow-500 text-white rounded-full p-1 set-cover-button"
                                                         data-image-key="{{ $object->key }}">
                                                         <svg class="w-4 h-4 text-gray-800 dark:text-white"
                                                              aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -167,7 +167,7 @@
                                                     <div class="h-6 w-[1px] bg-gray-300 mx-2"></div>
                                                     <!-- Expand Button -->
                                                     <button
-                                                        class="bg-blue-500 text-white rounded-full p-2 expand-button"
+                                                        class="bg-blue-500 text-white rounded-full p-1 expand-button"
                                                         data-image-url="{{ $object->objectUrl }}">
                                                         <svg class="w-4 h-4 text-gray-800 dark:text-white"
                                                              aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -180,7 +180,7 @@
                                                     <!-- Separator -->
                                                     <div class="h-6 w-[1px] bg-gray-300 mx-2"></div>
                                                     <!-- Delete Button -->
-                                                    <button class="bg-red-500 text-white rounded-full p-2 delete-button"
+                                                    <button class="bg-red-500 text-white rounded-full p-1 delete-button"
                                                             data-image-key="{{ $object->key }}">
                                                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                                              xmlns="http://www.w3.org/2000/svg">
