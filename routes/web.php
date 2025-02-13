@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
         '[0-9]+')->name('projects.show');
     Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
+    Route::post('/projects/store-folder/{project}', [ProjectController::class, 'storeFolder'])->name('projects.store-folder');
     Route::get('/projects/edit/{project}', [ProjectController::class, 'edit'])->name('projects.edit');
     Route::get('/projects/basic-setting/{project}', [ProjectController::class, 'basicSettings'])->name('projects.basic-setting');
     Route::get('/projects/design-and-cover/{project}', [ProjectController::class, 'designAndCover'])->name('projects.design-and-cover');

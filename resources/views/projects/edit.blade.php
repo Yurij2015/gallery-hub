@@ -56,10 +56,12 @@
                         <div class="gallery">
                             <div class="flex flex-col mb-2 px-10">
                                 <div class="grid grid-cols-12 gap-4 mb-3">
-                                    <div class="col-span-12 md:col-span-4 flex items-center justify-start">
+                                    <div class="col-span-12 md:col-span-4 flex items-center justify-start  space-x-6">
                                         <button
-                                            data-modal-target="add-folder-modal" data-modal-toggle="add-folder-modal"
-                                            class="inline-flex items-center px-5 py-2.5 sm:mt-6 text-sm font-medium text-white bg-yellow-500 rounded-none focus:ring-4 focus:ring-yellow-400 dark:focus:ring-yellow-500 hover:bg-yellow-400 ml-5">
+                                            data-modal-target="add-folder-modal"
+                                            data-modal-toggle="add-folder-modal"
+                                            class="inline-flex items-center px-5 py-2.5 sm:mt-6 text-sm font-medium text-white bg-yellow-500 rounded-none focus:ring-4 focus:ring-yellow-400 dark:focus:ring-yellow-500 hover:bg-yellow-400 ml-5"
+                                        >
                                             <svg class="w-4 h-4 me-2 text-gray-800 dark:text-white" aria-hidden="true"
                                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                                  viewBox="0 0 24 24">
@@ -69,9 +71,33 @@
                                             </svg>
                                             {{ __('message.addFolder') }}
                                         </button>
+
+                                        <div class="flex items-center space-x-4 mt-5">
+                                            @foreach($projectFoldersWithFolderName as $folder)
+                                                <div class="relative group flex flex-col items-center">
+                                                    <svg class="w-10 h-10 text-gray-800 dark:text-white cursor-pointer" aria-hidden="true"
+                                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                         fill="currentColor" viewBox="0 0 24 24">
+                                                        <path fill-rule="evenodd"
+                                                              d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z"
+                                                              clip-rule="evenodd"/>
+                                                    </svg>
+
+                                                    <div class="absolute top-full mt-2 px-4 py-2 min-w-[150px] text-center max-w-xs text-sm font-medium text-white bg-gray-900 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 dark:bg-gray-800 z-50">
+                                                        {{ $folder['folderName'] }}
+                                                        <div class="absolute left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-900 rotate-45 top-[-5px] dark:bg-gray-800"></div>
+                                                    </div>
+
+
+                                                </div>
+                                            @endforeach
+                                        </div>
+
+
                                     </div>
                                     <div class="col-span-12 md:col-span-8 md:col-start-7 flex items-center">
-                                        <form id="uploadForm" action="{{ route('projects.upload-images', $project->id) }}"
+                                        <form id="uploadForm"
+                                              action="{{ route('projects.upload-images', $project->id) }}"
                                               method="POST" enctype="multipart/form-data">
                                             @method('put')
                                             @csrf
@@ -102,8 +128,8 @@
                                 </div>
                                 <hr class="mb-5 border border-gray-200 dark:border-gray-700">
                                 <div class="grid md:grid-cols-12 gap-12 lg:mb-11 mb-7 px-5">
-                                    @if(isset($projectObjects))
-                                        @foreach($projectObjects as $object)
+                                    @if(isset($projectFiles))
+                                        @foreach($projectFiles as $object)
                                             <div
                                                 class="md:col-span-2 md:h-[222px] h-[138px] w-full rounded-3xl relative group">
                                                 <!-- Image -->

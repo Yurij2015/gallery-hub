@@ -124,14 +124,16 @@ class BucketService
         return $object ?? null;
     }
 
-    public function createFolder($bucketName, $folderName): ?Result
+    public function createFolder($bucketName, $folderName, $metaData): ?Result
     {
         try {
             $folder = $this->s3Client->putObject([
                 'Bucket' => $bucketName,
-                'Key' => $folderName.'/',
-                'Body' => ''
+                'Key' => rtrim($folderName, '/') . '/',
+                'Body' => '',
+                'Metadata' => $metaData
             ]);
+            Log::info("Minio Folder created: {$folderName}");
         } catch (S3Exception $e) {
             Log::info('S3 Exception:', [
                 'message' => $e->getMessage()
@@ -139,6 +141,33 @@ class BucketService
         }
 
         return $folder ?? null;
+    }
+
+    public function getFoldersList($bucketName, $folderName): array
+    {
+        try {
+            $folderName = rtrim($folderName, '/').'/';
+
+            $result = $this->s3Client->listObjectsV2([
+                'Bucket' => $bucketName,
+                'Prefix' => $folderName,
+                'Delimiter' => '/',
+            ]);
+
+            $folders = [];
+            if (isset($result['CommonPrefixes'])) {
+                foreach ($result['CommonPrefixes'] as $prefix) {
+                    $folders[] = $prefix['Prefix'];
+                }
+            }
+
+            Log::info('MinIO Folders:', $folders);
+            return $folders;
+
+        } catch (S3Exception $e) {
+            Log::error('MinIO Exception:', ['message' => $e->getMessage()]);
+            return [];
+        }
     }
 
     public function checkBucketExist($bucketName): bool
