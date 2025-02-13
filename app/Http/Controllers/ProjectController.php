@@ -428,6 +428,11 @@ class ProjectController extends Controller
 
         $projectObjects = $bucketService->listObjectsInFolder($bucketName, $userDirectory.'/'.$projectFolder);
 
+        $projectObjects = array_filter($projectObjects, function ($object) {
+            $array = explode('/', $object->key);
+            return !empty(end($array));
+        });
+
         foreach ($projectObjects as $object) {
             $key = $object->key;
             $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
