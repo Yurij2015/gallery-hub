@@ -42,9 +42,9 @@ class ProjectController extends Controller
         $user = Auth::user();
 
         if ($user->hasRole('admin')) {
-            $projects = Project::with('user')->with('userReactions')->paginate(10);
+            $projects = Project::with('user')->with('userReactions')->paginate(100);
         } else {
-            $projects = Project::with('user')->with('userReactions')->where('user_id', $user->id)->paginate(10);
+            $projects = Project::with('user')->with('userReactions')->where('user_id', $user->id)->paginate(100);
         }
 
         foreach ($projects as $project) {
@@ -320,6 +320,32 @@ class ProjectController extends Controller
         $project->update($validatedRequest);
 
         return redirect()->route('projects.edit', $project->id)->with('success', 'Project updated successfully');
+    }
+
+    public function uploadImages(Request $request, Project $project, BucketService $bucketService)
+    {
+        $userDirectory = $this->getUserFolderName($project);
+        $bucketName = $this->mainStorage;
+        $userEmail = Auth::user()->email;
+        $files = $request->file('files');
+
+        $metaData = [
+            'projectName' => $project->name,
+            'projectSlug' => $project->slug,
+            'userEmail' => $userEmail,
+        ];
+
+        if ($files) {
+            foreach ($files as $file) {
+                $objectName = $file->getClientOriginalPath();
+                $objectPath = $file->getPathname();
+                $content = file_get_contents($objectPath);
+                $bucketService->putObject($bucketName, $userDirectory.'/'.$project->project_folder.'/'.$objectName, $content,
+                    $metaData);
+            }
+        }
+
+        return redirect()->route('projects.edit', $project->id)->with('success', 'Images uplsaded successfully');
     }
 
     /**

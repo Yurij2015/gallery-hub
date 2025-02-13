@@ -40,6 +40,7 @@ return [
     'goBack' => 'Go Back',
     'editProject' => 'Edit Project',
     'chooseNewFiles' => 'Choose New Files',
+    'chooseFolderFiles' => 'Choose Folder Files',
     'allUsers' => 'All Users',
     'search' => 'Search',
     'searchUser' => 'Search User',

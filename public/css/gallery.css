@@ -30,11 +30,44 @@
     width: 90vw;
     max-width: 1200px;
     margin: 0 auto;
+    display: grid;
     grid-template-rows: 1fr;
     grid-column-gap: 30px;
     grid-row-gap: 30px;
-
 }
+
+/* Extra Large Screens (e.g., large desktops, 4K monitors) */
+@media (min-width: 1600px) {
+    .gallery {
+        max-width: 1600px;
+        width: 85vw;
+    }
+}
+
+/* Large Screens (desktops) */
+@media (min-width: 1200px) and (max-width: 1599px) {
+    .gallery {
+        max-width: 1200px;
+        width: 85vw;
+    }
+}
+
+/* Medium Screens (tablets) */
+@media (min-width: 768px) and (max-width: 1199px) {
+    .gallery {
+        max-width: 1000px;
+        width: 90vw;
+    }
+}
+
+/* Small Screens (phones) */
+@media (max-width: 767px) {
+    .gallery {
+        max-width: 100%;
+        width: 95vw;
+    }
+}
+
 
 .gallery img {
     max-width: 100%;

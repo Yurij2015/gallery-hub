@@ -31,7 +31,6 @@
                         </li>
                     </ol>
                 </nav>
-                <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ __('message.projects') }}</h1>
             </div>
             <div class="items-center justify-between block sm:flex md:divide-x md:divide-gray-100 dark:divide-gray-700">
                 <div class="flex items-center mb-4 sm:mb-0">
@@ -241,55 +240,82 @@
                                         </div>
                                     </td>
                                     <td class="p-4 space-x-2 whitespace-nowrap">
-                                        <a href="{{ route('projects.show', $project->id) }}"
-                                           data-tooltip-target="tooltip-view"
-                                           class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd"
-                                                      d="M4.998 7.78C6.729 6.345 9.198 5 12 5c2.802 0 5.27 1.345 7.002 2.78a12.713 12.713 0 0 1 2.096 2.183c.253.344.465.682.618.997.14.286.284.658.284 1.04s-.145.754-.284 1.04a6.6 6.6 0 0 1-.618.997 12.712 12.712 0 0 1-2.096 2.183C17.271 17.655 14.802 19 12 19c-2.802 0-5.27-1.345-7.002-2.78a12.712 12.712 0 0 1-2.096-2.183 6.6 6.6 0 0 1-.618-.997C2.144 12.754 2 12.382 2 12s.145-.754.284-1.04c.153-.315.365-.653.618-.997A12.714 12.714 0 0 1 4.998 7.78ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                                                      clip-rule="evenodd"/>
-                                            </svg>
-                                        </a>
-                                        <div id="tooltip-view" role="tooltip"
-                                             class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
-                                            {{ __('message.view') }}
-                                            <div class="tooltip-arrow" data-popper-arrow></div>
-                                        </div>
-                                        <button type="button"
-                                                data-modal-target="delete-project-modal-{{ $project->id }}"
-                                                data-modal-toggle="delete-project-modal-{{ $project->id }}"
-                                                data-tooltip-target="tooltip-delete"
-                                                class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
-                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd"
-                                                      d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                      clip-rule="evenodd"></path>
+                                        <button
+                                            id="dropdownDotsButton"
+                                            data-project-id="{{ $project->id }}"
+                                            data-popover-target="popover-left-{{$project->id}}"
+                                            data-popover-trigger="click"
+                                            data-popover-placement="left"
+                                            class="inline-flex items-center p-2 text-sm font-medium text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 dropdown-dots-button"
+                                            type="button"
+                                            @click="toggleDropdown($event)"
+                                        >
+                                            <svg
+                                                class="w-5 h-5"
+                                                aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="currentColor"
+                                                viewBox="0 0 4 16"
+                                            >
+                                                <path
+                                                    d="M2 3.5A1.5 1.5 0 1 0 2 0a1.5 1.5 0 0 0 0 3.5ZM2 9A1.5 1.5 0 1 0 2 5.5 1.5 1.5 0 0 0 2 9Zm0 5.5A1.5 1.5 0 1 0 2 11a1.5 1.5 0 0 0 0 3.5Z"/>
                                             </svg>
                                         </button>
-                                        <div id="tooltip-delete" role="tooltip"
-                                             class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
-                                            {{ __('message.delete') }}
-                                            <div class="tooltip-arrow" data-popper-arrow></div>
-                                        </div>
-                                        <a href="{{ route('project.statistic', $project->id) }}"
-                                           data-tooltip-target="tooltip-statistic"
-                                           class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-primary-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">
-                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                      stroke-linejoin="round" stroke-width="2"
-                                                      d="M10 6.025A7.5 7.5 0 1 0 17.975 14H10V6.025Z"/>
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                      stroke-linejoin="round" stroke-width="2"
-                                                      d="M13.5 3c-.169 0-.334.014-.5.025V11h7.975c.011-.166.025-.331.025-.5A7.5 7.5 0 0 0 13.5 3Z"/>
-                                            </svg>
-                                        </a>
-                                        <div id="tooltip-statistic" role="tooltip"
-                                             class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
-                                            {{ __('message.projectStatistic') }}
-                                            <div class="tooltip-arrow" data-popper-arrow></div>
+
+                                        <!-- Popover Container -->
+                                        <div
+                                            data-popover
+                                            id="popover-left-{{ $project->id }}"
+                                            role="tooltip"
+                                            class="absolute z-10 invisible w-56 text-sm text-gray-700 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-800"
+                                        >
+                                            <div
+                                                class="flex items-center justify-between px-4 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700 project-popover-menu">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white text-base">
+                                                    Project Actions</h3>
+                                                <button type="button"
+                                                        class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-200 focus:outline-none close-popover-btn"
+                                                        data-project-id="{{ $project->id }}">
+                                                    ✕
+                                                </button>
+                                            </div>
+                                            <!-- Menu Items -->
+                                            <div class="flex justify-around px-4 py-3 space-x-2">
+                                                <!-- View Project -->
+                                                <a href="{{ route('projects.show', $project->id) }}"
+                                                   class="inline-flex items-center justify-center w-12 h-12 text-xs font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                              d="M4.998 7.78C6.729 6.345 9.198 5 12 5c2.802 0 5.27 1.345 7.002 2.78a12.713 12.713 0 0 1 2.096 2.183c.253.344.465.682.618.997.14.286.284.658.284 1.04s-.145.754-.284 1.04a6.6 6.6 0 0 1-.618.997 12.712 12.712 0 0 1-2.096 2.183C17.271 17.655 14.802 19 12 19c-2.802 0-5.27-1.345-7.002-2.78a12.712 12.712 0 0 1-2.096-2.183 6.6 6.6 0 0 1-.618-.997C2.144 12.754 2 12.382 2 12s.145-.754.284-1.04c.153-.315.365-.653.618-.997A12.714 12.714 0 0 1 4.998 7.78ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                                                              clip-rule="evenodd"/>
+                                                    </svg>
+                                                </a>
+
+                                                <!-- Delete Project -->
+                                                <button type="button"
+                                                        data-modal-target="delete-project-modal-{{ $project->id }}"
+                                                        data-modal-toggle="delete-project-modal-{{ $project->id }}"
+                                                        class="inline-flex items-center justify-center w-12 h-12 text-xs font-medium text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900 delete-project-button">
+                                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                              clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </button>
+
+                                                <!-- Project Statistics -->
+                                                <a href="{{ route('project.statistic', $project->id) }}"
+                                                   class="inline-flex items-center justify-center w-12 h-12 text-xs font-medium text-center text-white rounded-lg bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-primary-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">
+                                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path stroke="currentColor" stroke-linecap="round"
+                                                              stroke-linejoin="round" stroke-width="2"
+                                                              d="M10 6.025A7.5 7.5 0 1 0 17.975 14H10V6.025Z"/>
+                                                        <path stroke="currentColor" stroke-linecap="round"
+                                                              stroke-linejoin="round" stroke-width="2"
+                                                              d="M13.5 3c-.169 0-.334.014-.5.025V11h7.975c.011-.166.025-.331.025-.5A7.5 7.5 0 0 0 13.5 3Z"/>
+                                                    </svg>
+                                                </a>
+                                            </div>
                                         </div>
                                         @include('projects.partials.delete-project-modal')
                                     </td>
@@ -380,18 +406,19 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const projectRows = document.querySelectorAll('.project-row');
+            const copyLinks = document.querySelectorAll('.copyLink');
+            const dropdownDotsButtons = document.querySelectorAll('.dropdown-dots-button');
+
             projectRows.forEach(row => {
                 row.addEventListener('click', function () {
                     window.location.href = row.getAttribute('data-project-edit-url');
                 });
             });
 
-
-            const copyLinks = document.querySelectorAll('.copyLink');
-
             copyLinks.forEach(link => {
                 link.addEventListener('click', function (event) {
                     event.preventDefault();
+                    event.stopPropagation(); // Stop the click from bubbling
                     const url = link.getAttribute('data-url');
                     const objectsCount = link.getAttribute('data-objects-count');
                     if (!objectsCount) {
@@ -404,6 +431,51 @@
                     });
                 });
             });
+
+            dropdownDotsButtons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const projectId = button.getAttribute('data-project-id');
+                    console.log('projectId', projectId);
+                });
+            });
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.close-popover-btn').forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    const projectId = this.getAttribute('data-project-id');
+                    const popover = document.getElementById(`popover-left-${projectId}`);
+                    if (popover) {
+                        popover.classList.add("invisible", "opacity-0");
+                    }
+                });
+            });
+
+            document.querySelectorAll('.project-popover-menu').forEach(popover => {
+                popover.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                });
+            });
+
+            document.querySelectorAll('.delete-project-button').forEach(popover => {
+                popover.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                });
+            });
+
+            document.querySelectorAll('.delete-project-modal').forEach(popover => {
+                popover.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                });
+            });
+        });
+
     </script>
 @endpush
