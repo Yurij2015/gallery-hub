@@ -42,6 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/projects/favorites/{project}', [ProjectController::class, 'favorites'])->name('projects.favorites');
 
     Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
+    Route::put('/projects-upload-images/{project}', [ProjectController::class, 'uploadImages'])->name('projects.upload-images');
+
     Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
     Route::get('/projects/statistic/{project}', [ProjectController::class, 'projectStatistic'])->name('project.statistic');
     Route::delete('/project/remove-object/{project}', [ProjectController::class, 'deleteObject'])->name('project.delete-object');

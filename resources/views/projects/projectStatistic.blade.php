@@ -26,15 +26,12 @@
                                           clip-rule="evenodd"></path>
                                 </svg>
                                 <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500"
-                                      aria-current="page">{{ __('message.projectStatistic') }}</span>
+                                      aria-current="page">{{ __('message.projectStatistic') }} - {{ $project->name }}</span>
                             </div>
                         </li>
                     </ol>
                 </nav>
                 <div class="flex items-center">
-                    <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mr-3">
-                        {{ __('message.projectStatistic') }} - {{ $project->name }}
-                    </h1>
                     <span
                         class="bg-green-100 text-indigo-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-indigo-500 dark:text-indigo-300">
                         {{ __('message.likes') }}: {{ $project->userReactions->where('has_like', true)->count() }}
