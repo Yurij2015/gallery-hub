@@ -129,7 +129,7 @@
 @stop
 
 @section('footer')
-    <link rel="stylesheet" href="{{ asset('css/gallery.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/project-show.css') }}">
 @endsection
 
 @push('scripts')
