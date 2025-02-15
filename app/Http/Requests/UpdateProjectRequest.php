@@ -29,6 +29,7 @@ class UpdateProjectRequest extends FormRequest
             'date' => ['nullable', 'date'],
             'expiration_date' => ['nullable', 'date'],
             'project_link' => ['nullable', 'string', 'max:255'],
+            'allow_feedback' => ['nullable', 'boolean']
         ];
     }
 }

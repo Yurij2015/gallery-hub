@@ -29,6 +29,7 @@ class StoreProjectRequest extends FormRequest
             'date' => ['nullable', 'date'],
             'expiration_date' => ['nullable', 'string', 'max:255'],
             'project_link' => ['nullable', 'string', 'max:255'],
+            'allow_feedback' => ['nullable', 'boolean']
         ];
     }
 }

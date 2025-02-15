@@ -103,5 +103,8 @@ return [
     'favorites' => 'Favorites',
     'upload' => 'Upload',
     'imageNotFound' => 'Image Not Found Or Deleted',
+    'allowFeedback' => 'Allow Feedback',
+    'yes' => 'Yes',
+    'no' => 'No',
 ];
 

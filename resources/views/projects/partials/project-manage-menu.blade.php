@@ -25,14 +25,14 @@
                 {{ __('message.designAndCover') }}
             </a>
         </li>
-        <li class="me-2">
-            <a href="{{ route('projects.reviews', $project->id) }}" class="{{ Route::is('projects.reviews') ? 'inline-flex items-center justify-center p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : 'inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group' }}">
-                <svg class="w-4 h-4 me-2 {{ Route::is('projects.reviews') ? 'text-blue-600 dark:text-blue-500' : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300' }} mt-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-width="2"  d="M2 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6l-4 4v-4H4a2 2 0 0 1-2-2V4z" />
-                </svg>
-                {{ __('message.reviews') }}
-            </a>
-        </li>
+{{--        <li class="me-2">--}}
+{{--            <a href="{{ route('projects.reviews', $project->id) }}" class="{{ Route::is('projects.reviews') ? 'inline-flex items-center justify-center p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : 'inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group' }}">--}}
+{{--                <svg class="w-4 h-4 me-2 {{ Route::is('projects.reviews') ? 'text-blue-600 dark:text-blue-500' : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300' }} mt-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">--}}
+{{--                    <path stroke="currentColor" stroke-width="2"  d="M2 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6l-4 4v-4H4a2 2 0 0 1-2-2V4z" />--}}
+{{--                </svg>--}}
+{{--                {{ __('message.reviews') }}--}}
+{{--            </a>--}}
+{{--        </li>--}}
         <li class="me-2">
             <a href="{{ route('projects.favorites', $project->id) }}" class="{{ Route::is('projects.favorites') ? 'inline-flex items-center justify-center p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : 'inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group' }}">
                 <svg class="w-4 h-4 me-2 {{ Route::is('projects.favorites') ? 'text-blue-600 dark:text-blue-500' : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300' }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">

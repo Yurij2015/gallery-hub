@@ -6,45 +6,45 @@
     <div
         class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700">
         <div class="w-full">
-                <nav class="flex" aria-label="Breadcrumb">
-                    <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
-                        <li class="inline-flex items-center">
-                            <a href="{{ route('projects.index') }}"
-                               class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
-                                <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                                </svg>
-                                {{ __('message.home')}}
-                            </a>
-                        </li>
-                        <li class="inline-flex items-center">
-                            <a href="{{ route('projects.index') }}"
-                               class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
-                                <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                          clip-rule="evenodd"></path>
-                                </svg>
-                                {{ __('message.projects') }}
-                            </a>
-                        </li>
-                        <li>
-                            <div class="flex items-center">
-                                <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                          clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500"
-                                      aria-current="page">{{ __('message.editProject') }} - {{ $project->name }}</span>
-                            </div>
-                        </li>
-                    </ol>
-                </nav>
+            <nav class="flex" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+                    <li class="inline-flex items-center">
+                        <a href="{{ route('projects.index') }}"
+                           class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
+                            <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                            </svg>
+                            {{ __('message.home')}}
+                        </a>
+                    </li>
+                    <li class="inline-flex items-center">
+                        <a href="{{ route('projects.index') }}"
+                           class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
+                            <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                      clip-rule="evenodd"></path>
+                            </svg>
+                            {{ __('message.projects') }}
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                      clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500"
+                                  aria-current="page">{{ __('message.editProject') }} - {{ $project->name }}</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
         </div>
     </div>
     <div class="flex flex-col">
@@ -110,19 +110,39 @@
                                                            value="{{ Carbon::parse($project->expiration_date)->format('d/m/Y') }}">
                                                 </div>
                                             </div>
-{{--                                            <div class="col-span-6 sm:col-span-2">--}}
-{{--                                                <label--}}
-{{--                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"--}}
-{{--                                                    for="user_avatar">--}}
-{{--                                                    {{ __('message.chooseNewFiles') }}--}}
-{{--                                                </label>--}}
-{{--                                                <input--}}
-{{--                                                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-none cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"--}}
-{{--                                                    aria-describedby="upload_directory_help" id="uploadDirectory"--}}
-{{--                                                    type="file"--}}
-{{--                                                    name="files[]" multiple--}}
-{{--                                                >--}}
-{{--                                            </div>--}}
+                                            <div class="col-span-12 sm:col-span-12">
+                                                <h4 class="mb-1 text-sm text-gray-900 dark:text-white">
+                                                    {{ __('message.allowFeedback') }}
+                                                </h4>
+                                                <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-none sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                    <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                                                        <div class="flex items-center ps-3">
+                                                            <input id="allow-feedback" type="radio" value="1"
+                                                                   name="allow_feedback"
+                                                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                                                {{ old('allow_feedback', $project->allow_feedback ?? 1) == 1 ? 'checked' : '' }}>
+                                                            <label for="allow-feedback"
+                                                                   class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                                                {{ __('message.yes') }}
+                                                            </label>
+                                                        </div>
+                                                    </li>
+
+                                                    <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                                                        <div class="flex items-center ps-3">
+                                                            <input id="disallow-feedback" type="radio" value="0"
+                                                                   name="allow_feedback"
+                                                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                                                {{ old('allow_feedback', $project->allow_feedback ?? 1) == 0 ? 'checked' : '' }}>
+                                                            <label for="disallow-feedback"
+                                                                   class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                                                {{ __('message.no') }}
+                                                            </label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
                                         </div>
                                         <div class="flex justify-end">
                                             <button type="submit"

@@ -25,6 +25,7 @@ class Project extends Model
         'project_statistic',
         'project_link',
         'status',
+        'allow_feedback',
         'user_id',
     ];
 
