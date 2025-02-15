@@ -51,7 +51,8 @@
         <div class="overflow-x-auto">
             <div class="inline-bock min-w-full align-middle">
                 <div class="overflow-hidden shadow overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600 relative overflow-hidden">
+                    <table
+                        class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600 relative overflow-hidden">
                         <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr>
                             <th scope="col"
@@ -63,7 +64,7 @@
                                 {{ __('message.client') }}
                             </th>
                             <th scope="col"
-                                class="p-4 text-xs text-mediun text-gray-500 uppercase dark:text-gray-400">
+                                class="p-4 text-left text-xs text-mediun text-gray-500 uppercase dark:text-gray-400">
                                 {{ __('message.comment') }}
                             </th>
                             <th scope="col"
@@ -83,7 +84,7 @@
                                 <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $i++  }}</td>
                                     <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
-                                        <img class="w-32 h-32" src="{{ $reaction->object_url }}"
+                                        <img class="w-32" src="{{ $reaction->object_url }}"
                                              data-tooltip-target="tooltip-object-{{ $reaction->id }}"
                                              onerror="this.onerror=null;this.src='{{ asset('images/image-deleted.svg') }}';"
                                              alt="{{ $reaction->object_key }}">
@@ -104,16 +105,12 @@
                                     </td>
                                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                            <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                                {{ $reaction->comment_message }}
-                                            </div>
+                                            {{ $reaction->comment_message }}
                                         </div>
                                     </td>
                                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                            <div class="text-sm font-normal text-gray-500 dark:text-gray-400 text-center">
-                                                {{ $reaction->created_at->diffForHumans() }}
-                                            </div>
+                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400 text-center">
+                                            {{ $reaction->created_at->diffForHumans() }}
                                         </div>
                                     </td>
                                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -194,7 +191,7 @@
         .stringDisplay::after {
             content: attr(data-full-string);
             display: inline-block;
-            width: 30ch;
+            width: 15ch;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
