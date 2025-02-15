@@ -422,7 +422,10 @@ class ProjectController extends Controller
 
     public function projectStatistic(Project $project)
     {
-        $project->load('userReactions');
+        $project->load(['userReactions' => function ($query) {
+            $query->whereNull('review');
+        }]);
+
         return view('projects.projectStatistic', compact('project'));
     }
 
