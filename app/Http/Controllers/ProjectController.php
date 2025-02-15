@@ -307,6 +307,7 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project, BucketService $bucketService)
     {
+
         $validatedRequest = $request->validated();
         $userDirectory = $this->getUserFolderName($project);
         $bucketName = $this->mainStorage;
@@ -337,7 +338,7 @@ class ProjectController extends Controller
 
         $project->update($validatedRequest);
 
-        return redirect()->route('projects.edit', $project->id)->with('success', 'Project updated successfully');
+        return redirect()->route('projects.basic-setting', $project->id)->with('success', 'Project updated successfully');
     }
 
     public function uploadImages(Request $request, Project $project, BucketService $bucketService)
