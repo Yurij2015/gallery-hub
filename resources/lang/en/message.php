@@ -106,5 +106,9 @@ return [
     'allowFeedback' => 'Allow Feedback',
     'yes' => 'Yes',
     'no' => 'No',
+    'archive' => 'Archive',
+    'client' => 'Client',
+    'added' => 'Added',
+    'published' => 'Published',
 ];
 

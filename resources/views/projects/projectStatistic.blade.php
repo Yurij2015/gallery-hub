@@ -196,7 +196,6 @@
                                                               clip-rule="evenodd"/>
                                                     </svg>
                                                 </a>
-                                            </div>
                                             <div id="tooltip-view-{{ $reaction->id }}" role="tooltip"
                                                  class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
                                                 {{ __('message.viewImage') }}
