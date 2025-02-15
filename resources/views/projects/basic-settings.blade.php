@@ -119,8 +119,8 @@
                                                         <div class="flex items-center ps-3">
                                                             <input id="allow-feedback" type="radio" value="1"
                                                                    name="allow_feedback"
-                                                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                                                {{ old('allow_feedback', $project->allow_feedback ?? 1) == 1 ? 'checked' : '' }}>
+                                                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                                                {{ old('allow_feedback', isset($project->allow_feedback) ? $project->allow_feedback : 1) == 1 ? 'checked' : '' }}>
                                                             <label for="allow-feedback"
                                                                    class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                                                 {{ __('message.yes') }}
@@ -132,8 +132,8 @@
                                                         <div class="flex items-center ps-3">
                                                             <input id="disallow-feedback" type="radio" value="0"
                                                                    name="allow_feedback"
-                                                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                                                {{ old('allow_feedback', $project->allow_feedback ?? 1) == 0 ? 'checked' : '' }}>
+                                                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                                                {{ old('allow_feedback', isset($project->allow_feedback) ? $project->allow_feedback : null) == 0 ? 'checked' : '' }}>
                                                             <label for="disallow-feedback"
                                                                    class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                                                 {{ __('message.no') }}

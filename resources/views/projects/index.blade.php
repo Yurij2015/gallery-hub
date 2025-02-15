@@ -128,7 +128,7 @@
                                     <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
                                         {{-- TODO get prev image (by meta, or save in db name of main image--}}
                                         {{--                                        <img class="w-10 h-10" src="/images/users/profile-picture-4.jpg"--}}
-                                        <img class="w-10 h-10" src="{{ $project->getProjectImage() }}"
+                                        <img class="w-24" src="{{ $project->getProjectImage() }}"
                                              alt="{{ $project->name }} avatar">
                                         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                                             <div class="text-base font-semibold text-gray-900 dark:text-white">

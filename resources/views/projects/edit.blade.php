@@ -71,29 +71,29 @@
                                             </svg>
                                             {{ __('message.addFolder') }}
                                         </button>
-
                                         <div class="flex items-center space-x-4 mt-5">
-                                            @foreach($projectFoldersWithFolderName as $folder)
-                                                <div class="relative group flex flex-col items-center">
-                                                    <svg class="w-10 h-10 text-gray-800 dark:text-white cursor-pointer" aria-hidden="true"
-                                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                         fill="currentColor" viewBox="0 0 24 24">
-                                                        <path fill-rule="evenodd"
-                                                              d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z"
-                                                              clip-rule="evenodd"/>
-                                                    </svg>
-
-                                                    <div class="absolute top-full mt-2 px-4 py-2 min-w-[150px] text-center max-w-xs text-sm font-medium text-white bg-gray-900 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 dark:bg-gray-800 z-50">
-                                                        {{ $folder['folderName'] }}
-                                                        <div class="absolute left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-900 rotate-45 top-[-5px] dark:bg-gray-800"></div>
+                                            @if(isset($projectFoldersWithFolderName))
+                                                @foreach($projectFoldersWithFolderName as $folder)
+                                                    <div class="relative group flex flex-col items-center">
+                                                        <svg
+                                                            class="w-10 h-10 text-gray-800 dark:text-white cursor-pointer"
+                                                            aria-hidden="true"
+                                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                            fill="currentColor" viewBox="0 0 24 24">
+                                                            <path fill-rule="evenodd"
+                                                                  d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z"
+                                                                  clip-rule="evenodd"/>
+                                                        </svg>
+                                                        <div
+                                                            class="absolute top-full mt-2 px-4 py-2 min-w-[150px] text-center max-w-xs text-sm font-medium text-white bg-gray-900 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 dark:bg-gray-800 z-50">
+                                                            {{ $folder['folderName'] }}
+                                                            <div
+                                                                class="absolute left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-900 rotate-45 top-[-5px] dark:bg-gray-800"></div>
+                                                        </div>
                                                     </div>
-
-
-                                                </div>
-                                            @endforeach
+                                                @endforeach
+                                            @endif
                                         </div>
-
-
                                     </div>
                                     <div class="col-span-12 md:col-span-8 md:col-start-7 flex items-center">
                                         <form id="uploadForm"
