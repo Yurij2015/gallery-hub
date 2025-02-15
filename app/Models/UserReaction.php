@@ -16,6 +16,7 @@ class UserReaction extends Model
         'has_like',
         'has_comment',
         'comment_message',
+        'review',
         'comment_date',
         'like_date',
         'download_statistic',

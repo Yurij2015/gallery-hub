@@ -41,6 +41,20 @@
                     </span>
                 </div>
                 <button
+                    class="mt-2 sm:mt-0 py-2 px-4 text-sm font-medium text-white rounded-lg group bg-gradient-to-r from-green-400 via-teal-500 to-blue-500 hover:from-green-500 hover:via-teal-600 hover:to-blue-600 focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 flex items-center gap-3 mr-3 {{ !$project->allow_feedback ? 'cursor-not-allowed' : '' }}"
+                    {{ !$project->allow_feedback ? 'disabled' : '' }}
+                    id="add-review-button"
+                    data-modal-target="review-modal"
+                    data-modal-toggle="review-modal"
+                >
+                    <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
+                         xmlns="http://www.w3.org/2000/svg"
+                         width="24" height="24" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-width="2"
+                              d="M2 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6l-4 4v-4H4a2 2 0 0 1-2-2V4z"/>
+                    </svg>
+                </button>
+                <button
                     class="mt-2 sm:mt-0 py-2 px-4 text-sm font-medium text-white rounded-lg group bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 hover:from-yellow-500 hover:via-red-600 hover:to-pink-600 focus:ring-4 focus:outline-none focus:ring-yellow-200 dark:focus:ring-yellow-800 flex items-center gap-3"
                     id="instagramButton">
                     <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
@@ -53,7 +67,6 @@
                     {{ $user->name }}
                 </button>
             </div>
-
             <div class="gallery">
                 <div class="flex flex-col mb-10">
                     <div class="grid md:grid-cols-12 gap-8 lg:mb-11 mb-7">
@@ -61,7 +74,7 @@
                             <div class="relative md:col-span-4 h-[277px] w-full rounded-3xl mb-7">
                                 <a href="{{ $object->objectUrl }}"
                                    data-gallery="gallery-{{ $project->id }}"
-                                   data-description= "{{ $object->getObjectName() }}"
+                                   data-description="{{ $object->getObjectName() }}"
                                    class="glightbox">
                                     <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
                                          class="gallery-image object-cover rounded-3xl hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
@@ -79,7 +92,8 @@
                                         data-object="{{ json_encode($object) }}"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                             stroke="currentColor" class="w-6 h-6  {{ $object->hasLike ? 'text-red-600' : 'text-gray-500'}}  bg-gray-200 rounded-full">
+                                             stroke="currentColor"
+                                             class="w-6 h-6  {{ $object->hasLike ? 'text-red-600' : 'text-gray-500'}}  bg-gray-200 rounded-full">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                   d="M4.318 6.318a4.5 4.5 0 011.406-1.094 4.5 4.5 0 015.68 0l.596.596.596-.596a4.5 4.5 0 015.68 0 4.5 4.5 0 011.406 1.094 4.5 4.5 0 010 5.68l-7.072 7.072a1 1 0 01-1.414 0L4.318 12a4.5 4.5 0 010-5.682z"/>
                                         </svg>
@@ -241,6 +255,63 @@
             </div>
         </div>
 
+        <!-- Modal Add Review -->
+        <div id="review-modal" tabindex="-1" aria-hidden="true"
+             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-md max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            {{ __('client-gallery.addReview') }}
+                        </h3>
+                        <button type="button"
+                                class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                data-modal-hide="review-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                 viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                      stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                            <span class="sr-only">
+                                {{ __('client-gallery.closeModal') }}
+                            </span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5">
+                        <form class="space-y-4" action="#">
+                            <div>
+                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    {{ __('client-gallery.yourName') }}
+                                </label>
+                                <input type="text" name="name" id="review-modal-name"
+                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                       placeholder="Type your name"
+                                       required
+                                       autocomplete="off"
+                                       value="{{ session('client_name') }}"/>
+                            </div>
+                            <div class="col-span-2">
+                                <label for="comment"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    {{ __('client-gallery.yourReview') }}
+                                </label>
+                                <textarea id="review-modal-review" rows="4"
+                                          class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                          placeholder="Write your review here"></textarea>
+                            </div>
+                            <button id="save-review-button"
+                                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                                {{ __('client-gallery.save') }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Comment Modal  Slider-->
         <div id="comment-modal-slider" tabindex="-1" aria-hidden="true"
              class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -316,6 +387,8 @@
         const likeProjectUrl = "{{ route('client.projects.like', ['project' => '__PROJECT_ID__']) }}";
         const commentProjectUrl = "{{ route('client.projects.comment', ['project' => '__PROJECT_ID__']) }}";
         const downloadProjectUrl = "{{ route('client.download-object-url-increment', ['project' => '__PROJECT_ID__']) }}";
+        const addProjectReviewUrl = "{{ route('client.projects.add-review', ['project' => '__PROJECT_ID__']) }}";
+        const getProjectReviewsUrl = "{{ route('client.projects.get-review', ['project' => '__PROJECT_ID__']) }}";
         const clientName = "{{ session('client_name') }}" || null;
 
         if (clientName) {
@@ -331,6 +404,7 @@
 
             const hideLoaderOnBlur = () => {
                 loader.style.display = 'none';
+                document.getElementById('add-review-button').click();
             };
 
             window.addEventListener('blur', hideLoaderOnBlur);
@@ -386,6 +460,28 @@
             sendCommentRequest(currentImageId, currentObject, comment, name);
         });
 
+        document.getElementById('save-review-button').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const nameInput = document.getElementById('review-modal-name');
+            const reviewtInput = document.getElementById('review-modal-review');
+
+            if (!nameInput.checkValidity()) {
+                nameInput.focus();
+                return;
+            }
+
+            if (!reviewtInput.checkValidity()) {
+                reviewtInput.focus();
+                return;
+            }
+
+            const name = nameInput.value;
+            const review = reviewtInput.value;
+
+            sendReviewRequest(review, name);
+        });
+
         document.addEventListener('click', function (e) {
             if (e.target.classList.contains('like-btn')) {
                 console.log('Like button clicked!');
@@ -412,7 +508,7 @@
 
                 console.log({userId: user.id, projectId: project.id});
 
-                if(clientName){
+                if (clientName) {
                     sendLikeRequest(imageId, object);
                 } else {
                     alert("Add your name to like the image (make first comment)");
@@ -535,6 +631,52 @@
                     console.error('Error:', error);
                 });
         }
+
+        function sendReviewRequest(review, name) {
+            const url = addProjectReviewUrl.replace('__PROJECT_ID__', project.id);
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    userId: user.id,
+                    projectId: project.id,
+                    review: review,
+                    clientName: name
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Project commented:', data);
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        document.getElementById('add-review-button').addEventListener('click', function () {
+            const url = getProjectReviewsUrl.replace('__PROJECT_ID__', project.id);
+            const urlWithParams = new URL(url, window.location.origin);
+            urlWithParams.searchParams.append('clientName', clientName);
+
+            fetch(urlWithParams, {
+                method: 'GET'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const projectReview = data.projectReview;
+                    const review = document.getElementById('review-modal-review');
+                    review.innerHTML = projectReview.review;
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
 
         document.getElementById('instagramButton').addEventListener('click', function (e) {
             window.open('{{ $user?->userDetail?->instagram_url }}', '_blank');

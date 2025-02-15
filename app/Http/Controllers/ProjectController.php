@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveProjectReviewRequest;
 use App\Http\Requests\SaveUserCommentRequest;
 use App\Http\Requests\SaveUserDownloadRequest;
 use App\Http\Requests\SaveUserLikeRequest;
@@ -67,6 +68,9 @@ class ProjectController extends Controller
                 break;
             }
             $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
+
+            $imgUrl = $project->cover_image ? $bucketService->getObjectUrl($bucketName, $project->cover_image) : $imgUrl;
+
             $project->setProjecImage($imgUrl);
         }
 
@@ -290,9 +294,33 @@ class ProjectController extends Controller
         return view('projects.reviews', compact('project'));
     }
 
-    public function allReviews()
+    public function allReviews(BucketService $bucketService)
     {
-        $userReactions = UserReaction::whereHas('project')->where('has_comment', true)->get();
+        $userReactions = UserReaction::whereHas('project')
+            ->with('project')
+            ->where('review', '!=' , '')->get();
+
+        foreach ($userReactions as $userReaction) {
+            $bucketName = $userReaction->project->bucket_name;
+            $projectFolder = $userReaction->project->project_folder;
+            $userFolderName = $this->getUserFolderName($userReaction->project);
+            $projectObjects = $bucketService->listObjectsInFolder($bucketName, $userFolderName.'/'.$projectFolder);
+
+            if (!$projectObjects) {
+                $project->setProjecImage(url('images/empty-project.png'));
+                continue;
+            }
+
+            foreach ($projectObjects as $object) {
+                $key = $object->key;
+                $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
+                break;
+            }
+
+            $imgUrl = $userReaction->project->cover_image ? $bucketService->getObjectUrl($bucketName, $userReaction->project->cover_image) : $imgUrl;
+
+            $userReaction->project->setProjecImage($imgUrl);
+        }
 
         return view('projects.all-reviews', compact('userReactions'));
     }
@@ -321,7 +349,6 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project, BucketService $bucketService)
     {
-
         $validatedRequest = $request->validated();
         $userDirectory = $this->getUserFolderName($project);
         $bucketName = $this->mainStorage;
@@ -352,7 +379,8 @@ class ProjectController extends Controller
 
         $project->update($validatedRequest);
 
-        return redirect()->route('projects.basic-setting', $project->id)->with('success', 'Project updated successfully');
+        return redirect()->route('projects.basic-setting', $project->id)->with('success',
+            'Project updated successfully');
     }
 
     public function uploadImages(Request $request, Project $project, BucketService $bucketService)
@@ -487,6 +515,55 @@ class ProjectController extends Controller
     {
         return response()->json([
             'success' => 'Comment saved successfully', 'reactionData' => $this->saveUserReaction($request, $project)
+        ]);
+    }
+
+    public function addReviewToProject(SaveProjectReviewRequest $request, Project $project)
+    {
+        $projectId = $project->id;
+        $clientName = $request->clientName;
+        $review = $request->get('review');
+        $userId = $project->user_id;
+
+        session(['client_name' => $clientName]);
+
+        $reactionData = [
+            'project_id' => $projectId,
+            'client_name' => $clientName,
+            'review' => $review,
+            'user_id' => $userId,
+            'object_key' => 'project_review',
+            'object_url' => 'project_review',
+        ];
+
+        $review = UserReaction::updateOrCreate([
+            'user_id' => $userId,
+            'project_id' => $projectId,
+            'client_name' => $clientName,
+            'object_key' => 'project_review',
+        ], $reactionData);
+
+        return response()->json([
+            'success' => 'Review saved successfully',
+            'review' => $review
+        ]);
+    }
+
+    public function getProjectReview(Project $project, Request $request)
+    {
+        $projectId = $project->id;
+        $clientName = $request->clientName;
+        $userId = $project->user_id;
+
+        $projectReview = UserReaction::where('project_id', $projectId)
+            ->where('client_name', $clientName)
+            ->where('user_id', $userId)
+            ->where('object_key', 'project_review')
+            ->first();
+
+        return response()->json([
+            'success' => 'true',
+            'projectReview' => $projectReview
         ]);
     }
 

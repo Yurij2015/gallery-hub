@@ -71,74 +71,43 @@
                                 class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                 {{ __('message.added') }}
                             </th>
-                            <th scope="col"
-                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
-                                {{ __('message.showImage') }}
-                            </th>
                         </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                         @if($userReactions)
                             @php($i = 1)
                             @foreach($userReactions as $reaction)
-                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $i++  }}</td>
-                                    <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
-                                        <img class="w-32" src="{{ $reaction->object_url }}"
-                                             data-tooltip-target="tooltip-object-{{ $reaction->id }}"
-                                             onerror="this.onerror=null;this.src='{{ asset('images/image-deleted.svg') }}';"
-                                             alt="{{ $reaction->object_key }}">
-                                        <div class="text-sm font-normal text-gray-900 dark:text-gray-400">
-                                            <div class="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                                                {{ $reaction->client_name }}
+                                @if($reaction->review)
+                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $i++  }}</td>
+                                        <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
+                                            <img class="w-32" src="{{ $reaction->project->getProjectImage() }}"
+                                                 data-tooltip-target="tooltip-object-{{ $reaction->id }}"
+                                                 alt="{{ $reaction->project->name }}">
+                                            <div class="text-sm font-normal text-gray-900 dark:text-gray-400">
+                                                <div class="text-base font-semibold text-gray-900 dark:text-white stringDisplay">
+                                                    {{ $reaction->client_name }}
+                                                </div>
                                             </div>
-                                            <div
-                                                class="text-base font-normal text-gray-500 dark:text-white stringDisplay"
-                                                data-full-string="{{ $reaction->object_key }}">
-                                            </div>
-                                        </div>
-                                        <div id="tooltip-object-{{ $reaction->id }}" role="tooltip"
-                                             class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
-                                            {{ $reaction->object_key }}
-                                            <div class="tooltip-arrow" data-popper-arrow></div>
-                                        </div>
-                                    </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                            {{ $reaction->comment_message }}
-                                        </div>
-                                    </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400 text-center">
-                                            {{ $reaction->created_at->diffForHumans() }}
-                                        </div>
-                                    </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400 text-center">
-                                            <div class="text-base font-semibold text-gray-900 dark:text-white">
-                                                <a href="{{ route('projects.show', $reaction->project->id) }}"
-                                                   data-tooltip-target="tooltip-view-{{$reaction->id}}"
-                                                   data-image-src="{{ $reaction->object_url }}"
-                                                   data-reaction-id="{{ $reaction->id }}"
-                                                   data-modal-target="imageModal"
-                                                   data-modal-toggle="imageModal"
-                                                   class="imageLink inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd"
-                                                              d="M4.998 7.78C6.729 6.345 9.198 5 12 5c2.802 0 5.27 1.345 7.002 2.78a12.713 12.713 0 0 1 2.096 2.183c.253.344.465.682.618.997.14.286.284.658.284 1.04s-.145.754-.284 1.04a6.6 6.6 0 0 1-.618.997 12.712 12.712 0 0 1-2.096 2.183C17.271 17.655 14.802 19 12 19c-2.802 0-5.27-1.345-7.002-2.78a12.712 12.712 0 0 1-2.096-2.183 6.6 6.6 0 0 1-.618-.997C2.144 12.754 2 12.382 2 12s.145-.754.284-1.04c.153-.315.365-.653.618-.997A12.714 12.714 0 0 1 4.998 7.78ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                                                              clip-rule="evenodd"/>
-                                                    </svg>
-                                                </a>
-                                            </div>
-                                            <div id="tooltip-view-{{ $reaction->id }}" role="tooltip"
+                                            <div id="tooltip-object-{{ $reaction->id }}" role="tooltip"
                                                  class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
-                                                {{ __('message.viewImage') }}
+                                                {{ $reaction->project->name }}
                                                 <div class="tooltip-arrow" data-popper-arrow></div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-normal break-words dark:text-white">
+                                            <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                                {{ $reaction->review }}
+                                            </div>
+                                        </td>
+                                        <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <div
+                                                class="text-sm font-normal text-gray-500 dark:text-gray-400 text-center">
+                                                {{ $reaction->created_at->diffForHumans() }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endif
                             @endforeach
                         @else
                             <tr>
@@ -191,7 +160,7 @@
         .stringDisplay::after {
             content: attr(data-full-string);
             display: inline-block;
-            width: 15ch;
+            width: 20ch;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
