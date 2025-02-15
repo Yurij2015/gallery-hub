@@ -40,6 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/projects/basic-setting/{project}', [ProjectController::class, 'basicSettings'])->name('projects.basic-setting');
     Route::get('/projects/design-and-cover/{project}', [ProjectController::class, 'designAndCover'])->name('projects.design-and-cover');
     Route::get('/projects/reviews/{project}', [ProjectController::class, 'reviews'])->name('projects.reviews');
+    Route::get('/projects/reviews', [ProjectController::class, 'allReviews'])->name('projects.all-reviews');
+    Route::get('/projects/archive', [ProjectController::class, 'archive'])->name('projects.archive');
     Route::get('/projects/favorites/{project}', [ProjectController::class, 'favorites'])->name('projects.favorites');
 
     Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');

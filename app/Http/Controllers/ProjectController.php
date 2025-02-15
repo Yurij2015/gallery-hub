@@ -290,6 +290,20 @@ class ProjectController extends Controller
         return view('projects.reviews', compact('project'));
     }
 
+    public function allReviews()
+    {
+        $userReactions = UserReaction::whereHas('project')->where('has_comment', true)->get();
+
+        return view('projects.all-reviews', compact('userReactions'));
+    }
+
+    public function archive()
+    {
+        $projects = Project::with('userReactions')->get();
+
+        return view('projects.archive', compact('projects'));
+    }
+
     public function favorites(Project $project)
     {
         $project->load([
