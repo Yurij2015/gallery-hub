@@ -69,7 +69,8 @@ class ProjectController extends Controller
             }
             $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
 
-            $imgUrl = $project->cover_image ? $bucketService->getObjectUrl($bucketName, $project->cover_image) : $imgUrl;
+            $imgUrl = $project->cover_image ? $bucketService->getObjectUrl($bucketName,
+                $project->cover_image) : $imgUrl;
 
             $project->setProjecImage($imgUrl);
         }
@@ -238,7 +239,8 @@ class ProjectController extends Controller
         $bucketName = $project->bucket_name;
         $projectDirectory = $project->project_folder;
         $userDirectory = $this->getUserFolderName($project);
-        $projectObjects = $bucketService->listObjectsInFolder($bucketName, $userDirectory.'/'.$projectDirectory.'/'.$folderSlug);
+        $projectObjects = $bucketService->listObjectsInFolder($bucketName,
+            $userDirectory.'/'.$projectDirectory.'/'.$folderSlug);
         $projectFolders = $bucketService->getFoldersList($bucketName, $userDirectory.'/'.$projectDirectory);
         $projectFoldersWithFolderName = [];
 
@@ -246,7 +248,7 @@ class ProjectController extends Controller
             $lastSegment = rtrim(basename(rtrim($folder, '/')), '/');
             $projectFoldersWithFolderName[$key]['folderKey'] = $folder;
             $projectFoldersWithFolderName[$key]['folderName'] = Str::title(str_replace('-', ' ', $lastSegment));
-            $projectFoldersWithFolderName[$key]['folderSlug'] =  $lastSegment;
+            $projectFoldersWithFolderName[$key]['folderSlug'] = $lastSegment;
         }
 
         if (!$projectObjects) {
@@ -302,7 +304,7 @@ class ProjectController extends Controller
     {
         $userReactions = UserReaction::whereHas('project')
             ->with('project')
-            ->where('review', '!=' , '')->get();
+            ->where('review', '!=', '')->get();
 
         foreach ($userReactions as $userReaction) {
             $bucketName = $userReaction->project->bucket_name;
@@ -311,7 +313,7 @@ class ProjectController extends Controller
             $projectObjects = $bucketService->listObjectsInFolder($bucketName, $userFolderName.'/'.$projectFolder);
 
             if (!$projectObjects) {
-                $project->setProjecImage(url('images/empty-project.png'));
+                $userReaction->project->setProjecImage(url('images/empty-project.png'));
                 continue;
             }
 
@@ -321,7 +323,8 @@ class ProjectController extends Controller
                 break;
             }
 
-            $imgUrl = $userReaction->project->cover_image ? $bucketService->getObjectUrl($bucketName, $userReaction->project->cover_image) : $imgUrl;
+            $imgUrl = $userReaction->project->cover_image ? $bucketService->getObjectUrl($bucketName,
+                $userReaction->project->cover_image) : $imgUrl;
 
             $userReaction->project->setProjecImage($imgUrl);
         }
@@ -429,13 +432,15 @@ class ProjectController extends Controller
                 $objectName = $file->getClientOriginalPath();
                 $objectPath = $file->getPathname();
                 $content = file_get_contents($objectPath);
-                $bucketService->putObject($bucketName, $userDirectory.'/'.$project->project_folder.'/'.$folderSlug.'/'.$objectName,
+                $bucketService->putObject($bucketName,
+                    $userDirectory.'/'.$project->project_folder.'/'.$folderSlug.'/'.$objectName,
                     $content,
                     $metaData);
             }
         }
 
-        return redirect()->route('projects.edit', ['project' => $project->id, 'folderSlug' => $folderSlug])->with('success', 'Images uplsaded successfully');
+        return redirect()->route('projects.edit',
+            ['project' => $project->id, 'folderSlug' => $folderSlug])->with('success', 'Images uplsaded successfully');
     }
 
     /**
@@ -450,9 +455,11 @@ class ProjectController extends Controller
 
     public function projectStatistic(Project $project)
     {
-        $project->load(['userReactions' => function ($query) {
-            $query->whereNull('review');
-        }]);
+        $project->load([
+            'userReactions' => function ($query) {
+                $query->whereNull('review');
+            }
+        ]);
 
         return view('projects.projectStatistic', compact('project'));
     }
@@ -748,6 +755,59 @@ class ProjectController extends Controller
         }
 
         return redirect()->route('projects.edit', $project->id)->with('success', 'Folder created successfully');
+    }
+
+    public function exportFavoriteItems(Project $project)
+    {
+        $project->load([
+            'userReactions' => function ($query) {
+                $query->whereNull('review');
+            }
+        ]);
+
+        $columns = ['ID', 'Project Name', 'File', 'Client Name', 'Comment', 'Review', 'Event Date'];
+
+        return $this->generateCsv("export_faforites_$project->id.csv", $project, $columns);
+    }
+
+    public function exportConsolidatedFavoriteItems(Project $project)
+    {
+        $project->load('userReactions');
+        $columns = ['ID', 'Project Name', 'File/ObjectName', 'Client Name', 'Comment', 'Review', 'Event Date'];
+
+        return $this->generateCsv("export_consolidated_faforites_$project->id.csv", $project, $columns);
+    }
+
+    private function generateCsv($fileName, $data, $columns){
+
+        $headers = [
+            "Content-Type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+        ];
+
+        $callback = function() use ($data, $columns) {
+            $handle = fopen('php://output', 'w');
+
+            fputcsv($handle, $columns);
+
+            $userReactions = $data->userReactions;
+
+            foreach ($userReactions as $item) {
+                fputcsv($handle, [
+                    $item->project_id,
+                    $item->project->name,
+                    $item->object_key,
+                    $item->client_name,
+                    $item->comment_message,
+                    $item->review,
+                    $item->project->date,
+                ]);
+            }
+
+            fclose($handle);
+        };
+
+        return response()->streamDownload($callback, $fileName, $headers);
     }
 
     private function getUserFolderName(Project $project): string
