@@ -110,5 +110,12 @@ return [
     'client' => 'Client',
     'added' => 'Added',
     'published' => 'Published',
+    'deleted' => 'Deleted',
+    'renew' => 'Renew',
+    'renewProject' => 'Renew Project',
+    'projectCanBeRestored' => 'The project can be restored within 7 days after deletion, after which the data is deleted from the server without the possibility of recovery!',
+    'dismiss' => 'Dismiss',
+    'cannotBeRestored' => 'The project cannot be restored!',
+    'canBeRestored' => 'The project can be restored!',
 ];
 

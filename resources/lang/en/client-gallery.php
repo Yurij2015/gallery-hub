@@ -8,5 +8,6 @@ return [
     'yourName' => 'Your Name',
     'yourReview' => 'Your Review',
     'save' => 'Save',
+    'leaveReviewAboutProject' => 'Leave feedback on the project',
 ];
 
