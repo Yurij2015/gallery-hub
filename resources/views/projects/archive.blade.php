@@ -79,88 +79,88 @@
                         <thead class="bg-gray-100 dark:bg-gray-700">
                         @if($projects->count())
                             <tr>
-                            <th scope="col" class="p-4">
-                                <div class="flex items-center">
-                                    <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
-                                           class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="checkbox-all" class="sr-only">checkbox</label>
-                                </div>
-                            </th>
-                            <th scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                {{ __('message.id') }}
-                            </th>
-                            <th scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                {{ __('message.name') }}
-                            </th>
-                            <th scope="col"
-                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
-                                {{ __('message.eventDate') }}
-                            </th>
-                            <th scope="col"
-                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
-                                {{ __('message.deleted') }}
-                            </th>
-                            <th scope="col"
-                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
-                                {{ __('message.viewsStatistic') }}
-                            </th>
-                            <th scope="col"
-                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
-                                {{ __('message.downloadStatistic') }}
-                            </th>
-                            <th scope="col"
-                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
-                                {{ __('message.userReactions') }}
-                            </th>
-                            <th scope="col"
-                                class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
-                                {{ __('message.renewProject') }}
-                            </th>
-                        </tr>
+                                <th scope="col" class="p-4">
+                                    <div class="flex items-center">
+                                        <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
+                                               class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="checkbox-all" class="sr-only">checkbox</label>
+                                    </div>
+                                </th>
+                                <th scope="col"
+                                    class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                    {{ __('message.id') }}
+                                </th>
+                                <th scope="col"
+                                    class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                    {{ __('message.name') }}
+                                </th>
+                                <th scope="col"
+                                    class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
+                                    {{ __('message.eventDate') }}
+                                </th>
+                                <th scope="col"
+                                    class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
+                                    {{ __('message.deleted') }}
+                                </th>
+                                <th scope="col"
+                                    class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
+                                    {{ __('message.viewsStatistic') }}
+                                </th>
+                                <th scope="col"
+                                    class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
+                                    {{ __('message.downloadStatistic') }}
+                                </th>
+                                <th scope="col"
+                                    class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
+                                    {{ __('message.userReactions') }}
+                                </th>
+                                <th scope="col"
+                                    class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
+                                    {{ __('message.renewProject') }}
+                                </th>
+                            </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                        @php
+                            $currentPage = $projects->currentPage();
+                            $perPage = $projects->perPage();
+                        @endphp
+                        @foreach($projects as $index => $project)
                             @php
-                                $currentPage = $projects->currentPage();
-                                $perPage = $projects->perPage();
+                                $rowNumber = ($currentPage - 1) * $perPage + $index + 1;
                             @endphp
-                            @foreach($projects as $index => $project)
-                                @php
-                                    $rowNumber = ($currentPage - 1) * $perPage + $index + 1;
-                                @endphp
-                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 project-row cursor-pointer"
-                                    data-project-edit-url="{{ route('projects.edit', $project->id) }}"
-                                >
-                                    <td class="w-4 p-4">
-                                        <div class="flex items-center">
-                                            <input id="checkbox-{{ $project->id }}" aria-describedby="checkbox-1"
-                                                   type="checkbox"
-                                                   class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="checkbox-{{ $project->id }}" class="sr-only">checkbox</label>
+                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 project-row cursor-pointer"
+                                data-project-edit-url="{{ route('projects.edit', $project->id) }}"
+                            >
+                                <td class="w-4 p-4">
+                                    <div class="flex items-center">
+                                        <input id="checkbox-{{ $project->id }}" aria-describedby="checkbox-1"
+                                               type="checkbox"
+                                               class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="checkbox-{{ $project->id }}" class="sr-only">checkbox</label>
+                                    </div>
+                                </td>
+                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"> {{ $rowNumber }}</td>
+                                <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
+                                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                        <div class="text-base font-semibold text-gray-900 dark:text-white">
+                                            {{ $project->name }}
                                         </div>
-                                    </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"> {{ $rowNumber }}</td>
-                                    <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
+                                        {{--  TODO add project statistic --}}
                                         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                            <div class="text-base font-semibold text-gray-900 dark:text-white">
-                                                {{ $project->name }}
-                                            </div>
-                                            {{--  TODO add project statistic --}}
-                                            <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                                {{ $project->getObjectsCount() }} file(s)
-                                                ({{ $project->getSizeOfProject() }})
-                                            </div>
+                                            {{ $project->getObjectsCount() }} file(s)
+                                            ({{ $project->getSizeOfProject() }})
                                         </div>
-                                    </td>
+                                    </div>
+                                </td>
 
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                                        {{ $project->date }}
-                                    </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                                        {{ $project->expiration_date }}
-                                    </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    {{ $project->date }}
+                                </td>
+                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    {{ $project->expiration_date }}
+                                </td>
+                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                         <span
                                             class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex justify-center items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-100 border border-gray-500 w-14 h-6 text-center">
                                                 <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true"
@@ -173,8 +173,8 @@
                                                 </svg>
                                                 {{ $project->views_statistic }}
                                              </span>
-                                    </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                </td>
+                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                          <span
                                              class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex justify-center items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-100 border border-gray-500 w-14 h-6">
                                                 <svg class="w-3 h-3 me-1.5" aria-hidden="true"
@@ -189,8 +189,8 @@
                                                 </svg>
                                                 {{ $project->download_statistic }}
                                              </span>
-                                    </td>
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                </td>
+                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                             <span
                                                 class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex justify-center items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-100 border border-gray-500 w-14 h-6">
                                                 <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true"
@@ -202,8 +202,8 @@
                                                 </svg>
                                                 {{$project->userReactions->where('has_like', 1)->count()}}
                                             </span>
-                                        <span
-                                            class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-100 border border-gray-500 w-14 justify-center h-6 mt-2">
+                                    <span
+                                        class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-100 border border-gray-500 w-14 justify-center h-6 mt-2">
                                                 <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true"
                                                      xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                                      viewBox="0 0 20 20">
@@ -213,33 +213,33 @@
                                                 </svg>
                                                     {{ $project->userReactions->where('has_comment', 1)->count()}}
                                         </span>
-                                    </td>
-                                    @php
-                                        $expirationDate = Carbon::parse($project->expiration_date);
-                                        $currentDate = Carbon::now();
-                                        $canBeRenewed = $expirationDate->diffInDays($currentDate) <= 7;
-                                        $tooltipText = $canBeRenewed ? __('message.canBeRestored') : __('message.cannotBeRestored');
-                                    @endphp
-                                    <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                            <div class="text-base font-semibold text-gray-900 dark:text-white">
-                                                <button
-                                                    {{ !$canBeRenewed ? 'disabled' : '' }}
-                                                    data-tooltip-target="renew-tooltip-{{ $project->id }}"
-                                                    data-project-id="{{ $project->id }}"
-                                                    class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-sm text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed renew-project-button">
-                                                    {{ __('message.renew') }}
-                                                </button>
-                                            </div>
-                                            <div id="renew-tooltip-{{ $project->id }}" role="tooltip"
-                                                 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
-                                                {{ $tooltipText }}
-                                                <div class="tooltip-arrow" data-popper-arrow></div>
-                                            </div>
+                                </td>
+                                @php
+                                    $expirationDate = Carbon::parse($project->expiration_date);
+                                    $currentDate = Carbon::now();
+                                    $canBeRenewed = $expirationDate->diffInDays($currentDate) <= 7;
+                                    $tooltipText = $canBeRenewed ? __('message.canBeRestored') : __('message.cannotBeRestored');
+                                @endphp
+                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                        <div class="text-base font-semibold text-gray-900 dark:text-white">
+                                            <button
+                                                {{ !$canBeRenewed ? 'disabled' : '' }}
+                                                data-tooltip-target="renew-tooltip-{{ $project->id }}"
+                                                data-project-id="{{ $project->id }}"
+                                                class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-sm text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed renew-project-button">
+                                                {{ __('message.renew') }}
+                                            </button>
                                         </div>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                        <div id="renew-tooltip-{{ $project->id }}" role="tooltip"
+                                             class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
+                                            {{ $tooltipText }}
+                                            <div class="tooltip-arrow" data-popper-arrow></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
                         @else
                             <tr>
                                 <td colspan="6"
@@ -268,9 +268,26 @@
             renewProjectButtons.forEach(button => {
                 button.addEventListener('click', function () {
                     const projectId = button.getAttribute('data-project-id');
-                    console.log('Renew project with id: ' + projectId);
-                    {{--const url = '{{ route('projects.renew', ':id') }}'.replace(':id', projectId);--}}
-                    // window.location.href = url;
+                    const url = '{{ route('client.projects.renew', ':id') }}'.replace(':id', projectId);
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                alert('Project successfully renewed');
+                                location.reload();
+                            } else {
+                                alert('Failed to project renew');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Failed to project renew');
+                        });
                 });
             });
         });
