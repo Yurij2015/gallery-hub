@@ -227,22 +227,26 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Project $project, BucketService $bucketService)
+    public function edit(Project $project, BucketService $bucketService, Request $request)
     {
+        $folderSlug = $request->get('folderSlug');
+
         if (!$project->project_folder) {
             return view('projects.edit', compact('project'));
         }
+
         $bucketName = $project->bucket_name;
         $projectDirectory = $project->project_folder;
         $userDirectory = $this->getUserFolderName($project);
-        $projectObjects = $bucketService->listObjectsInFolder($bucketName, $userDirectory.'/'.$projectDirectory);
+        $projectObjects = $bucketService->listObjectsInFolder($bucketName, $userDirectory.'/'.$projectDirectory.'/'.$folderSlug);
         $projectFolders = $bucketService->getFoldersList($bucketName, $userDirectory.'/'.$projectDirectory);
         $projectFoldersWithFolderName = [];
 
         foreach ($projectFolders as $key => $folder) {
             $lastSegment = rtrim(basename(rtrim($folder, '/')), '/');
-            $projectFoldersWithFolderName[$key]['folder'] = $folder;
+            $projectFoldersWithFolderName[$key]['folderKey'] = $folder;
             $projectFoldersWithFolderName[$key]['folderName'] = Str::title(str_replace('-', ' ', $lastSegment));
+            $projectFoldersWithFolderName[$key]['folderSlug'] =  $lastSegment;
         }
 
         if (!$projectObjects) {
@@ -408,6 +412,7 @@ class ProjectController extends Controller
 
     public function uploadImages(Request $request, Project $project, BucketService $bucketService)
     {
+        $folderSlug = $request->get('folderSlug');
         $userDirectory = $this->getUserFolderName($project);
         $bucketName = $this->mainStorage;
         $userEmail = Auth::user()->email;
@@ -424,13 +429,13 @@ class ProjectController extends Controller
                 $objectName = $file->getClientOriginalPath();
                 $objectPath = $file->getPathname();
                 $content = file_get_contents($objectPath);
-                $bucketService->putObject($bucketName, $userDirectory.'/'.$project->project_folder.'/'.$objectName,
+                $bucketService->putObject($bucketName, $userDirectory.'/'.$project->project_folder.'/'.$folderSlug.'/'.$objectName,
                     $content,
                     $metaData);
             }
         }
 
-        return redirect()->route('projects.edit', $project->id)->with('success', 'Images uplsaded successfully');
+        return redirect()->route('projects.edit', ['project' => $project->id, 'folderSlug' => $folderSlug])->with('success', 'Images uplsaded successfully');
     }
 
     /**

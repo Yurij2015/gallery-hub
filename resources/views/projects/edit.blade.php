@@ -54,13 +54,15 @@
                 <div class="overflow-hidden shadow">
                     <section class="bg-white dark:bg-gray-900">
                         <div class="gallery">
-                            <div class="flex flex-col mb-2 px-10">
+                            <div class="flex flex-col mb-2 md:px-10 px-5">
                                 <div class="grid grid-cols-12 gap-4 mb-3">
-                                    <div class="col-span-12 md:col-span-4 flex items-center justify-start  space-x-6">
+                                    <div
+                                        class="col-span-12 md:col-span-4 flex items-center justify-start  space-x-6 mt-3 sm:mt-0">
                                         <button
                                             data-modal-target="add-folder-modal"
                                             data-modal-toggle="add-folder-modal"
-                                            class="inline-flex items-center px-5 py-2.5 sm:mt-6 text-sm font-medium text-white bg-yellow-500 rounded-none focus:ring-4 focus:ring-yellow-400 dark:focus:ring-yellow-500 hover:bg-yellow-400 ml-5"
+                                            class="inline-flex items-center px-5 py-2.5 sm:mt-6 text-sm font-medium text-white bg-yellow-500 rounded-none focus:ring-4 focus:ring-yellow-400 dark:focus:ring-yellow-500 hover:bg-yellow-400 md:ml-5 {{ request()->get('folderSlug') ? 'cursor-not-allowed' : '' }}"
+                                            {{ request()->get('folderSlug') ? 'disabled' : '' }}
                                         >
                                             <svg class="w-4 h-4 me-2 text-gray-800 dark:text-white" aria-hidden="true"
                                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -71,10 +73,13 @@
                                             </svg>
                                             {{ __('message.addFolder') }}
                                         </button>
-                                        <div class="flex items-center space-x-4 mt-5">
+                                        <div class="flex items-center space-x-4 mt-0 sm:mt-6 md:mt-6 xl:mt-6">
                                             @if(isset($projectFoldersWithFolderName))
                                                 @foreach($projectFoldersWithFolderName as $folder)
-                                                    <div class="relative group flex flex-col items-center">
+                                                    <div class="relative group flex flex-col items-center folder-icon"
+                                                         data-folder-key="{{ $folder['folderKey'] }}"
+                                                         data-folder-slug="{{ $folder['folderSlug'] }}"
+                                                    >
                                                         <svg
                                                             class="w-10 h-10 text-gray-800 dark:text-white cursor-pointer"
                                                             aria-hidden="true"
@@ -97,7 +102,7 @@
                                     </div>
                                     <div class="col-span-12 md:col-span-8 md:col-start-7 flex items-center">
                                         <form id="uploadForm"
-                                              action="{{ route('projects.upload-images', $project->id) }}"
+                                              action="{{ route('projects.upload-images', ['project' => $project->id, 'folderSlug' => request()->get('folderSlug')]) }}"
                                               method="POST" enctype="multipart/form-data">
                                             @method('put')
                                             @csrf
@@ -127,11 +132,11 @@
                                     </div>
                                 </div>
                                 <hr class="mb-5 border border-gray-200 dark:border-gray-700">
-                                <div class="grid md:grid-cols-12 gap-12 lg:mb-11 mb-7 px-5">
+                                <div class="grid md:grid-cols-12 gap-12 lg:mb-11 mb-7 md:px-5">
                                     @if(isset($projectFiles))
                                         @foreach($projectFiles as $object)
                                             <div
-                                                class="md:col-span-2 md:h-[222px] h-[138px] w-full rounded-3xl relative group">
+                                                class="md:col-span-2 md:h-[222px] h-[190px] w-full rounded-3xl relative group">
                                                 <!-- Image -->
                                                 <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
                                                      class="gallery-image object-cover rounded-none hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
@@ -264,6 +269,17 @@
             const deleteButtons = document.querySelectorAll('.delete-button');
             const expandButtons = document.querySelectorAll('.expand-button');
             const setCoverButtons = document.querySelectorAll('.set-cover-button');
+            const folderIcons = document.querySelectorAll('.folder-icon');
+
+            folderIcons.forEach(folderIcon => {
+                folderIcon.addEventListener('click', function () {
+                    const folderKey = folderIcon.getAttribute('data-folder-key');
+                    const folderSlug = folderIcon.getAttribute('data-folder-slug');
+                    console.log(folderKey);
+                    console.log(folderSlug);
+                    window.location.href = `/projects/edit/${projectId}?folderSlug=${folderSlug}`;
+                });
+            });
 
             deleteButtons.forEach(button => {
                 button.addEventListener('click', function (event) {
