@@ -114,6 +114,7 @@
                                     class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                     {{ __('message.userReactions') }}
                                 </th>
+                                <th></th>
                                 <th scope="col"
                                     class="p-4 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400">
                                     {{ __('message.renewProject') }}
@@ -203,7 +204,7 @@
                                                 {{$project->userReactions->where('has_like', 1)->count()}}
                                             </span>
                                     <span
-                                        class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-100 border border-gray-500 w-14 justify-center h-6 mt-2">
+                                        class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded me-2 dark:bg-gray-700 dark:text-gray-100 border border-gray-500 w-14 justify-center h-6">
                                                 <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true"
                                                      xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                                      viewBox="0 0 20 20">
@@ -220,6 +221,91 @@
                                     $canBeRenewed = $expirationDate->diffInDays($currentDate) <= 7;
                                     $tooltipText = $canBeRenewed ? __('message.canBeRestored') : __('message.cannotBeRestored');
                                 @endphp
+                                <td>
+                                    <button
+                                        id="dropdownDotsButton"
+                                        data-project-id="{{ $project->id }}"
+                                        data-popover-target="popover-left-{{$project->id}}"
+                                        data-popover-trigger="click"
+                                        data-popover-placement="left"
+                                        data-tooltip-target="archive-options-tooltip-{{ $project->id }}"
+                                        class="inline-flex items-center p-2 text-sm font-medium text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 dropdown-dots-button {{ $canBeRenewed ? 'hidden' : '' }}"
+                                        type="button"
+                                        @click="toggleDropdown($event)"
+                                    >
+                                        <svg
+                                            class="w-5 h-5"
+                                            aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="currentColor"
+                                            viewBox="0 0 4 16"
+                                        >
+                                            <path
+                                                d="M2 3.5A1.5 1.5 0 1 0 2 0a1.5 1.5 0 0 0 0 3.5ZM2 9A1.5 1.5 0 1 0 2 5.5 1.5 1.5 0 0 0 2 9Zm0 5.5A1.5 1.5 0 1 0 2 11a1.5 1.5 0 0 0 0 3.5Z"/>
+                                        </svg>
+                                    </button>
+
+                                    <div id="archive-options-tooltip-{{ $project->id }}" role="tooltip"
+                                         class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-800">
+                                        {{ __('message.csvFiles') }}
+                                        <div class="tooltip-arrow" data-popper-arrow></div>
+                                    </div>
+
+                                    <!-- Popover Container -->
+                                    <div
+                                        data-popover
+                                        id="popover-left-{{ $project->id }}"
+                                        role="tooltip"
+                                        class="absolute z-10 invisible w-96 text-sm text-gray-700 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-800"
+                                    >
+                                        <div
+                                            class="flex items-center justify-between px-4 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700 project-popover-menu">
+                                            <h3 class="font-semibold text-gray-900 dark:text-white text-base">
+                                                Archive Actions</h3>
+                                            <button type="button"
+                                                    class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-200 focus:outline-none close-popover-btn"
+                                                    data-project-id="{{ $project->id }}">
+                                                ✕
+                                            </button>
+                                        </div>
+                                        <!-- Menu Items -->
+                                        <div class="px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md">
+                                            <ul class="space-y-2">
+                                                <!-- Favorite Items in CSV -->
+                                                <li class="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg shadow">
+                                                    <div class="flex items-center">
+                                                        <svg class="w-6 h-6 text-blue-600 dark:text-blue-400 me-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                                        </svg>
+                                                        <span class="text-gray-700 dark:text-gray-300 font-medium">{{ __('message.downloadCsv') }}</span>
+                                                    </div>
+                                                    <a href="{{ route('export.favorite-items', $project->id) }}"
+                                                       class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/>
+                                                        </svg>
+                                                    </a>
+                                                </li>
+
+                                                <!-- Consolidated Favorite Items in CSV -->
+                                                <li class="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg shadow">
+                                                    <div class="flex items-center">
+                                                        <svg class="w-6 h-6 text-green-600 dark:text-green-400 me-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                                        </svg>
+                                                        <span class="text-gray-700 dark:text-gray-300 font-medium">{{ __('message.downloadConsolidatedCsv') }}</span>
+                                                    </div>
+                                                    <a href="{{ route('export.consolidated-favorite-items', $project->id) }}"
+                                                       class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800">
+                                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/>
+                                                        </svg>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
                                 <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                                     <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                                         <div class="text-base font-semibold text-gray-900 dark:text-white">
@@ -264,6 +350,18 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const renewProjectButtons = document.querySelectorAll('.renew-project-button');
+
+            document.querySelectorAll('.close-popover-btn').forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    const projectId = this.getAttribute('data-project-id');
+                    const popover = document.getElementById(`popover-left-${projectId}`);
+                    if (popover) {
+                        popover.classList.add("invisible", "opacity-0");
+                    }
+                });
+            });
 
             renewProjectButtons.forEach(button => {
                 button.addEventListener('click', function () {

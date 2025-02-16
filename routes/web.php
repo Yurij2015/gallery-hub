@@ -51,6 +51,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/projects/statistic/{project}', [ProjectController::class, 'projectStatistic'])->name('project.statistic');
     Route::delete('/project/remove-object/{project}', [ProjectController::class, 'deleteObject'])->name('project.delete-object');
 
+    // export archives (prjects)
+    Route::get('/export/favorite-items/{project}', [ProjectController::class, 'exportFavoriteItems'])->name('export.favorite-items');
+    Route::get('/export/consolidated-favorite-items/{project}', [ProjectController::class, 'exportConsolidatedFavoriteItems'])->name('export.consolidated-favorite-items');
 
     // project ajax requests
     Route::post('/project/set-cover-image/{project}', [ProjectController::class, 'setCoverImage'])->name('project.set-cover-image');

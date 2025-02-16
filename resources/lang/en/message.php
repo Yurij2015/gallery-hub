@@ -118,5 +118,8 @@ return [
     'cannotBeRestored' => 'The project cannot be restored!',
     'canBeRestored' => 'The project can be restored!',
     'noArchivedProjects' => 'No Archived Projects',
+    'csvFiles' => 'CSV Files',
+    'downloadCsv' => 'Download CSV',
+    'downloadConsolidatedCsv' => 'Download Consolidated CSV',
 ];
 
