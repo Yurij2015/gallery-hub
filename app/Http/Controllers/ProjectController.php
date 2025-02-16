@@ -598,6 +598,21 @@ class ProjectController extends Controller
         ]);
     }
 
+    public function renewProject(Project $project)
+    {
+        $expirationDate = now()->addWeek();
+
+        $project->expiration_date = $expirationDate;
+        $project->save();
+
+        return response()->json([
+            'success' => 'Project renewed successfully',
+            'project' => $project,
+            'newExpirationDate' => $expirationDate
+        ]);
+    }
+
+
     private function saveUserReaction(
         SaveUserCommentRequest|SaveUserLikeRequest|SaveUserDownloadRequest $request,
         Project $project

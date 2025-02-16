@@ -77,6 +77,7 @@ Route::group(['prefix' => 'client', 'as' => 'client.'], function () {
     Route::post('/projects/{project}/comment', [ProjectController::class, 'saveUserComment'])->name('projects.comment');
     Route::post('/download-object-increment/{project}', [ProjectController::class, 'downloadObjectUrlIncrement'])->name('download-object-url-increment');
     Route::post('/projects/{project}/add-review', [ProjectController::class, 'addReviewToProject'])->name('projects.add-review');
+    Route::post('/projects/{project}/renew', [ProjectController::class, 'renewProject'])->name('projects.renew');
     Route::get('/projects/{project}/get-review', [ProjectController::class, 'getProjectReview'])->name('projects.get-review');
 });
 
