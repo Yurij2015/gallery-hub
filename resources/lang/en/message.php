@@ -117,5 +117,6 @@ return [
     'dismiss' => 'Dismiss',
     'cannotBeRestored' => 'The project cannot be restored!',
     'canBeRestored' => 'The project can be restored!',
+    'noArchivedProjects' => 'No Archived Projects',
 ];
 

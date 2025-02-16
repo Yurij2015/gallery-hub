@@ -31,23 +31,23 @@
                         </li>
                     </ol>
                 </nav>
-                <div class="flex items-center">
+                <div class="flex flex-wrap items-center gap-2">
                     <span
-                        class="bg-green-100 text-indigo-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-indigo-500 dark:text-indigo-300">
+                        class="bg-green-100 text-indigo-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-indigo-500 dark:text-indigo-300 w-full sm:w-auto">
                         {{ __('message.likes') }}: {{ $project->userReactions->where('has_like', true)->count() }}
-                </span>
+                    </span>
                     <span
-                        class="bg-green-100 text-purple-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-purple-900 dark:text-purple-300">
+                        class="bg-green-100 text-purple-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-purple-900 dark:text-purple-300 w-full sm:w-auto">
                     {{ __('message.comments') }}: {{ $project->userReactions->where('has_comment', true)->count() }}
-                </span>
+                    </span>
                     <span
-                        class="bg-green-100 text-blue-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-blue-900 dark:text-blue-300">
+                        class="bg-green-100 text-blue-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-blue-900 dark:text-blue-300 w-full sm:w-auto ">
                      {{ __('message.uploadIndividualPhotos') }}: {{ $project->userReactions->sum('download_statistic') }}
-                </span>
+                    </span>
                     <span
-                        class="bg-green-100 text-blue-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-blue-900 dark:text-blue-300">
+                        class="bg-green-100 text-blue-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-blue-900 dark:text-blue-300 w-full sm:w-auto">
                     {{ __('message.loadingProjectFolder') }}: {{ $project->download_statistic }}
-                </span>
+                    </span>
                 </div>
             </div>
             <div class="items-center justify-between block sm:flex md:divide-x md:divide-gray-100 dark:divide-gray-700">

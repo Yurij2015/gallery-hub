@@ -77,7 +77,8 @@
                     <table
                         class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600 relative overflow-hidden">
                         <thead class="bg-gray-100 dark:bg-gray-700">
-                        <tr>
+                        @if($projects->count())
+                            <tr>
                             <th scope="col" class="p-4">
                                 <div class="flex items-center">
                                     <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
@@ -120,7 +121,6 @@
                         </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                        @if($projects)
                             @php
                                 $currentPage = $projects->currentPage();
                                 $perPage = $projects->perPage();
@@ -244,7 +244,7 @@
                             <tr>
                                 <td colspan="6"
                                     class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ __('message.noDataFound') }}
+                                    {{ __('message.noArchivedProjects') }}
                                 </td>
                             </tr>
                         @endif
