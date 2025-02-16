@@ -85,7 +85,7 @@
                                                     </div>
                                                     <input datepicker id="date-datepicker" type="text" name="date"
                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-none focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                           value="{{ Carbon::parse($project->date)->format('d/m/Y') }}">
+                                                           value="{{ Carbon::parse($project->date)->format('m/d/Y') }}">
                                                 </div>
                                             </div>
                                             <div class="col-span-12 sm:col-span-12">
@@ -107,7 +107,7 @@
                                                     <input datepicker id="expiration-date-datepicker" type="text"
                                                            name="expiration_date"
                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-none focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                           value="{{ Carbon::parse($project->expiration_date)->format('d/m/Y') }}">
+                                                           value="{{ Carbon::parse($project->expiration_date)->format('m/d/Y') }}">
                                                 </div>
                                             </div>
                                             <div class="col-span-12 sm:col-span-12">

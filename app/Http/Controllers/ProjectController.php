@@ -325,9 +325,31 @@ class ProjectController extends Controller
         return view('projects.all-reviews', compact('userReactions'));
     }
 
-    public function archive()
+    public function archive(BucketService $bucketService, ProjectService $projectService)
     {
-        $projects = Project::with('userReactions')->get();
+        $user = Auth::user();
+
+        if ($user->hasRole('admin')) {
+            $projects = Project::with('user')
+                ->with('userReactions')
+                ->where('expiration_date', '<', now())
+                ->paginate(100);
+        } else {
+            $projects = Project::with('user')
+                ->with('userReactions')
+                ->where('user_id', $user->id)
+                ->where('expiration_date', '<', now())
+                ->paginate(100);
+        }
+
+        foreach ($projects as $project) {
+            $bucketName = $project->bucket_name;
+            $projectFolder = $project->project_folder;
+            $userFolderName = $this->getUserFolderName($project);
+            $projectObjects = $bucketService->listObjectsInFolder($bucketName, $userFolderName.'/'.$projectFolder);
+
+            $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
+        }
 
         return view('projects.archive', compact('projects'));
     }
@@ -372,9 +394,10 @@ class ProjectController extends Controller
             }
         }
 
-        $validatedRequest['date'] = (DateTime::createFromFormat('d/m/Y',
+        $validatedRequest['date'] = (DateTime::createFromFormat('m/d/Y',
             $validatedRequest['date']))->format('Y-m-d');
-        $validatedRequest['expiration_date'] = (DateTime::createFromFormat('d/m/Y',
+
+        $validatedRequest['expiration_date'] = (DateTime::createFromFormat('m/d/Y',
             $validatedRequest['expiration_date']))->format('Y-m-d');
 
         $project->update($validatedRequest);
