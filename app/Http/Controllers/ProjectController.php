@@ -430,10 +430,11 @@ class ProjectController extends Controller
         if ($files) {
             foreach ($files as $file) {
                 $objectName = $file->getClientOriginalPath();
+                $fullObjectName = $folderSlug ? $userDirectory.'/'.$project->project_folder.'/'.$folderSlug.'/'.$objectName : $userDirectory.'/'.$project->project_folder.'/'.$objectName;
                 $objectPath = $file->getPathname();
                 $content = file_get_contents($objectPath);
                 $bucketService->putObject($bucketName,
-                    $userDirectory.'/'.$project->project_folder.'/'.$folderSlug.'/'.$objectName,
+                    $fullObjectName,
                     $content,
                     $metaData);
             }
