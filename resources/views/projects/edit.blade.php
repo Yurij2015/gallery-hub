@@ -135,41 +135,55 @@
                                 <div class="grid md:grid-cols-12 gap-12 lg:mb-11 mb-7 md:px-5">
                                     @if(isset($projectFiles))
                                         @foreach($projectFiles as $object)
+                                            @php
+                                                $extension = pathinfo(parse_url($object->objectUrl, PHP_URL_PATH), PATHINFO_EXTENSION);
+                                                $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+                                                $videoExtensions = ['mp4', 'mov', 'avi', 'webm'];
+                                            @endphp
                                             <div
                                                 class="md:col-span-2 md:h-[222px] h-[190px] w-full rounded-3xl relative group">
-                                                <!-- Image -->
-                                                <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
-                                                     class="gallery-image object-cover rounded-none hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
+                                                @if (in_array(strtolower($extension), $imageExtensions))
+                                                    <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
+                                                         class="gallery-image object-cover rounded-none hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
+                                                @elseif (in_array(strtolower($extension), $videoExtensions))
+                                                    <video controls
+                                                           class="object-cover rounded-none hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
+                                                        <source src="{{ $object->objectUrl }}" type="video/mp4">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                @endif
                                                 <!-- Hover Menu -->
                                                 <div
                                                     class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/1 flex items-center bg-white py-1 px-2 rounded-none shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-auto min-h-[25px]">
-                                                    <!-- Favorite Button -->
-                                                    <button
-                                                        class="bg-yellow-500 text-white rounded-full p-1 set-cover-button"
-                                                        data-image-key="{{ $object->key }}">
-                                                        <svg class="w-4 h-4 text-gray-800 dark:text-white"
-                                                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                             width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                            <path stroke="currentColor" stroke-width="2"
-                                                                  d="M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597l1.753-4.022Z"/>
-                                                        </svg>
-                                                    </button>
-                                                    <!-- Separator -->
-                                                    <div class="h-6 w-[1px] bg-gray-300 mx-2"></div>
-                                                    <!-- Expand Button -->
-                                                    <button
-                                                        class="bg-blue-500 text-white rounded-full p-1 expand-button"
-                                                        data-image-url="{{ $object->objectUrl }}">
-                                                        <svg class="w-4 h-4 text-gray-800 dark:text-white"
-                                                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                             width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                            <path d="M4 10V4h6M4 14v6h6M20 10V4h-6M20 14v6h-6"
-                                                                  stroke="currentColor" stroke-width="2"
-                                                                  stroke-linecap="round" stroke-linejoin="round"/>
-                                                        </svg>
-                                                    </button>
-                                                    <!-- Separator -->
-                                                    <div class="h-6 w-[1px] bg-gray-300 mx-2"></div>
+                                                    @if (in_array(strtolower($extension), $imageExtensions))
+                                                        <!-- Favorite Button -->
+                                                        <button
+                                                            class="bg-yellow-500 text-white rounded-full p-1 set-cover-button"
+                                                            data-image-key="{{ $object->key }}">
+                                                            <svg class="w-4 h-4 text-gray-800 dark:text-white"
+                                                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                                 width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                                <path stroke="currentColor" stroke-width="2"
+                                                                      d="M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597l1.753-4.022Z"/>
+                                                            </svg>
+                                                        </button>
+                                                        <!-- Separator -->
+                                                        <div class="h-6 w-[1px] bg-gray-300 mx-2"></div>
+                                                        <!-- Expand Button -->
+                                                        <button
+                                                            class="bg-blue-500 text-white rounded-full p-1 expand-button"
+                                                            data-image-url="{{ $object->objectUrl }}">
+                                                            <svg class="w-4 h-4 text-gray-800 dark:text-white"
+                                                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                                 width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                                <path d="M4 10V4h6M4 14v6h6M20 10V4h-6M20 14v6h-6"
+                                                                      stroke="currentColor" stroke-width="2"
+                                                                      stroke-linecap="round" stroke-linejoin="round"/>
+                                                            </svg>
+                                                        </button>
+                                                        <!-- Separator -->
+                                                        <div class="h-6 w-[1px] bg-gray-300 mx-2"></div>
+                                                    @endif
                                                     <!-- Delete Button -->
                                                     <button class="bg-red-500 text-white rounded-full p-1 delete-button"
                                                             data-image-key="{{ $object->key }}">
