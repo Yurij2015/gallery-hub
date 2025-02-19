@@ -420,7 +420,7 @@
                     loader.classList.add("hidden"); // Hide loader
                     if (xhr.status === 200) {
                         Swal.fire("Success!", "File(s) uploaded successfully!", "success").then(() => {
-                            // window.location.reload();
+                            window.location.reload();
                         });
                     } else {
                         Swal.fire("Error!", "File upload failed!", "error");
