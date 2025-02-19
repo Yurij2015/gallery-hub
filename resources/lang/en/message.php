@@ -121,5 +121,6 @@ return [
     'csvFiles' => 'CSV Files',
     'downloadCsv' => 'Download CSV',
     'downloadConsolidatedCsv' => 'Download Consolidated CSV',
+    'files' => 'Files',
 ];
 

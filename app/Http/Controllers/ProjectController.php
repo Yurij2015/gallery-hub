@@ -361,16 +361,27 @@ class ProjectController extends Controller
         return view('projects.archive', compact('projects'));
     }
 
-    public function favorites(Project $project)
+    public function favorites(Project $project, Request $request)
     {
+        $favoritesView = $request->get('favoritesView');
+        $folderSlug = $request->get('folderSlug');
+
         $project->load([
-            'userReactions' => function ($query) {
+            'userReactions' => function ($query) use ($folderSlug) {
                 $query->where('has_like', true);
-                $query->orWhere('has_comment', true);
+                if ($folderSlug) {
+                    $query->where('client_name', 'like', '%'.$folderSlug.'%');
+                }
             }
         ]);
 
-        return view('projects.favorites', compact('project'));
+        if ($favoritesView === 'table') {
+            return view('projects.favorites-table', compact('project'));
+        }
+
+        $clientNames = $project->userReactions()->where('has_like', true)->pluck('client_name')->unique();
+
+        return view('projects.favorites-grid', compact('project', 'clientNames'));
     }
 
     /**
@@ -783,14 +794,14 @@ class ProjectController extends Controller
         return $this->generateCsv("export_consolidated_faforites_$project->id.csv", $project, $columns);
     }
 
-    private function generateCsv($fileName, $data, $columns){
-
+    private function generateCsv($fileName, $data, $columns)
+    {
         $headers = [
             "Content-Type" => "text/csv",
             "Content-Disposition" => "attachment; filename=$fileName",
         ];
 
-        $callback = function() use ($data, $columns) {
+        $callback = function () use ($data, $columns) {
             $handle = fopen('php://output', 'w');
 
             fputcsv($handle, $columns);
