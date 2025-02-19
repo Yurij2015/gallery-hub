@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "glightbox": "^3.3.0",
-        "inputmask": "^5.0.9"
+        "inputmask": "^5.0.9",
+        "sweetalert2": "^11.17.2"
     }
 }
