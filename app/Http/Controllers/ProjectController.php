@@ -440,8 +440,12 @@ class ProjectController extends Controller
             }
         }
 
-        return redirect()->route('projects.edit',
-            ['project' => $project->id, 'folderSlug' => $folderSlug])->with('success', 'Images uplsaded successfully');
+        return response()->json([
+            'success' => true,
+            'message' => 'mages uplsaded successfully',
+            'project' => $project,
+            'folderSlug' => $folderSlug
+        ]);
     }
 
     /**

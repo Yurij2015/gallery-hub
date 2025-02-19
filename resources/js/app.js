@@ -14,6 +14,7 @@ Alpine.start();
 
 import GLightbox from 'glightbox';
 import 'glightbox/dist/css/glightbox.min.css';
+import Swal from 'sweetalert2';
 
  const glightbox = GLightbox({
     selector: '.glightbox',
@@ -24,3 +25,4 @@ import 'glightbox/dist/css/glightbox.min.css';
 });
 
 window.glightbox = glightbox;
+window.Swal = Swal;
