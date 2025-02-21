@@ -12,6 +12,7 @@ use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Services\BucketService;
 use App\Http\Services\ProjectService;
 use App\Models\Project;
+use App\Models\UploadLog;
 use App\Models\User;
 use App\Models\UserReaction;
 use Auth;
@@ -19,6 +20,8 @@ use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use SplFileInfo;
+use Symfony\Component\HttpFoundation\File\File;
 
 class ProjectController extends Controller
 {
@@ -440,14 +443,20 @@ class ProjectController extends Controller
 
         if ($files) {
             foreach ($files as $file) {
-                $objectName = $file->getClientOriginalPath();
-                $fullObjectName = $folderSlug ? $userDirectory.'/'.$project->project_folder.'/'.$folderSlug.'/'.$objectName : $userDirectory.'/'.$project->project_folder.'/'.$objectName;
-                $objectPath = $file->getPathname();
-                $content = file_get_contents($objectPath);
-                $bucketService->putObject($bucketName,
-                    $fullObjectName,
-                    $content,
-                    $metaData);
+                try {
+                    $objectName = $file->getClientOriginalPath();
+                    $fullObjectName = $folderSlug ? $userDirectory.'/'.$project->project_folder.'/'.$folderSlug.'/'.$objectName : $userDirectory.'/'.$project->project_folder.'/'.$objectName;
+                    $objectPath = $file->getPathname();
+                    $content = file_get_contents($objectPath);
+                    $bucketService->putObject($bucketName,
+                        $fullObjectName,
+                        $content,
+                        $metaData);
+                    $this->uploadLog($fullObjectName, $project->id, $file, 'success');
+
+                } catch (\Exception $e) {
+                    $this->uploadLog($fullObjectName, $project->id, $file, 'error', $e->getMessage());
+                }
             }
         }
 
@@ -456,6 +465,19 @@ class ProjectController extends Controller
             'message' => 'mages uplsaded successfully',
             'project' => $project,
             'folderSlug' => $folderSlug
+        ]);
+    }
+
+    private function uploadLog($objectName, $projectId, File $file, $status, $errorMessage = null)
+    {
+        UploadLog::create([
+            'user_id' => Auth::id(),
+            'project_id' => $projectId,
+            'original_path' => $objectName,
+            'size' => $file->getSize(),
+            'mime_type' => $file->getMimeType(),
+            'status' => $status,
+            'error_message' => $errorMessage,
         ]);
     }
 
@@ -762,11 +784,17 @@ class ProjectController extends Controller
 
         if ($files) {
             foreach ($files as $file) {
-                $objectName = $file->getClientOriginalPath();
-                $objectPath = $file->getPathname();
-                $content = file_get_contents($objectPath);
-                $bucketService->putObject($bucketName, $folderPath.'/'.$objectName, $content,
-                    $metaData);
+                try {
+                    $objectName = $file->getClientOriginalPath();
+                    $objectPath = $file->getPathname();
+                    $content = file_get_contents($objectPath);
+                    $bucketService->putObject($bucketName, $folderPath.'/'.$objectName, $content,
+                        $metaData);
+                    $this->uploadLog($objectName, $project->id, $file, 'success');
+
+                } catch (\Exception $e) {
+                    $this->uploadLog($objectName, $project->id, $file, 'error', $e->getMessage());
+                }
             }
         }
 
