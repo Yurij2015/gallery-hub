@@ -210,7 +210,8 @@
                                                 @endif
                                                 <!-- Image Caption -->
                                                 <p class="text-sm text-gray-800 sm:text-sm dark:text-white text-center mt-2">
-                                                    {{ $object->objectName }}
+                                                    <span class="stringDisplay"
+                                                          data-full-string="{{ $object->objectName }}"></span>
                                                 </p>
                                             </div>
                                         @endforeach
@@ -294,6 +295,16 @@
             transform: translate(100%, -100%);
             width: 25px;
             height: 25px;
+        }
+
+        .stringDisplay::after {
+            content: attr(data-full-string);
+            display: inline-block;
+            width: 15ch;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            direction: rtl;
         }
 
         @media (max-width: 640px) {

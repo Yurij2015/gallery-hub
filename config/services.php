@@ -43,6 +43,7 @@ return [
     ],
 
     'minio' => [
-        'main_storage' => env('MAIN_STORAGE_BUCKET')
+        'main_storage' => env('MAIN_STORAGE_BUCKET'),
+        'preview_storage' => env('PREVIEW_STORAGE_BUCKET'),
     ],
 ];

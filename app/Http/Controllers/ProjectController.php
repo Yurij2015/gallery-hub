@@ -20,16 +20,21 @@ use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use SplFileInfo;
+use Intervention\Image\Encoders\JpegEncoder;
+use Intervention\Image\Encoders\PngEncoder;
+use Intervention\Image\Encoders\WebpEncoder;
 use Symfony\Component\HttpFoundation\File\File;
+use Intervention\Image\ImageManager;
 
 class ProjectController extends Controller
 {
     public string $mainStorage;
+    public string $previewStorage;
 
     public function __construct()
     {
         $this->mainStorage = config('services.minio.main_storage');
+        $this->previewStorage = config('services.minio.preview_storage');
     }
 
     public const TIME_OPTIONS = [
@@ -452,6 +457,9 @@ class ProjectController extends Controller
                         $fullObjectName,
                         $content,
                         $metaData);
+
+                    $this->preparePreviewImage($file, $bucketService, $metaData, $fullObjectName);
+
                     $this->uploadLog($fullObjectName, $project->id, $file, 'success');
 
                 } catch (\Exception $e) {
@@ -465,19 +473,6 @@ class ProjectController extends Controller
             'message' => 'mages uplsaded successfully',
             'project' => $project,
             'folderSlug' => $folderSlug
-        ]);
-    }
-
-    private function uploadLog($objectName, $projectId, File $file, $status, $errorMessage = null)
-    {
-        UploadLog::create([
-            'user_id' => Auth::id(),
-            'project_id' => $projectId,
-            'original_path' => $objectName,
-            'size' => $file->getSize(),
-            'mime_type' => $file->getMimeType(),
-            'status' => $status,
-            'error_message' => $errorMessage,
         ]);
     }
 
@@ -786,14 +781,17 @@ class ProjectController extends Controller
             foreach ($files as $file) {
                 try {
                     $objectName = $file->getClientOriginalPath();
+                    $fullObjectName = $folderPath.'/'.$objectName;
                     $objectPath = $file->getPathname();
                     $content = file_get_contents($objectPath);
-                    $bucketService->putObject($bucketName, $folderPath.'/'.$objectName, $content,
-                        $metaData);
-                    $this->uploadLog($objectName, $project->id, $file, 'success');
+                    $bucketService->putObject($bucketName, $fullObjectName, $content, $metaData);
+
+                    $this->preparePreviewImage($file, $bucketService, $metaData, $fullObjectName);
+
+                    $this->uploadLog($fullObjectName, $project->id, $file, 'success');
 
                 } catch (\Exception $e) {
-                    $this->uploadLog($objectName, $project->id, $file, 'error', $e->getMessage());
+                    $this->uploadLog($fullObjectName, $project->id, $file, 'error', $e->getMessage());
                 }
             }
         }
@@ -822,6 +820,8 @@ class ProjectController extends Controller
         return $this->generateCsv("export_consolidated_faforites_$project->id.csv", $project, $columns);
     }
 
+
+    // TODO move private methods to service
     private function generateCsv($fileName, $data, $columns)
     {
         $headers = [
@@ -862,5 +862,44 @@ class ProjectController extends Controller
         $userName = explode('@', $userEmail)[0];
         $emailDomain = explode('@', $userEmail)[1];
         return $userName.'.'.$emailDomain;
+    }
+
+    private function uploadLog($objectName, $projectId, File $file, $status, $errorMessage = null)
+    {
+        UploadLog::create([
+            'user_id' => Auth::id(),
+            'project_id' => $projectId,
+            'original_path' => $objectName,
+            'size' => $file->getSize(),
+            'mime_type' => $file->getMimeType(),
+            'status' => $status,
+            'error_message' => $errorMessage,
+        ]);
+    }
+
+    private function preparePreviewImage($file, BucketService $bucketService, $metaData, $fullObjectName): void
+    {
+        $previewBucketName = $this->previewStorage;
+
+        $imageManager = ImageManager::imagick();
+        $image = $imageManager->read($file);
+        $extension = strtolower($file->getClientOriginalExtension());
+
+        if (in_array($extension, ['jpg', 'jpeg'])) {
+            $encodedImage = $image->encode(new JpegEncoder(quality: 30));
+        } elseif ($extension === 'png') {
+            $encodedImage = $image->encode(new PngEncoder());
+        } elseif ($extension === 'webp') {
+            $encodedImage = $image->encode(new WebpEncoder(quality: 80));
+        } else {
+            $encodedImage = $image->encode();
+        }
+
+        if (in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
+            $bucketService->putObject($previewBucketName,
+                $fullObjectName,
+                (string) $encodedImage,
+                $metaData);
+        }
     }
 }
