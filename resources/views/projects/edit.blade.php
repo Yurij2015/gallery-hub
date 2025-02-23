@@ -481,19 +481,28 @@
             let loader = document.getElementById("loader");
             let progressBar = document.getElementById("progressBar");
 
-            if (dropzoneElement) {
-                new Dropzone(dropzoneElement, {
+            if (dropzoneContainer) {
+                const dropzone = new Dropzone(dropzoneElement, {
                     paramName: "files",
                     maxFilesize: 300,
                     acceptedFiles: "image/*,video/*",
                     uploadMultiple: true,
                     parallelUploads: 10,
-                    addRemoveLinks: true,
+                    addRemoveLinks: false,
                     autoProcessQueue: true,
                     previewsContainer: false,
                     clickable: dropzoneContainer,
 
                     init: function () {
+                        const dz = this;
+                        let successfulUploads = 0;
+                        let failedUploads = 0;
+
+                        this.on("maxfilesexceeded", function (file) {
+                            Swal.fire("Error!", "File too large! Max size is 10MB.", "error");
+                            this.removeFile(file);
+                        });
+
                         this.on("sending", function (file, xhr) {
                             loader.classList.remove("hidden");
                             progressBar.style.width = "0%";
@@ -507,21 +516,31 @@
                             };
                         });
 
-                        this.on("queuecomplete", function () {
-                            loader.classList.add("hidden");
-                            Swal.fire("Success!", "File(s) uploaded successfully!", "success").then(() => {
-                                window.location.reload();
-                            });
+                        this.on("success", function () {
+                            successfulUploads++;
                         });
 
                         this.on("error", function (file, response) {
+                            failedUploads++;
                             loader.classList.add("hidden");
                             Swal.fire("Error!", "Upload failed: " + response, "error");
                         });
-                    },
 
-                    error: function (file, response) {
-                        alert("Upload failed: " + response);
+                        this.on("queuecomplete", function () {
+                            loader.classList.add("hidden");
+
+                            if (successfulUploads > 0 && failedUploads === 0) {
+                                Swal.fire("Success!", "File(s) uploaded successfully!", "success").then(() => {
+                                    window.location.reload();
+                                });
+                            } else if (failedUploads > 0) {
+                                Swal.fire("Warning!", "Some files failed to upload.", "warning");
+                            }
+
+                            // Reset counters
+                            successfulUploads = 0;
+                            failedUploads = 0;
+                        });
                     },
                 });
             }
