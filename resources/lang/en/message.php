@@ -125,5 +125,6 @@ return [
     'dragAndDrop' => 'Drag & Drop',
     'toUpload' => 'to upload',
     'imagesAndVideos' => 'Images & Videos',
+    "cover" => "Cover",
 ];
 

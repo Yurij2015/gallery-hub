@@ -297,8 +297,13 @@ class ProjectController extends Controller
         return view('projects.basic-settings', compact('project', 'timeOptions'));
     }
 
-    public function designAndCover(Project $project)
+    public function designAndCover(Project $project, BucketService $bucketService)
     {
+        $coverImage = $project->cover_image ? $bucketService->getObjectUrl($project->bucket_name,
+            $project->cover_image) : null;
+
+        $project->setProjecImage($coverImage);
+
         return view('projects.design-and-cover', compact('project'));
     }
 
@@ -559,6 +564,11 @@ class ProjectController extends Controller
             $keySegments = explode('/', $key);
             $objectName = end($keySegments);
             $object->setObjectName($objectName);
+
+            $coverImage = $project->cover_image ? $bucketService->getObjectUrl($project->bucket_name,
+                $project->cover_image) : null;
+
+            $project->setProjecImage($coverImage);
 
             foreach ($userReactions as $userReaction) {
                 if ($object->key === $userReaction->object_key) {
