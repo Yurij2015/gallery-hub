@@ -3,6 +3,19 @@
     use Carbon\Carbon;
 @endphp
 @section('content')
+    @if($project->projectImage)
+        <section class="pt-10">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ">
+                <div class="md:flex items-center">
+                    <div
+                        class="text-gray-400  rounded dark:border-gray-600 flex-1">
+                        <img src="{{ $project->projectImage }}" alt="{{ $project->name }}"
+                             class="w-full h-96 object-cover mt-2 rounded-lg">
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
     <section class="py-10">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ">
             <div class="md:flex items-center mb-8">
@@ -99,10 +112,10 @@
                                             Your browser does not support the video tag.
                                         </video>
                                     @endif
-                                        <p class="text-sm text-gray-800 sm:text-sm dark:text-white text-center mt-2">
+                                    <p class="text-sm text-gray-800 sm:text-sm dark:text-white text-center mt-2">
                                             <span class="stringDisplay"
                                                   data-full-string="{{ $object->objectName }}"></span>
-                                        </p>
+                                    </p>
                                 </a>
                                 <div class="absolute top-2 right-2 flex flex-col items-end space-y-1 group">
                                     <!-- First button (Like) -->
