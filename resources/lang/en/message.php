@@ -122,5 +122,8 @@ return [
     'downloadCsv' => 'Download CSV',
     'downloadConsolidatedCsv' => 'Download Consolidated CSV',
     'files' => 'Files',
+    'dragAndDrop' => 'Drag & Drop',
+    'toUpload' => 'to upload',
+    'imagesAndVideos' => 'Images & Videos',
 ];
 
