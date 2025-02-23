@@ -111,7 +111,8 @@
                                             <div
                                                 class="md:col-span-2 md:h-[222px] h-[190px] w-full rounded-3xl relative group">
                                                 @if (in_array(strtolower($extension), $imageExtensions))
-                                                    <img src="{{ $object->object_url }}" alt="{{ $object->object_key }}"
+                                                    <img src="{{ $object->previewUrl }}" alt="{{ $object->object_key }}"
+                                                         data-object-src="{{ $object->object_url }}"
                                                          class="gallery-image object-cover rounded-none hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
                                                 @elseif (in_array(strtolower($extension), $videoExtensions))
                                                     <video controls

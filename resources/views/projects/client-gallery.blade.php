@@ -8,17 +8,17 @@
             <div class="md:flex items-center mb-8">
                 <div class="flex-1">
                     <button type="button"
-                            class="py-2 px-3 me-2 text-xs font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                            class="py-2 px-3 me-2 text-xs font-medium text-gray-900 focus:outline-none bg-white rounded-sm border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                             id="goBack">
                         {{ __('message.goBack') }}
                     </button>
                     <span
                         class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-blue-900 dark:text-blue-300">
-                    {{ $project->getObjectsCount() }} file(s)
+                    {{ $project->objects_count }} file(s)
                 </span>
                     <span
                         class="bg-green-100 text-green-800 text-sm font-medium me-2 px-3 py-2 rounded dark:bg-green-900 dark:text-green-300">
-                    {{ $project->getSizeOfProject() }}
+                    {{ $project->project_size }}
                 </span>
                     <a href="{{ route('download-folder', $project->id) }}"
                        class="py-2 px-3 me-2 text-xs text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-sm text-sx text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
@@ -79,16 +79,30 @@
                 <div class="flex flex-col mb-10">
                     <div class="grid md:grid-cols-12 gap-8 lg:mb-11 mb-7">
                         @foreach($projectObjects as $object)
+                            @php
+                                $extension = pathinfo(parse_url($object->objectUrl, PHP_URL_PATH), PATHINFO_EXTENSION);
+                                $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+                                $videoExtensions = ['mp4', 'mov', 'avi', 'webm'];
+                            @endphp
                             <div class="relative md:col-span-4 h-[277px] w-full rounded-3xl mb-7">
                                 <a href="{{ $object->objectUrl }}"
                                    data-gallery="gallery-{{ $project->id }}"
                                    data-description="{{ $object->getObjectName() }}"
                                    class="glightbox">
-                                    <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
-                                         class="gallery-image object-cover rounded-3xl hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
-                                    <p class="text-sm text-gray-900 sm:text-sm dark:text-white text-center mt-2">
-                                        {{ $object->getObjectName() }}
-                                    </p>
+                                    @if (in_array(strtolower($extension), $imageExtensions))
+                                        <img src="{{ $object->objectPreviewUrl}}" alt="{{ $object->objectName }}"
+                                             class="gallery-image object-cover rounded-none hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
+                                    @elseif (in_array(strtolower($extension), $videoExtensions))
+                                        <video controls
+                                               class="object-cover rounded-none hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
+                                            <source src="{{ $object->objectUrl }}" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    @endif
+                                        <p class="text-sm text-gray-800 sm:text-sm dark:text-white text-center mt-2">
+                                            <span class="stringDisplay"
+                                                  data-full-string="{{ $object->objectName }}"></span>
+                                        </p>
                                 </a>
                                 <div class="absolute top-2 right-2 flex flex-col items-end space-y-1 group">
                                     <!-- First button (Like) -->
@@ -381,6 +395,16 @@
 
         #comment-modal {
             transition: opacity 0.3s ease-in-out;
+        }
+
+        .stringDisplay::after {
+            content: attr(data-full-string);
+            display: inline-block;
+            width: 15ch;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            direction: rtl;
         }
     </style>
 @endsection
