@@ -55,13 +55,13 @@
                     <section class="bg-white dark:bg-gray-900">
                         <div class="gallery">
                             <div class="flex flex-col mb-2 md:px-10 px-5">
-                                <div class="grid grid-cols-12 gap-4 mb-3">
+                                <div class="grid grid-cols-12 gap-4">
                                     <div
                                         class="col-span-12 md:col-span-4 flex items-center justify-start  space-x-6 mt-3 sm:mt-0">
                                         <button
                                             data-modal-target="add-folder-modal"
                                             data-modal-toggle="add-folder-modal"
-                                            class="inline-flex items-center px-5 py-2.5 sm:mt-6 text-sm font-medium text-white bg-yellow-500 rounded-none focus:ring-4 focus:ring-yellow-400 dark:focus:ring-yellow-500 hover:bg-yellow-400 md:ml-5 {{ request()->get('folderSlug') ? 'cursor-not-allowed' : '' }}"
+                                            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-yellow-500 rounded-none focus:ring-4 focus:ring-yellow-400 dark:focus:ring-yellow-500 hover:bg-yellow-400 {{ request()->get('folderSlug') ? 'cursor-not-allowed' : '' }}"
                                             {{ request()->get('folderSlug') ? 'disabled' : '' }}
                                         >
                                             <svg class="w-4 h-4 me-2 text-gray-800 dark:text-white" aria-hidden="true"
@@ -73,7 +73,7 @@
                                             </svg>
                                             {{ __('message.addFolder') }}
                                         </button>
-                                        <div class="flex items-center space-x-4 mt-0 sm:mt-6 md:mt-6 xl:mt-6">
+                                        <div class="flex items-center space-x-4 mt-0">
                                             @if(isset($projectFoldersWithFolderName))
                                                 @foreach($projectFoldersWithFolderName as $folder)
                                                     <div class="relative group flex flex-col items-center folder-icon"
@@ -100,9 +100,37 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="col-span-12 md:col-span-8 md:col-start-7 flex items-center">
-                                        <form id="uploadForm"
-                                              action="{{ route('projects.upload-images', ['project' => $project->id, 'folderSlug' => request()->get('folderSlug')]) }}"
+                                    <div class="col-span-12 md:col-span-8 flex items-center">
+                                        <form
+                                            method="POST"
+                                            action="{{ route('projects.upload-images', ['project' => $project->id, 'folderSlug' => request()->get('folderSlug')]) }}"
+                                            class=" w-full"
+                                            enctype="multipart/form-data"
+                                            id="dropUploadForm">
+                                            @method('put')
+                                            @csrf
+                                            <div id="dropzone-container"
+                                                 class="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-none cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                         fill="none" viewBox="0 0 20 16">
+                                                        <path stroke="currentColor" stroke-linecap="round"
+                                                              stroke-linejoin="round" stroke-width="2"
+                                                              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                                    </svg>
+                                                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
+                                                            class="font-semibold">
+                                                            {{ __('message.dragAndDrop') }}
+                                                        </span> {{ __('message.toUpload') }}</p>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                                                        {{ __('message.imagesAndVideos') }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        {{-- TODO remove this and js for this --}}
+                                        <form id="uploadForm" hidden="hidden"
                                               method="POST" enctype="multipart/form-data">
                                             @method('put')
                                             @csrf
@@ -444,6 +472,58 @@
                 };
 
                 xhr.send(formData);
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const dropzoneContainer = document.querySelector("#dropzone-container");
+            const dropzoneElement = document.querySelector("#dropUploadForm");
+            let loader = document.getElementById("loader");
+            let progressBar = document.getElementById("progressBar");
+
+            if (dropzoneElement) {
+                new Dropzone(dropzoneElement, {
+                    paramName: "files",
+                    maxFilesize: 300,
+                    acceptedFiles: "image/*,video/*",
+                    uploadMultiple: true,
+                    parallelUploads: 10,
+                    addRemoveLinks: true,
+                    autoProcessQueue: true,
+                    previewsContainer: false,
+                    clickable: dropzoneContainer,
+
+                    init: function () {
+                        this.on("sending", function (file, xhr) {
+                            loader.classList.remove("hidden");
+                            progressBar.style.width = "0%";
+
+                            xhr.upload.onprogress = function (event) {
+                                if (event.lengthComputable) {
+                                    let percent = Math.round((event.loaded / event.total) * 100);
+                                    progressBar.style.width = percent + "%";
+                                    progressBar.textContent = percent + "%";
+                                }
+                            };
+                        });
+
+                        this.on("queuecomplete", function () {
+                            loader.classList.add("hidden");
+                            Swal.fire("Success!", "File(s) uploaded successfully!", "success").then(() => {
+                                window.location.reload();
+                            });
+                        });
+
+                        this.on("error", function (file, response) {
+                            loader.classList.add("hidden");
+                            Swal.fire("Error!", "Upload failed: " + response, "error");
+                        });
+                    },
+
+                    error: function (file, response) {
+                        alert("Upload failed: " + response);
+                    },
+                });
             }
         });
 

@@ -15,6 +15,7 @@ Alpine.start();
 import GLightbox from 'glightbox';
 import 'glightbox/dist/css/glightbox.min.css';
 import Swal from 'sweetalert2';
+import Dropzone from "dropzone";
 
  const glightbox = GLightbox({
     selector: '.glightbox',
@@ -24,5 +25,8 @@ import Swal from 'sweetalert2';
     zoomable: true,
 });
 
+Dropzone.autoDiscover = false;
+
 window.glightbox = glightbox;
 window.Swal = Swal;
+window.Dropzone = Dropzone;

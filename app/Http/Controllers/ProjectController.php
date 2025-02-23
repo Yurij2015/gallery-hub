@@ -25,6 +25,7 @@ use Intervention\Image\Encoders\PngEncoder;
 use Intervention\Image\Encoders\WebpEncoder;
 use Symfony\Component\HttpFoundation\File\File;
 use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Log;
 
 class ProjectController extends Controller
 {
@@ -470,7 +471,7 @@ class ProjectController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'mages uplsaded successfully',
+            'message' => 'images uploaded successfully',
             'project' => $project,
             'folderSlug' => $folderSlug
         ]);
@@ -879,27 +880,31 @@ class ProjectController extends Controller
 
     private function preparePreviewImage($file, BucketService $bucketService, $metaData, $fullObjectName): void
     {
-        $previewBucketName = $this->previewStorage;
+        try {
+            $previewBucketName = $this->previewStorage;
 
-        $imageManager = ImageManager::imagick();
-        $image = $imageManager->read($file);
-        $extension = strtolower($file->getClientOriginalExtension());
+            $imageManager = ImageManager::imagick();
+            $image = $imageManager->read($file);
+            $extension = strtolower($file->getClientOriginalExtension());
 
-        if (in_array($extension, ['jpg', 'jpeg'])) {
-            $encodedImage = $image->encode(new JpegEncoder(quality: 30));
-        } elseif ($extension === 'png') {
-            $encodedImage = $image->encode(new PngEncoder());
-        } elseif ($extension === 'webp') {
-            $encodedImage = $image->encode(new WebpEncoder(quality: 80));
-        } else {
-            $encodedImage = $image->encode();
-        }
+            if (in_array($extension, ['jpg', 'jpeg'])) {
+                $encodedImage = $image->encode(new JpegEncoder(quality: 30));
+            } elseif ($extension === 'png') {
+                $encodedImage = $image->encode(new PngEncoder());
+            } elseif ($extension === 'webp') {
+                $encodedImage = $image->encode(new WebpEncoder(quality: 80));
+            } else {
+                $encodedImage = $image->encode();
+            }
 
-        if (in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
-            $bucketService->putObject($previewBucketName,
-                $fullObjectName,
-                (string) $encodedImage,
-                $metaData);
+            if (in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
+                $bucketService->putObject($previewBucketName,
+                    $fullObjectName,
+                    (string) $encodedImage,
+                    $metaData);
+            }
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
         }
     }
 }
