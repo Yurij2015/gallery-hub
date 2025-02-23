@@ -8,7 +8,8 @@ const goBackButton = document.getElementById('goBack');
 // Add event listener to each image
 gallery.addEventListener('click', e => {
     if (e.target.classList.contains('gallery-image')) {
-        lightboxImage.src = e.target.src;
+        lightboxImage.src = e.target.getAttribute("data-object-src");
+        // lightboxImage.src = e.target.src;
         lightbox.style.display = 'flex';
     }
 });
