@@ -149,8 +149,8 @@
                                         </div>
                                         {{--  TODO add project statistic --}}
                                         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                            {{ $project->getObjectsCount() }} file(s)
-                                            ({{ $project->getSizeOfProject() }})
+                                            {{ $project->objects_count }} file(s)
+                                            ({{ $project->project_size }})
                                         </div>
                                     </div>
                                 </td>
@@ -274,15 +274,23 @@
                                                 <!-- Favorite Items in CSV -->
                                                 <li class="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg shadow">
                                                     <div class="flex items-center">
-                                                        <svg class="w-6 h-6 text-blue-600 dark:text-blue-400 me-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                                        <svg class="w-6 h-6 text-blue-600 dark:text-blue-400 me-3"
+                                                             xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                             viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                  stroke-width="2" d="M12 4v16m8-8H4"/>
                                                         </svg>
-                                                        <span class="text-gray-700 dark:text-gray-300 font-medium">{{ __('message.downloadCsv') }}</span>
+                                                        <span
+                                                            class="text-gray-700 dark:text-gray-300 font-medium">{{ __('message.downloadCsv') }}</span>
                                                     </div>
                                                     <a href="{{ route('export.favorite-items', $project->id) }}"
                                                        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
-                                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/>
+                                                        <svg class="w-6 h-6 text-gray-800 dark:text-white"
+                                                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                             width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                            <path stroke="currentColor" stroke-linecap="round"
+                                                                  stroke-linejoin="round" stroke-width="2"
+                                                                  d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/>
                                                         </svg>
                                                     </a>
                                                 </li>
@@ -290,15 +298,23 @@
                                                 <!-- Consolidated Favorite Items in CSV -->
                                                 <li class="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg shadow">
                                                     <div class="flex items-center">
-                                                        <svg class="w-6 h-6 text-green-600 dark:text-green-400 me-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                                        <svg class="w-6 h-6 text-green-600 dark:text-green-400 me-3"
+                                                             xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                             viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                  stroke-width="2" d="M12 4v16m8-8H4"/>
                                                         </svg>
-                                                        <span class="text-gray-700 dark:text-gray-300 font-medium">{{ __('message.downloadConsolidatedCsv') }}</span>
+                                                        <span
+                                                            class="text-gray-700 dark:text-gray-300 font-medium">{{ __('message.downloadConsolidatedCsv') }}</span>
                                                     </div>
                                                     <a href="{{ route('export.consolidated-favorite-items', $project->id) }}"
                                                        class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-800">
-                                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/>
+                                                        <svg class="w-6 h-6 text-gray-800 dark:text-white"
+                                                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                             width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                            <path stroke="currentColor" stroke-linecap="round"
+                                                                  stroke-linejoin="round" stroke-width="2"
+                                                                  d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/>
                                                         </svg>
                                                     </a>
                                                 </li>

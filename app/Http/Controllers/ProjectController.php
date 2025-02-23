@@ -345,7 +345,7 @@ class ProjectController extends Controller
         return view('projects.all-reviews', compact('userReactions'));
     }
 
-    public function archive(BucketService $bucketService, ProjectService $projectService)
+    public function archive()
     {
         $user = Auth::user();
 
@@ -362,19 +362,10 @@ class ProjectController extends Controller
                 ->paginate(100);
         }
 
-        foreach ($projects as $project) {
-            $bucketName = $project->bucket_name;
-            $projectFolder = $project->project_folder;
-            $userFolderName = $this->getUserFolderName($project);
-            $projectObjects = $bucketService->listObjectsInFolder($bucketName, $userFolderName.'/'.$projectFolder);
-
-            $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
-        }
-
         return view('projects.archive', compact('projects'));
     }
 
-    public function favorites(Project $project, Request $request)
+    public function favorites(Project $project, Request $request, BucketService $bucketService)
     {
         $favoritesView = $request->get('favoritesView');
         $folderSlug = $request->get('folderSlug');
@@ -393,6 +384,12 @@ class ProjectController extends Controller
         }
 
         $clientNames = $project->userReactions()->where('has_like', true)->pluck('client_name')->unique();
+
+        foreach ($project->userReactions as $userReaction) {
+            $key = $userReaction->object_key;
+            $previewUrl = $bucketService->getObjectUrl($this->previewStorage, $key);
+            $userReaction->setPreviewUrl($previewUrl);
+        }
 
         return view('projects.favorites-grid', compact('project', 'clientNames'));
     }
@@ -529,8 +526,7 @@ class ProjectController extends Controller
     public function clientGallery(
         User $user,
         Project $project,
-        BucketService $bucketService,
-        ProjectService $projectService
+        BucketService $bucketService
     ) {
         $projectFolder = $project->project_folder;
         $bucketName = $project->bucket_name;
@@ -555,9 +551,14 @@ class ProjectController extends Controller
         foreach ($projectObjects as $object) {
             $key = $object->key;
             $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
+            $previewUrl = $bucketService->getObjectUrl($this->previewStorage, $key);
             $object->setObjectUrl($imgUrl);
+            $object->setObjectPreviewUrl($previewUrl);
             $object->setShareUrl($bucketService->genetateShareUrl($bucketName, $key));
-//            $object->setBase64Image($bucketService->prepareResizedImage($bucketName, $key));
+
+            $keySegments = explode('/', $key);
+            $objectName = end($keySegments);
+            $object->setObjectName($objectName);
 
             foreach ($userReactions as $userReaction) {
                 if ($object->key === $userReaction->object_key) {
@@ -569,8 +570,6 @@ class ProjectController extends Controller
         }
 
         $project->increment('views_statistic');
-
-        $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
 
         if ($project->expiration_date < now()) {
             return view('projects.expired-client-gallery', compact('user', 'project'))->with('error',
@@ -737,6 +736,11 @@ class ProjectController extends Controller
             $objectName = end($keySegments);
             $object->setObjectName($objectName);
         }
+
+        $project->update([
+            'objects_count' => $objectsCount,
+            'project_size' => $sizeOfProject,
+        ]);
 
         $project->setSizeOfProject($sizeOfProject);
         $project->setObjectsCount($objectsCount);

@@ -19,8 +19,6 @@ class BucketObject
 
     public ?string $shareUrl = null;
 
-    public ?string $base64Image = null;
-
     public ?bool $hasLike = null;
     public ?bool $hasComment = null;
     public ?string $commentMessage = null;
@@ -66,16 +64,6 @@ class BucketObject
     public function setShareUrl($shareUrl): void
     {
         $this->shareUrl = $shareUrl;
-    }
-
-    public function getBase64Image(): ?string
-    {
-        return $this->base64Image;
-    }
-
-    public function setBase64Image($base64Image): void
-    {
-        $this->base64Image = $base64Image;
     }
 
     public function setUserLike($hasLike): void

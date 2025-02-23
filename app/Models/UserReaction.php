@@ -22,6 +22,8 @@ class UserReaction extends Model
         'download_statistic',
     ];
 
+    public ?string $previewUrl = null;
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -30,5 +32,15 @@ class UserReaction extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function getPreviewUrl(): ?string
+    {
+        return $this->previewUrl;
+    }
+
+    public function setPreviewUrl($previewUrl): void
+    {
+        $this->previewUrl = $previewUrl;
     }
 }

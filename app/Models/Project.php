@@ -27,6 +27,8 @@ class Project extends Model
         'status',
         'allow_feedback',
         'user_id',
+        'objects_count',
+        'project_size',
     ];
 
     public ?int $objectsCount = null;
