@@ -171,7 +171,9 @@
                                             <div
                                                 class="md:col-span-2 md:h-[222px] h-[190px] w-full rounded-3xl relative group">
                                                 @if (in_array(strtolower($extension), $imageExtensions))
-                                                    <img src="{{ $object->objectUrl }}" alt="{{ $object->objectName }}"
+                                                    <img src="{{ $object->objectPreviewUrl }}"
+                                                         alt="{{ $object->objectName }}"
+                                                         data-object-src="{{ $object->objectUrl }}"
                                                          class="gallery-image object-cover rounded-none hover:grayscale transition-all duration-700 ease-in-out mx-auto lg:col-span-4 md:col-span-6 w-full h-full">
                                                 @elseif (in_array(strtolower($extension), $videoExtensions))
                                                     <video controls
@@ -376,15 +378,16 @@
                         })
                             .then(response => {
                                 if (response.ok) {
-                                    alert('Image deleted successfully');
-                                    location.reload();
+                                    Swal.fire("Success!", "Image deleted successfully!", "success").then(() => {
+                                        location.reload();
+                                    });
                                 } else {
-                                    alert('Failed to delete image');
+                                    Swal.fire("Error!", "Failed to delete image!", "error");
                                 }
                             })
                             .catch(error => {
                                 console.error('Error:', error);
-                                alert('Failed to delete image');
+                                Swal.fire("Error!", "Failed to delete image!", "error");
                             });
                     }
                 });
@@ -414,14 +417,14 @@
                     })
                         .then(response => {
                             if (response.ok) {
-                                alert('Cover image set successfully');
+                                Swal.fire("Success!", "Cover image set successfully!", "success");
                             } else {
-                                alert('Failed to set cover image');
+                                Swal.fire("Error!", "Failed to set cover image!", "error");
                             }
                         })
                         .catch(error => {
                             console.error('Error:', error);
-                            alert('Failed to set cover image');
+                            Swal.fire("Error!", "Failed to set cover image!", "error");
                         });
                 });
             });
@@ -443,7 +446,6 @@
                 let xhr = new XMLHttpRequest();
                 xhr.open("POST", "{{ route('projects.upload-images', ['project' => $project->id, 'folderSlug' => request()->get('folderSlug')]) }}", true);
                 xhr.setRequestHeader("X-CSRF-TOKEN", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-
 
                 // Update progress bar
                 xhr.upload.onprogress = function (event) {
@@ -545,7 +547,6 @@
                 });
             }
         });
-
     </script>
     <script src="{{ asset('js/gallery.js') }}"></script>
 @endpush

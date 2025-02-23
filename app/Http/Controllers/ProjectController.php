@@ -78,7 +78,7 @@ class ProjectController extends Controller
             }
             $this->setSizeAndCountOfObjects($projectObjects, $projectService, $project);
 
-            $imgUrl = $project->cover_image ? $bucketService->getObjectUrl($bucketName,
+            $imgUrl = $project->cover_image ? $bucketService->getObjectUrl($this->previewStorage,
                 $project->cover_image) : $imgUrl;
 
             $project->setProjecImage($imgUrl);
@@ -277,7 +277,11 @@ class ProjectController extends Controller
             $keySegments = explode('/', $key);
             $objectName = end($keySegments);
             $imgUrl = $bucketService->getObjectUrl($bucketName, $key);
+            // TODO save preview backet name in project (or in config) !!!
+            $previewUrl = $bucketService->getObjectUrl($this->previewStorage, $key);
             $object->setObjectUrl($imgUrl);
+            $object->setObjectPreviewUrl($previewUrl);
+
             $object->setObjectName($objectName);
             $downloadsCount = $downloadCounts[$key] ?? 0;
             $object->setDownloadsCount($downloadsCount);;

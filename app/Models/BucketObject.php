@@ -25,6 +25,7 @@ class BucketObject
     public ?bool $hasComment = null;
     public ?string $commentMessage = null;
     public ?int $downloadsCount = null;
+    public ?string $objectPreviewUrl = null;
 
     public function __construct(array $data)
     {
@@ -115,5 +116,15 @@ class BucketObject
     public function setDownloadsCount($downloadsCount): void
     {
         $this->downloadsCount = $downloadsCount;
+    }
+
+    public function getObjectPreviewUrl(): ?string
+    {
+        return $this->objectPreviewUrl;
+    }
+
+    public function setObjectPreviewUrl($objectPreviewUrl): void
+    {
+        $this->objectPreviewUrl = $objectPreviewUrl;
     }
 }
